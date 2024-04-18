@@ -1,0 +1,6 @@
+{
+    "extends": "./.nuxt/tsconfig.json",
+    "includes": [
+      "types/*.d.ts"
+    ]
+}

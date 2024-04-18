@@ -1,0 +1,2085 @@
+{
+  "config": {
+    "configFile": "/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/playwright.config.ts",
+    "rootDir": "/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 5
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reports.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 15000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "version": "1.42.1",
+    "workers": 5,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "example.spec.ts",
+      "file": "example.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "has title",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "status": "passed",
+                  "duration": 21528,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-03-18T21:26:28.854Z",
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a30a6eba6312f6b87ea5-b06063a3e613764d08f8",
+          "file": "example.spec.ts",
+          "line": 3,
+          "column": 1
+        },
+        {
+          "title": "get started link",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "status": "passed",
+                  "duration": 22038,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-03-18T21:26:28.852Z",
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a30a6eba6312f6b87ea5-274e97907a6e3638a22f",
+          "file": "example.spec.ts",
+          "line": 10,
+          "column": 1
+        },
+        {
+          "title": "has title",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "status": "timedOut",
+                  "duration": 30001,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/tests/example.spec.ts",
+                        "column": 14,
+                        "line": 4
+                      },
+                      "message": "Error: page.goto: Test timeout of 30000ms exceeded.\nCall log:\n  \u001b[2m- navigating to \"https://playwright.dev/\", waiting until \"load\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 2 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 3 |\u001b[39m test(\u001b[32m'has title'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 4 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'https://playwright.dev/'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m   |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 5 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 6 |\u001b[39m   \u001b[90m// Expect a title \"to contain\" a substring.\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[35m/Playwright/\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\n\u001b[2m    at /Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/tests/example.spec.ts:4:14\u001b[22m"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-03-18T21:26:28.855Z",
+                  "attachments": []
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a30a6eba6312f6b87ea5-f53a5ad453cd33dc57d5",
+          "file": "example.spec.ts",
+          "line": 3,
+          "column": 1
+        },
+        {
+          "title": "get started link",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "status": "passed",
+                  "duration": 19621,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-03-18T21:26:30.399Z",
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a30a6eba6312f6b87ea5-bfe080d6fe34297f494c",
+          "file": "example.spec.ts",
+          "line": 10,
+          "column": 1
+        },
+        {
+          "title": "has title",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "status": "passed",
+                  "duration": 4274,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-03-18T21:26:51.815Z",
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a30a6eba6312f6b87ea5-4a26ebd06a6b810edcc2",
+          "file": "example.spec.ts",
+          "line": 3,
+          "column": 1
+        },
+        {
+          "title": "get started link",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "status": "passed",
+                  "duration": 7594,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-03-18T21:26:52.232Z",
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a30a6eba6312f6b87ea5-1eb159041d56409ed83c",
+          "file": "example.spec.ts",
+          "line": 10,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "test-1.spec.ts",
+      "file": "test-1.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "test",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "status": "passed",
+                  "duration": 608,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-03-18T21:26:28.856Z",
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "492d4a3e7e76c4aacf4a-34ab2a399aed0b8eb826",
+          "file": "test-1.spec.ts",
+          "line": 3,
+          "column": 1
+        },
+        {
+          "title": "test",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "status": "passed",
+                  "duration": 718,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-03-18T21:26:50.496Z",
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "492d4a3e7e76c4aacf4a-37e2b8f79a25e4d7e6d2",
+          "file": "test-1.spec.ts",
+          "line": 3,
+          "column": 1
+        },
+        {
+          "title": "test",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "status": "passed",
+                  "duration": 796,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-03-18T21:26:56.059Z",
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "492d4a3e7e76c4aacf4a-a6b7cc54cad2784c8b6e",
+          "file": "test-1.spec.ts",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "tne.test.ts",
+      "file": "tne.test.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "test-tne",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "status": "failed",
+                  "duration": 25819,
+                  "error": {
+                    "message": "Error: locator.click: Test ended.\nCall log:\n  \u001b[2m- waiting for getByRole('img', { name: 'cake' })\u001b[22m\n",
+                    "stack": "Error: locator.click: Test ended.\nCall log:\n  \u001b[2m- waiting for getByRole('img', { name: 'cake' })\u001b[22m\n\n    at /Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/tests/tne.test.ts:12:48",
+                    "location": {
+                      "file": "/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/tests/tne.test.ts",
+                      "column": 48,
+                      "line": 12
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 10 |\u001b[39m     expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m\"img\"\u001b[39m\u001b[33m,\u001b[39m { \u001b[32m\"name\"\u001b[39m\u001b[33m:\u001b[39m throwable }))\u001b[33m.\u001b[39mtoBeDefined()\u001b[0m\n\u001b[0m \u001b[90m 11 |\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 12 |\u001b[39m     page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'img'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m throwable })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 13 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 14 |\u001b[39m     \u001b[90m// await page.locator(`#${throwable}`).click()\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 15 |\u001b[39m   }\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/tests/tne.test.ts",
+                        "column": 48,
+                        "line": 12
+                      },
+                      "message": "Error: locator.click: Test ended.\nCall log:\n  \u001b[2m- waiting for getByRole('img', { name: 'cake' })\u001b[22m\n\n\n\u001b[0m \u001b[90m 10 |\u001b[39m     expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m\"img\"\u001b[39m\u001b[33m,\u001b[39m { \u001b[32m\"name\"\u001b[39m\u001b[33m:\u001b[39m throwable }))\u001b[33m.\u001b[39mtoBeDefined()\u001b[0m\n\u001b[0m \u001b[90m 11 |\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 12 |\u001b[39m     page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'img'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m throwable })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 13 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 14 |\u001b[39m     \u001b[90m// await page.locator(`#${throwable}`).click()\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 15 |\u001b[39m   }\u001b[0m\n\n\u001b[2m    at /Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/tests/tne.test.ts:12:48\u001b[22m"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "\u001b[36mℹ\u001b[39m \u001b[36mvite v5.1.1 \u001b[32mbuilding for production...\u001b[36m\u001b[39m                             \u001b[90m22:26:31\u001b[39m\n"
+                    },
+                    {
+                      "text": "transforming (1) \u001b[2mnode_modules/nuxt/dist/app/entry.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (11) \u001b[2mnode_modules/nuxt/dist/app/components/nuxt-root.vue\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (27) \u001b[2mvirtual:nuxt:/Users/docjoe/Documents/mystuff/development/"
+                    },
+                    {
+                      "text": "transforming (42) \u001b[2mnode_modules/nuxt/dist/app/components/island-renderer.js\u001b"
+                    },
+                    {
+                      "text": "transforming (58) \u001b[2mnode_modules/nuxt/dist/pages/runtime/router.options.js\u001b[2"
+                    },
+                    {
+                      "text": "transforming (67) \u001b[2mnode_modules/socket.io-client/build/esm/index.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (89) \u001b[2mnode_modules/@nuxt/ui-templates/dist/templates/error-dev."
+                    },
+                    {
+                      "text": "transforming (111) \u001b[2mnode_modules/nuxt/dist/app/composables/once.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (135) \u001b[2mnode_modules/nuxt/dist/app/components/client-only.js\u001b[22"
+                    },
+                    {
+                      "text": "transforming (176) \u001b[2mnode_modules/vuetify/lib/framework.mjs\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (235) \u001b[2mnode_modules/@vue/devtools-api/lib/esm/api/api.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (252) \u001b[2mcomponents/cake.vue\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (268) \u001b[2m\u0000vite:asset:public/img/cake_splash.png\u001b[22m"
+                    },
+                    {
+                      "text": "\u001b[36mℹ\u001b[39m \u001b[32m✓\u001b[39m 283 modules transformed.                                         \u001b[90m22:26:39\u001b[39m\n"
+                    },
+                    {
+                      "text": "\u001b[32mInspect report generated at\u001b[39m \u001b[2m/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/.nuxt/test/x98dni/analyze/.vite-inspect\u001b[22m\n"
+                    },
+                    {
+                      "text": "rendering chunks (1)..."
+                    },
+                    {
+                      "text": "rendering chunks (2)..."
+                    },
+                    {
+                      "text": "rendering chunks (3)..."
+                    },
+                    {
+                      "text": "rendering chunks (4)..."
+                    },
+                    {
+                      "text": "rendering chunks (5)..."
+                    },
+                    {
+                      "text": "rendering chunks (6)..."
+                    },
+                    {
+                      "text": "rendering chunks (7)..."
+                    },
+                    {
+                      "text": "rendering chunks (8)..."
+                    },
+                    {
+                      "text": "rendering chunks (9)..."
+                    },
+                    {
+                      "text": "rendering chunks (10)..."
+                    },
+                    {
+                      "text": "rendering chunks (11)..."
+                    },
+                    {
+                      "text": "rendering chunks (12)..."
+                    },
+                    {
+                      "text": "rendering chunks (13)..."
+                    },
+                    {
+                      "text": "computing gzip size (0)..."
+                    },
+                    {
+                      "text": "computing gzip size (1)..."
+                    },
+                    {
+                      "text": "computing gzip size (2)..."
+                    },
+                    {
+                      "text": "computing gzip size (3)..."
+                    },
+                    {
+                      "text": "computing gzip size (4)..."
+                    },
+                    {
+                      "text": "computing gzip size (5)..."
+                    },
+                    {
+                      "text": "computing gzip size (6)..."
+                    },
+                    {
+                      "text": "computing gzip size (7)..."
+                    },
+                    {
+                      "text": "computing gzip size (8)..."
+                    },
+                    {
+                      "text": "computing gzip size (9)..."
+                    },
+                    {
+                      "text": "computing gzip size (10)..."
+                    },
+                    {
+                      "text": "computing gzip size (11)..."
+                    },
+                    {
+                      "text": "computing gzip size (12)..."
+                    },
+                    {
+                      "text": "computing gzip size (13)..."
+                    },
+                    {
+                      "text": "computing gzip size (14)..."
+                    },
+                    {
+                      "text": "computing gzip size (15)..."
+                    },
+                    {
+                      "text": "computing gzip size (16)..."
+                    },
+                    {
+                      "text": "computing gzip size (17)..."
+                    },
+                    {
+                      "text": "computing gzip size (18)..."
+                    },
+                    {
+                      "text": "computing gzip size (19)..."
+                    },
+                    {
+                      "text": "computing gzip size (20)..."
+                    },
+                    {
+                      "text": "computing gzip size (21)..."
+                    },
+                    {
+                      "text": "computing gzip size (22)..."
+                    },
+                    {
+                      "text": "computing gzip size (23)..."
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[32mmanifest.json                                            \u001b[39m\u001b[1m\u001b[2m    4.96 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.87 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mJMainusch_BStemmildt_AHamann_Speaker.BoNuO6es.jpg  \u001b[39m\u001b[1m\u001b[2m  381.61 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mmaterialdesignicons-webfont.Dp5v-WZN.woff2         \u001b[39m\u001b[1m\u001b[2m  403.22 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mmaterialdesignicons-webfont.PXm3-2wK.woff          \u001b[39m\u001b[1m\u001b[2m  587.98 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mmaterialdesignicons-webfont.B7mPwVP_.ttf           \u001b[39m\u001b[1m\u001b[2m1,307.66 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mmaterialdesignicons-webfont.CSr8KVlo.eot           \u001b[39m\u001b[1m\u001b[2m1,307.88 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35mentry.DPVArKG4.css                                 \u001b[39m\u001b[1m\u001b[2m    0.10 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35mcatchup.B9nuJwnh.css                               \u001b[39m\u001b[1m\u001b[2m    0.12 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35mqrcode.BjYjfer6.css                                \u001b[39m\u001b[1m\u001b[2m    0.12 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.12 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35mthrow-statistics.C53n2DFL.css                      \u001b[39m\u001b[1m\u001b[2m    0.14 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.13 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35mindex.BZJvbPlr.css                                 \u001b[39m\u001b[1m\u001b[2m    0.15 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.13 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35mcatchup-DL.An6gPuo3.css                            \u001b[39m\u001b[1m\u001b[2m    0.29 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.16 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35mthrow.CQeC8FEa.css                                 \u001b[39m\u001b[1m\u001b[2m    0.56 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.30 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35merror-500.BXQ_YkC0.css                             \u001b[39m\u001b[1m\u001b[2m    1.95 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.74 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35merror-404.CoUbADi5.css                             \u001b[39m\u001b[1m\u001b[2m    3.62 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  1.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mlogin.CjBi3d0n.js                                  \u001b[39m\u001b[1m\u001b[2m    0.19 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.17 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow.CqWo16zW.js                                  \u001b[39m\u001b[1m\u001b[2m    0.35 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.27 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mvue.f36acd1f.S2cAHtFc.js                           \u001b[39m\u001b[1m\u001b[2m    0.39 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.27 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mindex.DjY_tDJM.js                                  \u001b[39m\u001b[1m\u001b[2m    0.62 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.44 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mcatchup.0xHEXhZh.js                                \u001b[39m\u001b[1m\u001b[2m    0.95 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.55 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow.B9dPYN7k.js                                  \u001b[39m\u001b[1m\u001b[2m    1.07 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.64 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow-statistics.CwZ7_W6H.js                       \u001b[39m\u001b[1m\u001b[2m    1.17 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.61 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mcatchup-DL.Cv78PTAl.js                             \u001b[39m\u001b[1m\u001b[2m    1.28 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.75 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36merror-500.DqsX2r2i.js                              \u001b[39m\u001b[1m\u001b[2m    1.92 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  1.01 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36merror-404.C8W2xOup.js                              \u001b[39m\u001b[1m\u001b[2m    6.49 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  2.85 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mstar.vue.DuRtSVIs.js                               \u001b[39m\u001b[1m\u001b[2m    8.98 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  1.78 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mqrcode.DlYET3Fu.js                                 \u001b[39m\u001b[1m\u001b[2m   68.92 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip: 23.98 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:39\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mentry.Upl6AGHE.js                                  \u001b[39m\u001b[1m\u001b[2m  238.63 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip: 89.17 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[36mℹ\u001b[39m \u001b[32m✓ built in 8.04s\u001b[39m                                                   \u001b[90m22:26:39\u001b[39m\n"
+                    },
+                    {
+                      "text": "\u001b[36mℹ\u001b[39m \u001b[36mvite v5.1.1 \u001b[32mbuilding SSR bundle for production...\u001b[36m\u001b[39m                  \u001b[90m22:26:39\u001b[39m\n"
+                    },
+                    {
+                      "text": "transforming (2) \u001b[2mnode_modules/nuxt/dist/app/entry.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (10) \u001b[2mvirtual:nuxt:/Users/docjoe/Documents/mystuff/development/"
+                    },
+                    {
+                      "text": "transforming (12) \u001b[2mnode_modules/nuxt/dist/app/composables/error.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (18) \u001b[2mnode_modules/nuxt/dist/app/components/nuxt-root.vue\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (35) \u001b[2mnode_modules/@unhead/vue/dist/shared/vue.f36acd1f.mjs\u001b[22"
+                    },
+                    {
+                      "text": "transforming (44) \u001b[2mnode_modules/nuxt/dist/app/middleware/manifest-route-rule"
+                    },
+                    {
+                      "text": "transforming (55) \u001b[2mnode_modules/@nuxt/ui-templates/dist/templates/error-404."
+                    },
+                    {
+                      "text": "transforming (70) \u001b[2mnode_modules/nuxt/dist/app/composables/hydrate.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (101) \u001b[2mnode_modules/nuxt/dist/app/config.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (136) \u001b[2mnode_modules/vuetify/lib/util/propsFactory.mjs\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (158) \u001b[2mpublic/img/backgrounds/JMainusch_BStemmildt_AHamann_Spea"
+                    },
+                    {
+                      "text": "\u001b[36mℹ\u001b[39m \u001b[32m✓\u001b[39m 203 modules transformed.                                         \u001b[90m22:26:49\u001b[39m\n"
+                    },
+                    {
+                      "text": "\u001b[32mInspect report generated at\u001b[39m \u001b[2m/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/.nuxt/test/x98dni/analyze/.vite-inspect\u001b[22m\n"
+                    },
+                    {
+                      "text": "rendering chunks (1)..."
+                    },
+                    {
+                      "text": "rendering chunks (2)..."
+                    },
+                    {
+                      "text": "rendering chunks (3)..."
+                    },
+                    {
+                      "text": "rendering chunks (4)..."
+                    },
+                    {
+                      "text": "rendering chunks (5)..."
+                    },
+                    {
+                      "text": "rendering chunks (6)..."
+                    },
+                    {
+                      "text": "rendering chunks (7)..."
+                    },
+                    {
+                      "text": "rendering chunks (8)..."
+                    },
+                    {
+                      "text": "rendering chunks (9)..."
+                    },
+                    {
+                      "text": "rendering chunks (10)..."
+                    },
+                    {
+                      "text": "rendering chunks (11)..."
+                    },
+                    {
+                      "text": "rendering chunks (12)..."
+                    },
+                    {
+                      "text": "rendering chunks (13)..."
+                    },
+                    {
+                      "text": "rendering chunks (14)..."
+                    },
+                    {
+                      "text": "rendering chunks (15)..."
+                    },
+                    {
+                      "text": "rendering chunks (16)..."
+                    },
+                    {
+                      "text": "rendering chunks (17)..."
+                    },
+                    {
+                      "text": "rendering chunks (18)..."
+                    },
+                    {
+                      "text": "rendering chunks (19)..."
+                    },
+                    {
+                      "text": "rendering chunks (20)..."
+                    },
+                    {
+                      "text": "rendering chunks (21)..."
+                    },
+                    {
+                      "text": "rendering chunks (22)..."
+                    },
+                    {
+                      "text": "rendering chunks (23)..."
+                    },
+                    {
+                      "text": "rendering chunks (24)..."
+                    },
+                    {
+                      "text": "rendering chunks (25)..."
+                    },
+                    {
+                      "text": "rendering chunks (26)..."
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mapp-styles.CRS9nKq8.mjs                    \u001b[39m\u001b[1m\u001b[2m  0.08 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mindex-styles.L5zw9kH6.mjs                  \u001b[39m\u001b[1m\u001b[2m  0.08 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mthrow-styles.C-OTiZ92.mjs                  \u001b[39m\u001b[1m\u001b[2m  0.08 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mqrcode-styles.DNLIo34N.mjs                 \u001b[39m\u001b[1m\u001b[2m  0.08 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mcatchup-styles.D2mZUVJG.mjs                \u001b[39m\u001b[1m\u001b[2m  0.08 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32merror-404-styles.DKrRPVnW.mjs              \u001b[39m\u001b[1m\u001b[2m  0.08 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32merror-500-styles.TTVQqs5q.mjs              \u001b[39m\u001b[1m\u001b[2m  0.08 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mcatchup-DL-styles.l4pCK1Gx.mjs             \u001b[39m\u001b[1m\u001b[2m  0.09 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mthrow-statistics-styles.CdJpXs9I.mjs       \u001b[39m\u001b[1m\u001b[2m  0.09 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mentry-styles.Bb13oj9j.mjs                  \u001b[39m\u001b[1m\u001b[2m  0.28 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[32mstyles.mjs                                       \u001b[39m\u001b[1m\u001b[2m  2.56 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mentry-styles-4.mjs-hRSQ1EYN.js             \u001b[39m\u001b[1m\u001b[2m  0.30 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mcatchup-styles-1.mjs-BDV0nWnq.js           \u001b[39m\u001b[1m\u001b[2m  0.33 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mqrcode-styles-1.mjs-0AqK8NJZ.js            \u001b[39m\u001b[1m\u001b[2m  0.33 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mindex-styles-1.mjs-BHjMGrEp.js             \u001b[39m\u001b[1m\u001b[2m  0.35 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow-statistics-styles-1.mjs-C5sVmFT3.js  \u001b[39m\u001b[1m\u001b[2m  0.37 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.12 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mcatchup-DL-styles-1.mjs-DOcTvJXU.js        \u001b[39m\u001b[1m\u001b[2m  0.50 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.12 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow-styles-1.mjs-DB0BGslI.js             \u001b[39m\u001b[1m\u001b[2m  0.76 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mindex-BabADJUJ.js                          \u001b[39m\u001b[1m\u001b[2m  0.98 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   5.94 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mlogin-BzBgotZK.js                          \u001b[39m\u001b[1m\u001b[2m  1.06 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.13 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36misland-renderer-DU5anwH2.js                \u001b[39m\u001b[1m\u001b[2m  1.09 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   1.61 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow-ZO-vCQBn.js                          \u001b[39m\u001b[1m\u001b[2m  1.22 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.14 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow-RnFBv-WE.js                          \u001b[39m\u001b[1m\u001b[2m  1.49 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   2.42 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mqrcode-BYpVNb3X.js                         \u001b[39m\u001b[1m\u001b[2m  1.77 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   1.57 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mindex-BpFCZJIz.js                          \u001b[39m\u001b[1m\u001b[2m  1.82 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.14 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36merror-500-styles-1.mjs-Blr39NBU.js         \u001b[39m\u001b[1m\u001b[2m  2.17 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.12 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow-statistics-DWo5yTTp.js               \u001b[39m\u001b[1m\u001b[2m  2.21 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   1.83 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mcatchup-5FeJNxZX.js                        \u001b[39m\u001b[1m\u001b[2m  2.90 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   1.34 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36merror-500-CK8rYmWH.js                      \u001b[39m\u001b[1m\u001b[2m  3.09 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   3.80 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mcatchup-DL-CacoiczX.js                     \u001b[39m\u001b[1m\u001b[2m  3.38 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   1.84 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36merror-404-styles-1.mjs-CJJKmaPY.js         \u001b[39m\u001b[1m\u001b[2m  3.86 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.12 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36merror-404-D-2aGN92.js                      \u001b[39m\u001b[1m\u001b[2m 10.74 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:  20.86 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mstar-CrOK92CP.js                           \u001b[39m\u001b[1m\u001b[2m 23.86 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:  14.40 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[36mserver.mjs                                       \u001b[39m\u001b[1m\u001b[2m151.65 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map: 369.49 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mentry-styles-3.mjs-Cf-N_X7E.js             \u001b[39m\u001b[1m\u001b[2m242.99 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mentry-styles-1.mjs-OlcSQ1JO.js             \u001b[39m\u001b[1m\u001b[2m243.01 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:26:49\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/x98dni/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mentry-styles-2.mjs-DAE_lixv.js             \u001b[39m\u001b[1m\u001b[2m346.08 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[36mℹ\u001b[39m \u001b[32m✓ built in 10.36s\u001b[39m                                                  \u001b[90m22:26:49\u001b[39m\n"
+                    },
+                    {
+                      "text": "\u001b[32m✔\u001b[39m Generated public \u001b[36m.nuxt/test/x98dni/output/public\u001b[39m             \u001b[90mnitro\u001b[39m \u001b[90m22:26:50\u001b[39m\n"
+                    },
+                    {
+                      "text": "\u001b[36mℹ\u001b[39m Building Nitro Server (preset: \u001b[36mnode-server\u001b[39m)                  \u001b[90mnitro\u001b[39m \u001b[90m22:26:50\u001b[39m\n"
+                    },
+                    {
+                      "text": "\u001b[32m✔\u001b[39m Nitro server built                                           \u001b[90mnitro\u001b[39m \u001b[90m22:26:53\u001b[39m\n"
+                    },
+                    {
+                      "text": "\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/app-styles.CRS9nKq8.mjs (285 B)\u001b[39m\u001b[90m (198 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/app-styles.CRS9nKq8.mjs.map (201 B)\u001b[39m\u001b[90m (161 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/catchup-5FeJNxZX.mjs (2.98 kB)\u001b[39m\u001b[90m (923 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/catchup-5FeJNxZX.mjs.map (2.67 kB)\u001b[39m\u001b[90m (663 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/catchup-DL-CacoiczX.mjs (3.49 kB)\u001b[39m\u001b[90m (1.09 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/catchup-DL-CacoiczX.mjs.map (2.84 kB)\u001b[39m\u001b[90m (510 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/catchup-DL-styles.l4pCK1Gx.mjs (556 B)\u001b[39m\u001b[90m (293 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/catchup-DL-styles.l4pCK1Gx.mjs.map (314 B)\u001b[39m\u001b[90m (208 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/catchup-styles.D2mZUVJG.mjs (377 B)\u001b[39m\u001b[90m (239 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/catchup-styles.D2mZUVJG.mjs.map (305 B)\u001b[39m\u001b[90m (207 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/entry-styles-4.mjs-hRSQ1EYN.mjs (291 B)\u001b[39m\u001b[90m (219 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/entry-styles-4.mjs-hRSQ1EYN.mjs.map (204 B)\u001b[39m\u001b[90m (163 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/entry-styles.Bb13oj9j.mjs (833 kB)\u001b[39m\u001b[90m (110 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/entry-styles.Bb13oj9j.mjs.map (762 B)\u001b[39m\u001b[90m (338 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/error-404-D-2aGN92.mjs (10.8 kB)\u001b[39m\u001b[90m (3.46 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/error-404-D-2aGN92.mjs.map (8.64 kB)\u001b[39m\u001b[90m (2.13 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/error-404-styles.DKrRPVnW.mjs (3.92 kB)\u001b[39m\u001b[90m (1.26 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/error-404-styles.DKrRPVnW.mjs.map (312 B)\u001b[39m\u001b[90m (209 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/error-500-CK8rYmWH.mjs (3.06 kB)\u001b[39m\u001b[90m (1.36 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/error-500-CK8rYmWH.mjs.map (1.67 kB)\u001b[39m\u001b[90m (598 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/error-500-styles.TTVQqs5q.mjs (2.22 kB)\u001b[39m\u001b[90m (870 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/error-500-styles.TTVQqs5q.mjs.map (312 B)\u001b[39m\u001b[90m (209 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/index-BabADJUJ.mjs (979 B)\u001b[39m\u001b[90m (456 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/index-BabADJUJ.mjs.map (1.13 kB)\u001b[39m\u001b[90m (456 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/index-BpFCZJIz.mjs (1.79 kB)\u001b[39m\u001b[90m (788 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/index-BpFCZJIz.mjs.map (1.38 kB)\u001b[39m\u001b[90m (517 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/index-styles.L5zw9kH6.mjs (394 B)\u001b[39m\u001b[90m (256 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/index-styles.L5zw9kH6.mjs.map (299 B)\u001b[39m\u001b[90m (205 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/island-renderer-DU5anwH2.mjs (1.05 kB)\u001b[39m\u001b[90m (493 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/island-renderer-DU5anwH2.mjs.map (882 B)\u001b[39m\u001b[90m (405 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/login-BzBgotZK.mjs (1.03 kB)\u001b[39m\u001b[90m (503 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/login-BzBgotZK.mjs.map (812 B)\u001b[39m\u001b[90m (373 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/qrcode-BYpVNb3X.mjs (1.8 kB)\u001b[39m\u001b[90m (801 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/qrcode-BYpVNb3X.mjs.map (1.61 kB)\u001b[39m\u001b[90m (614 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/qrcode-styles.DNLIo34N.mjs (377 B)\u001b[39m\u001b[90m (243 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/qrcode-styles.DNLIo34N.mjs.map (302 B)\u001b[39m\u001b[90m (203 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/star-CrOK92CP.mjs (23.9 kB)\u001b[39m\u001b[90m (2.57 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/star-CrOK92CP.mjs.map (24.6 kB)\u001b[39m\u001b[90m (1.55 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/throw-RnFBv-WE.mjs (1.47 kB)\u001b[39m\u001b[90m (672 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/throw-RnFBv-WE.mjs.map (1.43 kB)\u001b[39m\u001b[90m (568 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/throw-statistics-DWo5yTTp.mjs (2.18 kB)\u001b[39m\u001b[90m (822 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/throw-statistics-DWo5yTTp.mjs.map (1.79 kB)\u001b[39m\u001b[90m (635 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/throw-statistics-styles.CdJpXs9I.mjs (435 B)\u001b[39m\u001b[90m (263 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/throw-statistics-styles.CdJpXs9I.mjs.map (332 B)\u001b[39m\u001b[90m (214 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/throw-styles.C-OTiZ92.mjs (805 B)\u001b[39m\u001b[90m (418 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/throw-styles.C-OTiZ92.mjs.map (300 B)\u001b[39m\u001b[90m (205 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/throw-ZO-vCQBn.mjs (1.19 kB)\u001b[39m\u001b[90m (541 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/_nuxt/throw-ZO-vCQBn.mjs.map (936 B)\u001b[39m\u001b[90m (413 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/client.manifest.mjs (7.67 kB)\u001b[39m\u001b[90m (1.11 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/client.manifest.mjs.map (6.42 kB)\u001b[39m\u001b[90m (790 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/server.mjs (127 kB)\u001b[39m\u001b[90m (35.1 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/server.mjs.map (306 B)\u001b[39m\u001b[90m (204 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/styles.mjs (2.63 kB)\u001b[39m\u001b[90m (578 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/app/styles.mjs.map (1.54 kB)\u001b[39m\u001b[90m (358 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/error-500.mjs (4.26 kB)\u001b[39m\u001b[90m (1.84 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/error-500.mjs.map (202 B)\u001b[39m\u001b[90m (157 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/handlers/renderer.mjs (13.3 kB)\u001b[39m\u001b[90m (4.26 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/handlers/renderer.mjs.map (460 B)\u001b[39m\u001b[90m (227 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/hello.mjs (344 B)\u001b[39m\u001b[90m (215 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/hello.mjs.map (249 B)\u001b[39m\u001b[90m (165 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/nitro/node-server.mjs (174 kB)\u001b[39m\u001b[90m (42.6 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/nitro/node-server.mjs.map (3.36 kB)\u001b[39m\u001b[90m (773 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/rollup/_virtual_spa-template.mjs (94 B)\u001b[39m\u001b[90m (100 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/chunks/rollup/_virtual_spa-template.mjs.map (112 B)\u001b[39m\u001b[90m (111 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/x98dni/output/server/index.mjs (286 B)\u001b[39m\u001b[90m (195 B gzip)\u001b[39m\n\u001b[90m  └─ .nuxt/test/x98dni/output/server/package.json (1.51 kB)\u001b[39m\u001b[90m (570 B gzip)\u001b[39m\n\u001b[36mΣ Total size:\u001b[39m 4.87 MB (1.12 MB gzip)\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90mnitro\u001b[90m \u001b[90m22:26:53\u001b[90m]\u001b[39m \u001b[32m✔\u001b[39m You can preview this build using \u001b[36mnode .nuxt/test/x98dni/output/server/index.mjs\u001b[39m\n"
+                    },
+                    {
+                      "buffer": "TGlzdGVuaW5nIG9uIGh0dHA6Ly8xMjcuMC4wLjE6NTEwNDEK"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-03-18T21:26:29.163Z",
+                  "attachments": [],
+                  "errorLocation": {
+                    "file": "/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/tests/tne.test.ts",
+                    "column": 48,
+                    "line": 12
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "b0a7fd45ac228944059d-6e2e38cf62487c556e9f",
+          "file": "tne.test.ts",
+          "line": 4,
+          "column": 1
+        },
+        {
+          "title": "test-tne",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "status": "failed",
+                  "duration": 26675,
+                  "error": {
+                    "message": "Error: locator.click: Test ended.\nCall log:\n  \u001b[2m- waiting for getByRole('img', { name: 'cake' })\u001b[22m\n",
+                    "stack": "Error: locator.click: Test ended.\nCall log:\n  \u001b[2m- waiting for getByRole('img', { name: 'cake' })\u001b[22m\n\n    at /Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/tests/tne.test.ts:12:48",
+                    "location": {
+                      "file": "/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/tests/tne.test.ts",
+                      "column": 48,
+                      "line": 12
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 10 |\u001b[39m     expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m\"img\"\u001b[39m\u001b[33m,\u001b[39m { \u001b[32m\"name\"\u001b[39m\u001b[33m:\u001b[39m throwable }))\u001b[33m.\u001b[39mtoBeDefined()\u001b[0m\n\u001b[0m \u001b[90m 11 |\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 12 |\u001b[39m     page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'img'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m throwable })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 13 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 14 |\u001b[39m     \u001b[90m// await page.locator(`#${throwable}`).click()\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 15 |\u001b[39m   }\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/tests/tne.test.ts",
+                        "column": 48,
+                        "line": 12
+                      },
+                      "message": "Error: locator.click: Test ended.\nCall log:\n  \u001b[2m- waiting for getByRole('img', { name: 'cake' })\u001b[22m\n\n\n\u001b[0m \u001b[90m 10 |\u001b[39m     expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m\"img\"\u001b[39m\u001b[33m,\u001b[39m { \u001b[32m\"name\"\u001b[39m\u001b[33m:\u001b[39m throwable }))\u001b[33m.\u001b[39mtoBeDefined()\u001b[0m\n\u001b[0m \u001b[90m 11 |\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 12 |\u001b[39m     page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'img'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m throwable })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 13 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 14 |\u001b[39m     \u001b[90m// await page.locator(`#${throwable}`).click()\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 15 |\u001b[39m   }\u001b[0m\n\n\u001b[2m    at /Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/tests/tne.test.ts:12:48\u001b[22m"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "\u001b[36mℹ\u001b[39m \u001b[36mvite v5.1.1 \u001b[32mbuilding for production...\u001b[36m\u001b[39m                             \u001b[90m22:26:54\u001b[39m\n"
+                    },
+                    {
+                      "text": "transforming (1) \u001b[2mnode_modules/nuxt/dist/app/entry.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (22) \u001b[2mvirtual:nuxt:/Users/docjoe/Documents/mystuff/development/"
+                    },
+                    {
+                      "text": "transforming (36) \u001b[2mnode_modules/ofetch/dist/shared/ofetch.00501375.mjs\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (58) \u001b[2mnode_modules/nuxt/dist/pages/runtime/router.options.js\u001b[2"
+                    },
+                    {
+                      "text": "transforming (61) \u001b[2mpages/index.vue\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (87) \u001b[2mnode_modules/hookable/dist/index.mjs\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (110) \u001b[2mnode_modules/nuxt/dist/app/composables/cookie.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (133) \u001b[2mnode_modules/socket.io-parser/build/esm/is-binary.js\u001b[22"
+                    },
+                    {
+                      "text": "transforming (170) \u001b[2mnode_modules/pinia/dist/pinia.mjs\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (220) \u001b[2mnode_modules/vuetify/lib/composables/proxiedModel.mjs\u001b[2"
+                    },
+                    {
+                      "text": "transforming (248) \u001b[2mnode_modules/nuxt/dist/pages/runtime/page.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (283) \u001b[2mnode_modules/@vue/reactivity/dist/reactivity.esm-bundler"
+                    },
+                    {
+                      "text": "\u001b[36mℹ\u001b[39m \u001b[32m✓\u001b[39m 283 modules transformed.                                         \u001b[90m22:27:02\u001b[39m\n"
+                    },
+                    {
+                      "text": "\u001b[32mInspect report generated at\u001b[39m \u001b[2m/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/.nuxt/test/9bi3vf/analyze/.vite-inspect\u001b[22m\n"
+                    },
+                    {
+                      "text": "rendering chunks (1)..."
+                    },
+                    {
+                      "text": "rendering chunks (2)..."
+                    },
+                    {
+                      "text": "rendering chunks (3)..."
+                    },
+                    {
+                      "text": "rendering chunks (4)..."
+                    },
+                    {
+                      "text": "rendering chunks (5)..."
+                    },
+                    {
+                      "text": "rendering chunks (6)..."
+                    },
+                    {
+                      "text": "rendering chunks (7)..."
+                    },
+                    {
+                      "text": "rendering chunks (8)..."
+                    },
+                    {
+                      "text": "rendering chunks (9)..."
+                    },
+                    {
+                      "text": "rendering chunks (10)..."
+                    },
+                    {
+                      "text": "rendering chunks (11)..."
+                    },
+                    {
+                      "text": "rendering chunks (12)..."
+                    },
+                    {
+                      "text": "rendering chunks (13)..."
+                    },
+                    {
+                      "text": "computing gzip size (0)..."
+                    },
+                    {
+                      "text": "computing gzip size (1)..."
+                    },
+                    {
+                      "text": "computing gzip size (2)..."
+                    },
+                    {
+                      "text": "computing gzip size (3)..."
+                    },
+                    {
+                      "text": "computing gzip size (4)..."
+                    },
+                    {
+                      "text": "computing gzip size (5)..."
+                    },
+                    {
+                      "text": "computing gzip size (6)..."
+                    },
+                    {
+                      "text": "computing gzip size (7)..."
+                    },
+                    {
+                      "text": "computing gzip size (8)..."
+                    },
+                    {
+                      "text": "computing gzip size (9)..."
+                    },
+                    {
+                      "text": "computing gzip size (10)..."
+                    },
+                    {
+                      "text": "computing gzip size (11)..."
+                    },
+                    {
+                      "text": "computing gzip size (12)..."
+                    },
+                    {
+                      "text": "computing gzip size (13)..."
+                    },
+                    {
+                      "text": "computing gzip size (14)..."
+                    },
+                    {
+                      "text": "computing gzip size (15)..."
+                    },
+                    {
+                      "text": "computing gzip size (16)..."
+                    },
+                    {
+                      "text": "computing gzip size (17)..."
+                    },
+                    {
+                      "text": "computing gzip size (18)..."
+                    },
+                    {
+                      "text": "computing gzip size (19)..."
+                    },
+                    {
+                      "text": "computing gzip size (20)..."
+                    },
+                    {
+                      "text": "computing gzip size (21)..."
+                    },
+                    {
+                      "text": "computing gzip size (22)..."
+                    },
+                    {
+                      "text": "computing gzip size (23)..."
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[32mmanifest.json                                            \u001b[39m\u001b[1m\u001b[2m    4.96 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.87 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mJMainusch_BStemmildt_AHamann_Speaker.BoNuO6es.jpg  \u001b[39m\u001b[1m\u001b[2m  381.61 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mmaterialdesignicons-webfont.Dp5v-WZN.woff2         \u001b[39m\u001b[1m\u001b[2m  403.22 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mmaterialdesignicons-webfont.PXm3-2wK.woff          \u001b[39m\u001b[1m\u001b[2m  587.98 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mmaterialdesignicons-webfont.B7mPwVP_.ttf           \u001b[39m\u001b[1m\u001b[2m1,307.66 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mmaterialdesignicons-webfont.CSr8KVlo.eot           \u001b[39m\u001b[1m\u001b[2m1,307.88 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35mentry.DPVArKG4.css                                 \u001b[39m\u001b[1m\u001b[2m    0.10 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35mcatchup.B9nuJwnh.css                               \u001b[39m\u001b[1m\u001b[2m    0.12 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35mqrcode.BjYjfer6.css                                \u001b[39m\u001b[1m\u001b[2m    0.12 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.12 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35mthrow-statistics.C53n2DFL.css                      \u001b[39m\u001b[1m\u001b[2m    0.14 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.13 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35mindex.BZJvbPlr.css                                 \u001b[39m\u001b[1m\u001b[2m    0.15 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.13 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35mcatchup-DL.An6gPuo3.css                            \u001b[39m\u001b[1m\u001b[2m    0.29 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.16 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35mthrow.CQeC8FEa.css                                 \u001b[39m\u001b[1m\u001b[2m    0.56 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.30 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35merror-500.BXQ_YkC0.css                             \u001b[39m\u001b[1m\u001b[2m    1.95 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.74 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35merror-404.CoUbADi5.css                             \u001b[39m\u001b[1m\u001b[2m    3.62 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  1.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mlogin.CgIzWsVS.js                                  \u001b[39m\u001b[1m\u001b[2m    0.19 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.17 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow.DvhkiX9L.js                                  \u001b[39m\u001b[1m\u001b[2m    0.35 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.27 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mvue.f36acd1f.CIeQlOoK.js                           \u001b[39m\u001b[1m\u001b[2m    0.39 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.27 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mindex.mUW35oKH.js                                  \u001b[39m\u001b[1m\u001b[2m    0.62 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.44 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mcatchup.D3CAkeL-.js                                \u001b[39m\u001b[1m\u001b[2m    0.95 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.55 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow.CHjxKm27.js                                  \u001b[39m\u001b[1m\u001b[2m    1.07 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.64 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow-statistics.D8zgCI_c.js                       \u001b[39m\u001b[1m\u001b[2m    1.17 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.61 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mcatchup-DL.BwQVLst8.js                             \u001b[39m\u001b[1m\u001b[2m    1.28 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.75 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36merror-500.B6nMX6uO.js                              \u001b[39m\u001b[1m\u001b[2m    1.92 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  1.02 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36merror-404.CANZwPD0.js                              \u001b[39m\u001b[1m\u001b[2m    6.49 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  2.85 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mstar.vue.CJeOYSl0.js                               \u001b[39m\u001b[1m\u001b[2m    8.98 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  1.78 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mqrcode.YRMbs1qx.js                                 \u001b[39m\u001b[1m\u001b[2m   68.92 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip: 23.98 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:02\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mentry.jTWA4lzF.js                                  \u001b[39m\u001b[1m\u001b[2m  238.63 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip: 89.17 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[36mℹ\u001b[39m \u001b[32m✓ built in 8.44s\u001b[39m                                                   \u001b[90m22:27:02\u001b[39m\n"
+                    },
+                    {
+                      "text": "\u001b[36mℹ\u001b[39m \u001b[36mvite v5.1.1 \u001b[32mbuilding SSR bundle for production...\u001b[36m\u001b[39m                  \u001b[90m22:27:02\u001b[39m\n"
+                    },
+                    {
+                      "text": "transforming (2) \u001b[2mnode_modules/nuxt/dist/app/entry.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (4) \u001b[2mvirtual:nuxt:/Users/docjoe/Documents/mystuff/development/t"
+                    },
+                    {
+                      "text": "transforming (12) \u001b[2mnode_modules/nuxt/dist/app/composables/error.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (18) \u001b[2mnode_modules/@pinia/nuxt/dist/runtime/plugin.vue3.mjs\u001b[22"
+                    },
+                    {
+                      "text": "transforming (34) \u001b[2mnode_modules/nuxt/dist/app/components/injections.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (47) \u001b[2mpages/login.vue\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (61) \u001b[2mnode_modules/nuxt/dist/app/composables/manifest.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (76) \u001b[2mnode_modules/nuxt/dist/app/composables/id.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (98) \u001b[2mnode_modules/nuxt/dist/app/config.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (123) \u001b[2mnode_modules/nuxt/dist/app/components/route-provider.js\u001b"
+                    },
+                    {
+                      "text": "transforming (139) \u001b[2mnode_modules/vuetify/lib/composables/goto.mjs\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (191) \u001b[2m\u0000vite:asset:public/img/shoe_throw.png\u001b[22m"
+                    },
+                    {
+                      "text": "\u001b[36mℹ\u001b[39m \u001b[32m✓\u001b[39m 203 modules transformed.                                         \u001b[90m22:27:12\u001b[39m\n"
+                    },
+                    {
+                      "text": "\u001b[32mInspect report generated at\u001b[39m \u001b[2m/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/.nuxt/test/9bi3vf/analyze/.vite-inspect\u001b[22m\n"
+                    },
+                    {
+                      "text": "rendering chunks (1)..."
+                    },
+                    {
+                      "text": "rendering chunks (2)..."
+                    },
+                    {
+                      "text": "rendering chunks (3)..."
+                    },
+                    {
+                      "text": "rendering chunks (4)..."
+                    },
+                    {
+                      "text": "rendering chunks (5)..."
+                    },
+                    {
+                      "text": "rendering chunks (6)..."
+                    },
+                    {
+                      "text": "rendering chunks (7)..."
+                    },
+                    {
+                      "text": "rendering chunks (8)..."
+                    },
+                    {
+                      "text": "rendering chunks (9)..."
+                    },
+                    {
+                      "text": "rendering chunks (10)..."
+                    },
+                    {
+                      "text": "rendering chunks (11)..."
+                    },
+                    {
+                      "text": "rendering chunks (12)..."
+                    },
+                    {
+                      "text": "rendering chunks (13)..."
+                    },
+                    {
+                      "text": "rendering chunks (14)..."
+                    },
+                    {
+                      "text": "rendering chunks (15)..."
+                    },
+                    {
+                      "text": "rendering chunks (16)..."
+                    },
+                    {
+                      "text": "rendering chunks (17)..."
+                    },
+                    {
+                      "text": "rendering chunks (18)..."
+                    },
+                    {
+                      "text": "rendering chunks (19)..."
+                    },
+                    {
+                      "text": "rendering chunks (20)..."
+                    },
+                    {
+                      "text": "rendering chunks (21)..."
+                    },
+                    {
+                      "text": "rendering chunks (22)..."
+                    },
+                    {
+                      "text": "rendering chunks (23)..."
+                    },
+                    {
+                      "text": "rendering chunks (24)..."
+                    },
+                    {
+                      "text": "rendering chunks (25)..."
+                    },
+                    {
+                      "text": "rendering chunks (26)..."
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mindex-styles.L5zw9kH6.mjs                  \u001b[39m\u001b[1m\u001b[2m  0.08 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mapp-styles.CRS9nKq8.mjs                    \u001b[39m\u001b[1m\u001b[2m  0.08 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mthrow-styles.C-OTiZ92.mjs                  \u001b[39m\u001b[1m\u001b[2m  0.08 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mqrcode-styles.DNLIo34N.mjs                 \u001b[39m\u001b[1m\u001b[2m  0.08 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mcatchup-styles.D2mZUVJG.mjs                \u001b[39m\u001b[1m\u001b[2m  0.08 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32merror-404-styles.DKrRPVnW.mjs              \u001b[39m\u001b[1m\u001b[2m  0.08 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32merror-500-styles.TTVQqs5q.mjs              \u001b[39m\u001b[1m\u001b[2m  0.08 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mcatchup-DL-styles.l4pCK1Gx.mjs             \u001b[39m\u001b[1m\u001b[2m  0.09 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mthrow-statistics-styles.CdJpXs9I.mjs       \u001b[39m\u001b[1m\u001b[2m  0.09 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mentry-styles.Bb13oj9j.mjs                  \u001b[39m\u001b[1m\u001b[2m  0.28 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[32mstyles.mjs                                       \u001b[39m\u001b[1m\u001b[2m  2.56 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mentry-styles-4.mjs-hRSQ1EYN.js             \u001b[39m\u001b[1m\u001b[2m  0.30 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mcatchup-styles-1.mjs-BDV0nWnq.js           \u001b[39m\u001b[1m\u001b[2m  0.33 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mqrcode-styles-1.mjs-0AqK8NJZ.js            \u001b[39m\u001b[1m\u001b[2m  0.33 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mindex-styles-1.mjs-BHjMGrEp.js             \u001b[39m\u001b[1m\u001b[2m  0.35 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow-statistics-styles-1.mjs-C5sVmFT3.js  \u001b[39m\u001b[1m\u001b[2m  0.37 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.12 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mcatchup-DL-styles-1.mjs-DOcTvJXU.js        \u001b[39m\u001b[1m\u001b[2m  0.50 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.12 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow-styles-1.mjs-DB0BGslI.js             \u001b[39m\u001b[1m\u001b[2m  0.76 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mindex-BabADJUJ.js                          \u001b[39m\u001b[1m\u001b[2m  0.98 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   5.94 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mlogin-BzBgotZK.js                          \u001b[39m\u001b[1m\u001b[2m  1.06 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.13 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36misland-renderer-DU5anwH2.js                \u001b[39m\u001b[1m\u001b[2m  1.09 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   1.61 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow-ZO-vCQBn.js                          \u001b[39m\u001b[1m\u001b[2m  1.22 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.14 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow-RnFBv-WE.js                          \u001b[39m\u001b[1m\u001b[2m  1.49 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   2.42 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mqrcode-BYpVNb3X.js                         \u001b[39m\u001b[1m\u001b[2m  1.77 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   1.57 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mindex-BpFCZJIz.js                          \u001b[39m\u001b[1m\u001b[2m  1.82 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.14 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36merror-500-styles-1.mjs-Blr39NBU.js         \u001b[39m\u001b[1m\u001b[2m  2.17 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.12 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow-statistics-DWo5yTTp.js               \u001b[39m\u001b[1m\u001b[2m  2.21 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   1.83 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mcatchup-5FeJNxZX.js                        \u001b[39m\u001b[1m\u001b[2m  2.90 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   1.34 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36merror-500-CK8rYmWH.js                      \u001b[39m\u001b[1m\u001b[2m  3.09 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   3.80 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mcatchup-DL-CacoiczX.js                     \u001b[39m\u001b[1m\u001b[2m  3.38 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   1.84 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36merror-404-styles-1.mjs-CJJKmaPY.js         \u001b[39m\u001b[1m\u001b[2m  3.86 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.12 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36merror-404-D-2aGN92.js                      \u001b[39m\u001b[1m\u001b[2m 10.74 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:  20.86 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mstar-CrOK92CP.js                           \u001b[39m\u001b[1m\u001b[2m 23.86 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:  14.40 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[36mserver.mjs                                       \u001b[39m\u001b[1m\u001b[2m151.65 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map: 369.49 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mentry-styles-3.mjs-Cf-N_X7E.js             \u001b[39m\u001b[1m\u001b[2m242.99 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mentry-styles-1.mjs-OlcSQ1JO.js             \u001b[39m\u001b[1m\u001b[2m243.01 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:12\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/9bi3vf/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mentry-styles-2.mjs-DAE_lixv.js             \u001b[39m\u001b[1m\u001b[2m346.08 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[36mℹ\u001b[39m \u001b[32m✓ built in 10.34s\u001b[39m                                                  \u001b[90m22:27:12\u001b[39m\n"
+                    },
+                    {
+                      "text": "\u001b[32m✔\u001b[39m Generated public \u001b[36m.nuxt/test/9bi3vf/output/public\u001b[39m             \u001b[90mnitro\u001b[39m \u001b[90m22:27:12\u001b[39m\n"
+                    },
+                    {
+                      "text": "\u001b[36mℹ\u001b[39m Building Nitro Server (preset: \u001b[36mnode-server\u001b[39m)                  \u001b[90mnitro\u001b[39m \u001b[90m22:27:12\u001b[39m\n"
+                    },
+                    {
+                      "text": "\u001b[32m✔\u001b[39m Nitro server built                                           \u001b[90mnitro\u001b[39m \u001b[90m22:27:16\u001b[39m\n"
+                    },
+                    {
+                      "text": "\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/app-styles.CRS9nKq8.mjs (285 B)\u001b[39m\u001b[90m (198 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/app-styles.CRS9nKq8.mjs.map (201 B)\u001b[39m\u001b[90m (161 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/catchup-5FeJNxZX.mjs (2.98 kB)\u001b[39m\u001b[90m (923 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/catchup-5FeJNxZX.mjs.map (2.67 kB)\u001b[39m\u001b[90m (663 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/catchup-DL-CacoiczX.mjs (3.49 kB)\u001b[39m\u001b[90m (1.09 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/catchup-DL-CacoiczX.mjs.map (2.84 kB)\u001b[39m\u001b[90m (510 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/catchup-DL-styles.l4pCK1Gx.mjs (556 B)\u001b[39m\u001b[90m (293 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/catchup-DL-styles.l4pCK1Gx.mjs.map (314 B)\u001b[39m\u001b[90m (208 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/catchup-styles.D2mZUVJG.mjs (377 B)\u001b[39m\u001b[90m (239 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/catchup-styles.D2mZUVJG.mjs.map (305 B)\u001b[39m\u001b[90m (207 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/entry-styles-4.mjs-hRSQ1EYN.mjs (291 B)\u001b[39m\u001b[90m (219 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/entry-styles-4.mjs-hRSQ1EYN.mjs.map (204 B)\u001b[39m\u001b[90m (163 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/entry-styles.Bb13oj9j.mjs (833 kB)\u001b[39m\u001b[90m (110 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/entry-styles.Bb13oj9j.mjs.map (762 B)\u001b[39m\u001b[90m (338 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/error-404-D-2aGN92.mjs (10.8 kB)\u001b[39m\u001b[90m (3.46 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/error-404-D-2aGN92.mjs.map (8.64 kB)\u001b[39m\u001b[90m (2.13 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/error-404-styles.DKrRPVnW.mjs (3.92 kB)\u001b[39m\u001b[90m (1.26 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/error-404-styles.DKrRPVnW.mjs.map (312 B)\u001b[39m\u001b[90m (209 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/error-500-CK8rYmWH.mjs (3.06 kB)\u001b[39m\u001b[90m (1.36 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/error-500-CK8rYmWH.mjs.map (1.67 kB)\u001b[39m\u001b[90m (598 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/error-500-styles.TTVQqs5q.mjs (2.22 kB)\u001b[39m\u001b[90m (870 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/error-500-styles.TTVQqs5q.mjs.map (312 B)\u001b[39m\u001b[90m (209 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/index-BabADJUJ.mjs (979 B)\u001b[39m\u001b[90m (456 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/index-BabADJUJ.mjs.map (1.13 kB)\u001b[39m\u001b[90m (456 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/index-BpFCZJIz.mjs (1.79 kB)\u001b[39m\u001b[90m (788 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/index-BpFCZJIz.mjs.map (1.38 kB)\u001b[39m\u001b[90m (517 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/index-styles.L5zw9kH6.mjs (394 B)\u001b[39m\u001b[90m (256 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/index-styles.L5zw9kH6.mjs.map (299 B)\u001b[39m\u001b[90m (205 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/island-renderer-DU5anwH2.mjs (1.05 kB)\u001b[39m\u001b[90m (493 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/island-renderer-DU5anwH2.mjs.map (882 B)\u001b[39m\u001b[90m (405 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/login-BzBgotZK.mjs (1.03 kB)\u001b[39m\u001b[90m (503 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/login-BzBgotZK.mjs.map (812 B)\u001b[39m\u001b[90m (373 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/qrcode-BYpVNb3X.mjs (1.8 kB)\u001b[39m\u001b[90m (801 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/qrcode-BYpVNb3X.mjs.map (1.61 kB)\u001b[39m\u001b[90m (614 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/qrcode-styles.DNLIo34N.mjs (377 B)\u001b[39m\u001b[90m (243 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/qrcode-styles.DNLIo34N.mjs.map (302 B)\u001b[39m\u001b[90m (203 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/star-CrOK92CP.mjs (23.9 kB)\u001b[39m\u001b[90m (2.57 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/star-CrOK92CP.mjs.map (24.6 kB)\u001b[39m\u001b[90m (1.55 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/throw-RnFBv-WE.mjs (1.47 kB)\u001b[39m\u001b[90m (672 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/throw-RnFBv-WE.mjs.map (1.43 kB)\u001b[39m\u001b[90m (568 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/throw-statistics-DWo5yTTp.mjs (2.18 kB)\u001b[39m\u001b[90m (822 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/throw-statistics-DWo5yTTp.mjs.map (1.79 kB)\u001b[39m\u001b[90m (635 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/throw-statistics-styles.CdJpXs9I.mjs (435 B)\u001b[39m\u001b[90m (263 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/throw-statistics-styles.CdJpXs9I.mjs.map (332 B)\u001b[39m\u001b[90m (214 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/throw-styles.C-OTiZ92.mjs (805 B)\u001b[39m\u001b[90m (418 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/throw-styles.C-OTiZ92.mjs.map (300 B)\u001b[39m\u001b[90m (205 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/throw-ZO-vCQBn.mjs (1.19 kB)\u001b[39m\u001b[90m (541 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/_nuxt/throw-ZO-vCQBn.mjs.map (936 B)\u001b[39m\u001b[90m (413 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/client.manifest.mjs (7.67 kB)\u001b[39m\u001b[90m (1.11 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/client.manifest.mjs.map (6.42 kB)\u001b[39m\u001b[90m (790 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/server.mjs (127 kB)\u001b[39m\u001b[90m (35.1 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/server.mjs.map (306 B)\u001b[39m\u001b[90m (204 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/styles.mjs (2.63 kB)\u001b[39m\u001b[90m (575 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/app/styles.mjs.map (1.54 kB)\u001b[39m\u001b[90m (358 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/error-500.mjs (4.26 kB)\u001b[39m\u001b[90m (1.84 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/error-500.mjs.map (202 B)\u001b[39m\u001b[90m (157 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/handlers/renderer.mjs (13.3 kB)\u001b[39m\u001b[90m (4.26 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/handlers/renderer.mjs.map (460 B)\u001b[39m\u001b[90m (227 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/hello.mjs (344 B)\u001b[39m\u001b[90m (215 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/hello.mjs.map (249 B)\u001b[39m\u001b[90m (165 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/nitro/node-server.mjs (174 kB)\u001b[39m\u001b[90m (42.6 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/nitro/node-server.mjs.map (3.36 kB)\u001b[39m\u001b[90m (773 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/rollup/_virtual_spa-template.mjs (94 B)\u001b[39m\u001b[90m (100 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/chunks/rollup/_virtual_spa-template.mjs.map (112 B)\u001b[39m\u001b[90m (111 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/9bi3vf/output/server/index.mjs (286 B)\u001b[39m\u001b[90m (195 B gzip)\u001b[39m\n\u001b[90m  └─ .nuxt/test/9bi3vf/output/server/package.json (1.51 kB)\u001b[39m\u001b[90m (570 B gzip)\u001b[39m\n\u001b[36mΣ Total size:\u001b[39m 4.87 MB (1.12 MB gzip)\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90mnitro\u001b[90m \u001b[90m22:27:16\u001b[90m]\u001b[39m \u001b[32m✔\u001b[39m You can preview this build using \u001b[36mnode .nuxt/test/9bi3vf/output/server/index.mjs\u001b[39m\n"
+                    },
+                    {
+                      "buffer": "TGlzdGVuaW5nIG9uIGh0dHA6Ly8xMjcuMC4wLjE6NTIwOTAK"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-03-18T21:26:51.677Z",
+                  "attachments": [],
+                  "errorLocation": {
+                    "file": "/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/tests/tne.test.ts",
+                    "column": 48,
+                    "line": 12
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "b0a7fd45ac228944059d-8c4da1dee86ce5c5174f",
+          "file": "tne.test.ts",
+          "line": 4,
+          "column": 1
+        },
+        {
+          "title": "test-tne",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "status": "failed",
+                  "duration": 25890,
+                  "error": {
+                    "message": "Error: locator.click: Test ended.\nCall log:\n  \u001b[2m- waiting for getByRole('img', { name: 'cake' })\u001b[22m\n",
+                    "stack": "Error: locator.click: Test ended.\nCall log:\n  \u001b[2m- waiting for getByRole('img', { name: 'cake' })\u001b[22m\n\n    at /Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/tests/tne.test.ts:12:48",
+                    "location": {
+                      "file": "/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/tests/tne.test.ts",
+                      "column": 48,
+                      "line": 12
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 10 |\u001b[39m     expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m\"img\"\u001b[39m\u001b[33m,\u001b[39m { \u001b[32m\"name\"\u001b[39m\u001b[33m:\u001b[39m throwable }))\u001b[33m.\u001b[39mtoBeDefined()\u001b[0m\n\u001b[0m \u001b[90m 11 |\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 12 |\u001b[39m     page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'img'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m throwable })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 13 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 14 |\u001b[39m     \u001b[90m// await page.locator(`#${throwable}`).click()\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 15 |\u001b[39m   }\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/tests/tne.test.ts",
+                        "column": 48,
+                        "line": 12
+                      },
+                      "message": "Error: locator.click: Test ended.\nCall log:\n  \u001b[2m- waiting for getByRole('img', { name: 'cake' })\u001b[22m\n\n\n\u001b[0m \u001b[90m 10 |\u001b[39m     expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m\"img\"\u001b[39m\u001b[33m,\u001b[39m { \u001b[32m\"name\"\u001b[39m\u001b[33m:\u001b[39m throwable }))\u001b[33m.\u001b[39mtoBeDefined()\u001b[0m\n\u001b[0m \u001b[90m 11 |\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 12 |\u001b[39m     page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'img'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m throwable })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 13 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 14 |\u001b[39m     \u001b[90m// await page.locator(`#${throwable}`).click()\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 15 |\u001b[39m   }\u001b[0m\n\n\u001b[2m    at /Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/tests/tne.test.ts:12:48\u001b[22m"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "\u001b[36mℹ\u001b[39m \u001b[36mvite v5.1.1 \u001b[32mbuilding for production...\u001b[36m\u001b[39m                             \u001b[90m22:26:59\u001b[39m\n"
+                    },
+                    {
+                      "text": "transforming (1) \u001b[2mnode_modules/nuxt/dist/app/entry.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (11) \u001b[2mnode_modules/ufo/dist/index.mjs\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (22) \u001b[2mvirtual:nuxt:/Users/docjoe/Documents/mystuff/development/"
+                    },
+                    {
+                      "text": "transforming (38) \u001b[2mnode_modules/nuxt/dist/app/composables/payload.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (61) \u001b[2mpages/index.vue\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (87) \u001b[2mnode_modules/nuxt/dist/app/components/utils.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (111) \u001b[2mnode_modules/nuxt/dist/app/composables/ssr.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (129) \u001b[2mnode_modules/engine.io-client/build/esm/index.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (177) \u001b[2mnode_modules/vuetify/lib/framework.mjs\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (210) \u001b[2mnode_modules/vuetify/lib/composables/date/index.mjs\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (255) \u001b[2mnode_modules/nuxt/dist/pages/runtime/page.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (283) \u001b[2mnode_modules/@vue/reactivity/dist/reactivity.esm-bundler"
+                    },
+                    {
+                      "text": "\u001b[36mℹ\u001b[39m \u001b[32m✓\u001b[39m 283 modules transformed.                                         \u001b[90m22:27:07\u001b[39m\n"
+                    },
+                    {
+                      "text": "\u001b[32mInspect report generated at\u001b[39m \u001b[2m/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/.nuxt/test/oul5m5/analyze/.vite-inspect\u001b[22m\n"
+                    },
+                    {
+                      "text": "rendering chunks (1)..."
+                    },
+                    {
+                      "text": "rendering chunks (2)..."
+                    },
+                    {
+                      "text": "rendering chunks (3)..."
+                    },
+                    {
+                      "text": "rendering chunks (4)..."
+                    },
+                    {
+                      "text": "rendering chunks (5)..."
+                    },
+                    {
+                      "text": "rendering chunks (6)..."
+                    },
+                    {
+                      "text": "rendering chunks (7)..."
+                    },
+                    {
+                      "text": "rendering chunks (8)..."
+                    },
+                    {
+                      "text": "rendering chunks (9)..."
+                    },
+                    {
+                      "text": "rendering chunks (10)..."
+                    },
+                    {
+                      "text": "rendering chunks (11)..."
+                    },
+                    {
+                      "text": "rendering chunks (12)..."
+                    },
+                    {
+                      "text": "rendering chunks (13)..."
+                    },
+                    {
+                      "text": "computing gzip size (0)..."
+                    },
+                    {
+                      "text": "computing gzip size (1)..."
+                    },
+                    {
+                      "text": "computing gzip size (2)..."
+                    },
+                    {
+                      "text": "computing gzip size (3)..."
+                    },
+                    {
+                      "text": "computing gzip size (4)..."
+                    },
+                    {
+                      "text": "computing gzip size (5)..."
+                    },
+                    {
+                      "text": "computing gzip size (6)..."
+                    },
+                    {
+                      "text": "computing gzip size (7)..."
+                    },
+                    {
+                      "text": "computing gzip size (8)..."
+                    },
+                    {
+                      "text": "computing gzip size (9)..."
+                    },
+                    {
+                      "text": "computing gzip size (10)..."
+                    },
+                    {
+                      "text": "computing gzip size (11)..."
+                    },
+                    {
+                      "text": "computing gzip size (12)..."
+                    },
+                    {
+                      "text": "computing gzip size (13)..."
+                    },
+                    {
+                      "text": "computing gzip size (14)..."
+                    },
+                    {
+                      "text": "computing gzip size (15)..."
+                    },
+                    {
+                      "text": "computing gzip size (16)..."
+                    },
+                    {
+                      "text": "computing gzip size (17)..."
+                    },
+                    {
+                      "text": "computing gzip size (18)..."
+                    },
+                    {
+                      "text": "computing gzip size (19)..."
+                    },
+                    {
+                      "text": "computing gzip size (20)..."
+                    },
+                    {
+                      "text": "computing gzip size (21)..."
+                    },
+                    {
+                      "text": "computing gzip size (22)..."
+                    },
+                    {
+                      "text": "computing gzip size (23)..."
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[32mmanifest.json                                            \u001b[39m\u001b[1m\u001b[2m    4.96 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.87 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mJMainusch_BStemmildt_AHamann_Speaker.BoNuO6es.jpg  \u001b[39m\u001b[1m\u001b[2m  381.61 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mmaterialdesignicons-webfont.Dp5v-WZN.woff2         \u001b[39m\u001b[1m\u001b[2m  403.22 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mmaterialdesignicons-webfont.PXm3-2wK.woff          \u001b[39m\u001b[1m\u001b[2m  587.98 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mmaterialdesignicons-webfont.B7mPwVP_.ttf           \u001b[39m\u001b[1m\u001b[2m1,307.66 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mmaterialdesignicons-webfont.CSr8KVlo.eot           \u001b[39m\u001b[1m\u001b[2m1,307.88 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35mentry.DPVArKG4.css                                 \u001b[39m\u001b[1m\u001b[2m    0.10 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35mcatchup.B9nuJwnh.css                               \u001b[39m\u001b[1m\u001b[2m    0.12 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35mqrcode.BjYjfer6.css                                \u001b[39m\u001b[1m\u001b[2m    0.12 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.12 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35mthrow-statistics.C53n2DFL.css                      \u001b[39m\u001b[1m\u001b[2m    0.14 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.13 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35mindex.BZJvbPlr.css                                 \u001b[39m\u001b[1m\u001b[2m    0.15 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.13 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35mcatchup-DL.An6gPuo3.css                            \u001b[39m\u001b[1m\u001b[2m    0.29 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.16 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35mthrow.CQeC8FEa.css                                 \u001b[39m\u001b[1m\u001b[2m    0.56 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.30 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35merror-500.BXQ_YkC0.css                             \u001b[39m\u001b[1m\u001b[2m    1.95 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.74 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[35merror-404.CoUbADi5.css                             \u001b[39m\u001b[1m\u001b[2m    3.62 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  1.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mlogin.ciWMN5tQ.js                                  \u001b[39m\u001b[1m\u001b[2m    0.19 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.17 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow.B1IZ6jog.js                                  \u001b[39m\u001b[1m\u001b[2m    0.35 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.27 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mvue.f36acd1f.KYTHAmGQ.js                           \u001b[39m\u001b[1m\u001b[2m    0.39 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.27 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mindex.NP8PS83e.js                                  \u001b[39m\u001b[1m\u001b[2m    0.62 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.44 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mcatchup.DrSKepPd.js                                \u001b[39m\u001b[1m\u001b[2m    0.95 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.55 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow.B3x6QrSr.js                                  \u001b[39m\u001b[1m\u001b[2m    1.07 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.64 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow-statistics.BPH_g66h.js                       \u001b[39m\u001b[1m\u001b[2m    1.17 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.61 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mcatchup-DL.Cbz7wBPU.js                             \u001b[39m\u001b[1m\u001b[2m    1.28 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  0.75 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36merror-500.BSjnKZxU.js                              \u001b[39m\u001b[1m\u001b[2m    1.92 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  1.02 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36merror-404.CH8L1vb0.js                              \u001b[39m\u001b[1m\u001b[2m    6.49 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  2.85 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mstar.vue.CgWAmuR2.js                               \u001b[39m\u001b[1m\u001b[2m    8.98 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  1.78 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mqrcode.BNQExxE0.js                                 \u001b[39m\u001b[1m\u001b[2m   68.92 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip: 23.98 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:07\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/client/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mentry.392_EFVQ.js                                  \u001b[39m\u001b[1m\u001b[2m  238.63 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip: 89.16 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[36mℹ\u001b[39m \u001b[32m✓ built in 8.20s\u001b[39m                                                   \u001b[90m22:27:07\u001b[39m\n"
+                    },
+                    {
+                      "text": "\u001b[36mℹ\u001b[39m \u001b[36mvite v5.1.1 \u001b[32mbuilding SSR bundle for production...\u001b[36m\u001b[39m                  \u001b[90m22:27:07\u001b[39m\n"
+                    },
+                    {
+                      "text": "transforming (2) \u001b[2mnode_modules/nuxt/dist/app/entry.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (4) \u001b[2mvirtual:nuxt:/Users/docjoe/Documents/mystuff/development/t"
+                    },
+                    {
+                      "text": "transforming (12) \u001b[2mnode_modules/nuxt/dist/app/composables/error.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (16) \u001b[2mnode_modules/vuetify/lib/styles/main.css\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (19) \u001b[2mnode_modules/nuxt/dist/app/nuxt.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (36) \u001b[2mnode_modules/nuxt/dist/app/components/injections.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (49) \u001b[2mpages/index.vue\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (61) \u001b[2mnode_modules/nuxt/dist/app/composables/state.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (77) \u001b[2mnode_modules/nuxt/dist/app/utils.js\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (121) \u001b[2mnode_modules/unctx/dist/index.mjs\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (151) \u001b[2mnode_modules/vuetify/lib/composables/display.mjs\u001b[22m"
+                    },
+                    {
+                      "text": "transforming (172) \u001b[2mcomponents/cake.vue\u001b[22m"
+                    },
+                    {
+                      "text": "\u001b[36mℹ\u001b[39m \u001b[32m✓\u001b[39m 203 modules transformed.                                         \u001b[90m22:27:17\u001b[39m\n"
+                    },
+                    {
+                      "text": "\u001b[32mInspect report generated at\u001b[39m \u001b[2m/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/.nuxt/test/oul5m5/analyze/.vite-inspect\u001b[22m\n"
+                    },
+                    {
+                      "text": "rendering chunks (1)..."
+                    },
+                    {
+                      "text": "rendering chunks (2)..."
+                    },
+                    {
+                      "text": "rendering chunks (3)..."
+                    },
+                    {
+                      "text": "rendering chunks (4)..."
+                    },
+                    {
+                      "text": "rendering chunks (5)..."
+                    },
+                    {
+                      "text": "rendering chunks (6)..."
+                    },
+                    {
+                      "text": "rendering chunks (7)..."
+                    },
+                    {
+                      "text": "rendering chunks (8)..."
+                    },
+                    {
+                      "text": "rendering chunks (9)..."
+                    },
+                    {
+                      "text": "rendering chunks (10)..."
+                    },
+                    {
+                      "text": "rendering chunks (11)..."
+                    },
+                    {
+                      "text": "rendering chunks (12)..."
+                    },
+                    {
+                      "text": "rendering chunks (13)..."
+                    },
+                    {
+                      "text": "rendering chunks (14)..."
+                    },
+                    {
+                      "text": "rendering chunks (15)..."
+                    },
+                    {
+                      "text": "rendering chunks (16)..."
+                    },
+                    {
+                      "text": "rendering chunks (17)..."
+                    },
+                    {
+                      "text": "rendering chunks (18)..."
+                    },
+                    {
+                      "text": "rendering chunks (19)..."
+                    },
+                    {
+                      "text": "rendering chunks (20)..."
+                    },
+                    {
+                      "text": "rendering chunks (21)..."
+                    },
+                    {
+                      "text": "rendering chunks (22)..."
+                    },
+                    {
+                      "text": "rendering chunks (23)..."
+                    },
+                    {
+                      "text": "rendering chunks (24)..."
+                    },
+                    {
+                      "text": "rendering chunks (25)..."
+                    },
+                    {
+                      "text": "rendering chunks (26)..."
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mindex-styles.L5zw9kH6.mjs                  \u001b[39m\u001b[1m\u001b[2m  0.08 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mapp-styles.CRS9nKq8.mjs                    \u001b[39m\u001b[1m\u001b[2m  0.08 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mthrow-styles.C-OTiZ92.mjs                  \u001b[39m\u001b[1m\u001b[2m  0.08 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mqrcode-styles.DNLIo34N.mjs                 \u001b[39m\u001b[1m\u001b[2m  0.08 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mcatchup-styles.D2mZUVJG.mjs                \u001b[39m\u001b[1m\u001b[2m  0.08 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32merror-404-styles.DKrRPVnW.mjs              \u001b[39m\u001b[1m\u001b[2m  0.08 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32merror-500-styles.TTVQqs5q.mjs              \u001b[39m\u001b[1m\u001b[2m  0.08 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mcatchup-DL-styles.l4pCK1Gx.mjs             \u001b[39m\u001b[1m\u001b[2m  0.09 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mthrow-statistics-styles.CdJpXs9I.mjs       \u001b[39m\u001b[1m\u001b[2m  0.09 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[32mentry-styles.Bb13oj9j.mjs                  \u001b[39m\u001b[1m\u001b[2m  0.28 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[32mstyles.mjs                                       \u001b[39m\u001b[1m\u001b[2m  2.56 kB\u001b[22m\u001b[1m\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mentry-styles-4.mjs-hRSQ1EYN.js             \u001b[39m\u001b[1m\u001b[2m  0.30 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mcatchup-styles-1.mjs-BDV0nWnq.js           \u001b[39m\u001b[1m\u001b[2m  0.33 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mqrcode-styles-1.mjs-0AqK8NJZ.js            \u001b[39m\u001b[1m\u001b[2m  0.33 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mindex-styles-1.mjs-BHjMGrEp.js             \u001b[39m\u001b[1m\u001b[2m  0.35 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow-statistics-styles-1.mjs-C5sVmFT3.js  \u001b[39m\u001b[1m\u001b[2m  0.37 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.12 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mcatchup-DL-styles-1.mjs-DOcTvJXU.js        \u001b[39m\u001b[1m\u001b[2m  0.50 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.12 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow-styles-1.mjs-DB0BGslI.js             \u001b[39m\u001b[1m\u001b[2m  0.76 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mindex-BabADJUJ.js                          \u001b[39m\u001b[1m\u001b[2m  0.98 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   5.94 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mlogin-BzBgotZK.js                          \u001b[39m\u001b[1m\u001b[2m  1.06 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.13 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36misland-renderer-DU5anwH2.js                \u001b[39m\u001b[1m\u001b[2m  1.09 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   1.61 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow-ZO-vCQBn.js                          \u001b[39m\u001b[1m\u001b[2m  1.22 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.14 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow-RnFBv-WE.js                          \u001b[39m\u001b[1m\u001b[2m  1.49 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   2.42 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mqrcode-BYpVNb3X.js                         \u001b[39m\u001b[1m\u001b[2m  1.77 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   1.57 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mindex-BpFCZJIz.js                          \u001b[39m\u001b[1m\u001b[2m  1.82 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.14 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36merror-500-styles-1.mjs-Blr39NBU.js         \u001b[39m\u001b[1m\u001b[2m  2.17 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.12 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mthrow-statistics-DWo5yTTp.js               \u001b[39m\u001b[1m\u001b[2m  2.21 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   1.83 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mcatchup-5FeJNxZX.js                        \u001b[39m\u001b[1m\u001b[2m  2.90 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   1.34 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36merror-500-CK8rYmWH.js                      \u001b[39m\u001b[1m\u001b[2m  3.09 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   3.80 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mcatchup-DL-CacoiczX.js                     \u001b[39m\u001b[1m\u001b[2m  3.38 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   1.84 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36merror-404-styles-1.mjs-CJJKmaPY.js         \u001b[39m\u001b[1m\u001b[2m  3.86 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.12 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36merror-404-D-2aGN92.js                      \u001b[39m\u001b[1m\u001b[2m 10.74 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:  20.86 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mstar-CrOK92CP.js                           \u001b[39m\u001b[1m\u001b[2m 23.86 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:  14.40 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[36mserver.mjs                                       \u001b[39m\u001b[1m\u001b[2m151.65 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map: 369.49 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mentry-styles-3.mjs-Cf-N_X7E.js             \u001b[39m\u001b[1m\u001b[2m242.99 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mentry-styles-1.mjs-OlcSQ1JO.js             \u001b[39m\u001b[1m\u001b[2m243.01 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90m22:27:18\u001b[90m]\u001b[39m \u001b[36mℹ\u001b[39m \u001b[2m.nuxt/test/oul5m5/dist/server/\u001b[22m\u001b[2m_nuxt/\u001b[22m\u001b[36mentry-styles-2.mjs-DAE_lixv.js             \u001b[39m\u001b[1m\u001b[2m346.08 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ map:   0.11 kB\u001b[22m\n"
+                    },
+                    {
+                      "text": "\u001b[36mℹ\u001b[39m \u001b[32m✓ built in 10.61s\u001b[39m                                                  \u001b[90m22:27:18\u001b[39m\n"
+                    },
+                    {
+                      "text": "\u001b[32m✔\u001b[39m Generated public \u001b[36m.nuxt/test/oul5m5/output/public\u001b[39m             \u001b[90mnitro\u001b[39m \u001b[90m22:27:18\u001b[39m\n"
+                    },
+                    {
+                      "text": "\u001b[36mℹ\u001b[39m Building Nitro Server (preset: \u001b[36mnode-server\u001b[39m)                  \u001b[90mnitro\u001b[39m \u001b[90m22:27:18\u001b[39m\n"
+                    },
+                    {
+                      "text": "\u001b[32m✔\u001b[39m Nitro server built                                           \u001b[90mnitro\u001b[39m \u001b[90m22:27:21\u001b[39m\n"
+                    },
+                    {
+                      "text": "\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/app-styles.CRS9nKq8.mjs (285 B)\u001b[39m\u001b[90m (198 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/app-styles.CRS9nKq8.mjs.map (201 B)\u001b[39m\u001b[90m (161 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/catchup-5FeJNxZX.mjs (2.98 kB)\u001b[39m\u001b[90m (923 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/catchup-5FeJNxZX.mjs.map (2.67 kB)\u001b[39m\u001b[90m (663 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/catchup-DL-CacoiczX.mjs (3.49 kB)\u001b[39m\u001b[90m (1.09 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/catchup-DL-CacoiczX.mjs.map (2.84 kB)\u001b[39m\u001b[90m (510 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/catchup-DL-styles.l4pCK1Gx.mjs (556 B)\u001b[39m\u001b[90m (293 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/catchup-DL-styles.l4pCK1Gx.mjs.map (314 B)\u001b[39m\u001b[90m (208 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/catchup-styles.D2mZUVJG.mjs (377 B)\u001b[39m\u001b[90m (239 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/catchup-styles.D2mZUVJG.mjs.map (305 B)\u001b[39m\u001b[90m (207 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/entry-styles-4.mjs-hRSQ1EYN.mjs (291 B)\u001b[39m\u001b[90m (219 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/entry-styles-4.mjs-hRSQ1EYN.mjs.map (204 B)\u001b[39m\u001b[90m (163 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/entry-styles.Bb13oj9j.mjs (833 kB)\u001b[39m\u001b[90m (110 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/entry-styles.Bb13oj9j.mjs.map (762 B)\u001b[39m\u001b[90m (338 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/error-404-D-2aGN92.mjs (10.8 kB)\u001b[39m\u001b[90m (3.46 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/error-404-D-2aGN92.mjs.map (8.64 kB)\u001b[39m\u001b[90m (2.13 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/error-404-styles.DKrRPVnW.mjs (3.92 kB)\u001b[39m\u001b[90m (1.26 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/error-404-styles.DKrRPVnW.mjs.map (312 B)\u001b[39m\u001b[90m (209 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/error-500-CK8rYmWH.mjs (3.06 kB)\u001b[39m\u001b[90m (1.36 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/error-500-CK8rYmWH.mjs.map (1.67 kB)\u001b[39m\u001b[90m (598 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/error-500-styles.TTVQqs5q.mjs (2.22 kB)\u001b[39m\u001b[90m (870 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/error-500-styles.TTVQqs5q.mjs.map (312 B)\u001b[39m\u001b[90m (209 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/index-BabADJUJ.mjs (979 B)\u001b[39m\u001b[90m (456 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/index-BabADJUJ.mjs.map (1.13 kB)\u001b[39m\u001b[90m (456 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/index-BpFCZJIz.mjs (1.79 kB)\u001b[39m\u001b[90m (788 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/index-BpFCZJIz.mjs.map (1.38 kB)\u001b[39m\u001b[90m (517 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/index-styles.L5zw9kH6.mjs (394 B)\u001b[39m\u001b[90m (256 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/index-styles.L5zw9kH6.mjs.map (299 B)\u001b[39m\u001b[90m (205 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/island-renderer-DU5anwH2.mjs (1.05 kB)\u001b[39m\u001b[90m (493 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/island-renderer-DU5anwH2.mjs.map (882 B)\u001b[39m\u001b[90m (405 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/login-BzBgotZK.mjs (1.03 kB)\u001b[39m\u001b[90m (503 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/login-BzBgotZK.mjs.map (812 B)\u001b[39m\u001b[90m (373 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/qrcode-BYpVNb3X.mjs (1.8 kB)\u001b[39m\u001b[90m (801 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/qrcode-BYpVNb3X.mjs.map (1.61 kB)\u001b[39m\u001b[90m (614 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/qrcode-styles.DNLIo34N.mjs (377 B)\u001b[39m\u001b[90m (243 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/qrcode-styles.DNLIo34N.mjs.map (302 B)\u001b[39m\u001b[90m (203 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/star-CrOK92CP.mjs (23.9 kB)\u001b[39m\u001b[90m (2.57 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/star-CrOK92CP.mjs.map (24.6 kB)\u001b[39m\u001b[90m (1.55 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/throw-RnFBv-WE.mjs (1.47 kB)\u001b[39m\u001b[90m (672 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/throw-RnFBv-WE.mjs.map (1.43 kB)\u001b[39m\u001b[90m (568 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/throw-statistics-DWo5yTTp.mjs (2.18 kB)\u001b[39m\u001b[90m (822 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/throw-statistics-DWo5yTTp.mjs.map (1.79 kB)\u001b[39m\u001b[90m (635 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/throw-statistics-styles.CdJpXs9I.mjs (435 B)\u001b[39m\u001b[90m (263 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/throw-statistics-styles.CdJpXs9I.mjs.map (332 B)\u001b[39m\u001b[90m (214 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/throw-styles.C-OTiZ92.mjs (805 B)\u001b[39m\u001b[90m (418 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/throw-styles.C-OTiZ92.mjs.map (300 B)\u001b[39m\u001b[90m (205 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/throw-ZO-vCQBn.mjs (1.19 kB)\u001b[39m\u001b[90m (541 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/_nuxt/throw-ZO-vCQBn.mjs.map (936 B)\u001b[39m\u001b[90m (413 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/client.manifest.mjs (7.67 kB)\u001b[39m\u001b[90m (1.11 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/client.manifest.mjs.map (6.42 kB)\u001b[39m\u001b[90m (790 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/server.mjs (127 kB)\u001b[39m\u001b[90m (35.1 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/server.mjs.map (306 B)\u001b[39m\u001b[90m (204 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/styles.mjs (2.63 kB)\u001b[39m\u001b[90m (580 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/app/styles.mjs.map (1.54 kB)\u001b[39m\u001b[90m (360 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/error-500.mjs (4.26 kB)\u001b[39m\u001b[90m (1.84 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/error-500.mjs.map (202 B)\u001b[39m\u001b[90m (157 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/handlers/renderer.mjs (13.3 kB)\u001b[39m\u001b[90m (4.26 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/handlers/renderer.mjs.map (460 B)\u001b[39m\u001b[90m (227 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/hello.mjs (344 B)\u001b[39m\u001b[90m (215 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/hello.mjs.map (249 B)\u001b[39m\u001b[90m (165 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/nitro/node-server.mjs (174 kB)\u001b[39m\u001b[90m (42.6 kB gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/nitro/node-server.mjs.map (3.36 kB)\u001b[39m\u001b[90m (773 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/rollup/_virtual_spa-template.mjs (94 B)\u001b[39m\u001b[90m (100 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/chunks/rollup/_virtual_spa-template.mjs.map (112 B)\u001b[39m\u001b[90m (111 B gzip)\u001b[39m\n\u001b[90m  ├─ .nuxt/test/oul5m5/output/server/index.mjs (286 B)\u001b[39m\u001b[90m (195 B gzip)\u001b[39m\n\u001b[90m  └─ .nuxt/test/oul5m5/output/server/package.json (1.51 kB)\u001b[39m\u001b[90m (570 B gzip)\u001b[39m\n\u001b[36mΣ Total size:\u001b[39m 4.87 MB (1.12 MB gzip)\n"
+                    },
+                    {
+                      "text": "\u001b[90m[\u001b[90mnitro\u001b[90m \u001b[90m22:27:21\u001b[90m]\u001b[39m \u001b[32m✔\u001b[39m You can preview this build using \u001b[36mnode .nuxt/test/oul5m5/output/server/index.mjs\u001b[39m\n"
+                    },
+                    {
+                      "buffer": "TGlzdGVuaW5nIG9uIGh0dHA6Ly8xMjcuMC4wLjE6NTI1ODkK"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-03-18T21:26:57.211Z",
+                  "attachments": [],
+                  "errorLocation": {
+                    "file": "/Users/docjoe/Documents/mystuff/development/tne-nuxt3/tomatoes-and-eggs/tests/tne.test.ts",
+                    "column": 48,
+                    "line": 12
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "b0a7fd45ac228944059d-b345ebf30620f80efad6",
+          "file": "tne.test.ts",
+          "line": 4,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2024-03-18T21:26:27.802Z",
+    "duration": 55650.825,
+    "expected": 8,
+    "skipped": 0,
+    "unexpected": 4,
+    "flaky": 0
+  }
+}

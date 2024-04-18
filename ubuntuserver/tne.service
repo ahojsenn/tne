@@ -1,0 +1,10 @@
+[Unit]
+Description=TNE-Server
+
+[Service]
+Type=simple
+User=hannes
+ExecStart=/home/hannes/.nvm/versions/node/v20.12.0/bin/node /home/hannes/tomatoes-and-eggs/.output/server/index.mjs
+
+[Install]
+WantedBy=multi-user.target
