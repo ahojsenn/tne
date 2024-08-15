@@ -3,4 +3,5 @@ export type Client = {
   id: string
   clientStr: string
   hero: string
-};
+}
+

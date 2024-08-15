@@ -6,7 +6,7 @@ div Tomato Trolls: {{ store.getTrolls.length }}
 
 <script setup lang="ts">
 import { type HERO_MESSAGE, type THROWS } from '~/types/message'
-import { useClientStore } from '~/store'
+import { useClientStore } from '~/store/useClientStore';
 const store = ref(useClientStore())
 const countMisses = (throws: THROWS[]) => throws.reduce((acc, cv) => cv.text != 'tomato' ? acc + cv.number: acc, 0)
 </script>

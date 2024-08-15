@@ -1,17 +1,20 @@
 <template lang="pug">
 div.thrower(@wheel.prevent @touchmove.prevent @scroll.prevent)
-  div.f1 {{ store.getHero }} threw {{ store.getNumberOfThrows }} things 
+  div.f1 {{ store.getHero }} threw {{ store.getNumberOfThrows }} things, score: {{ store.getScore }}
   span(v-if="store.getGameSettings.type==='NASA'") NASA mode active
   div(v-for="img,i in getImageLinks()")
     div.column(@click="onClickImage(throwables[i])" :id="throwables[i]")
       img.i1(:src="img" :alt="throwables[i]")
       div.f1 {{store.getNumberOfThrowsOf(throwables[i])  }}
-  div &copy; kommitment 2024
+  div
+    span.k &copy;k
+    span.kommitment ommitment 2024
 </template>
   
 <script setup lang="ts">
 import { type THROW_MESSAGE } from '~/types/message'
-import { useClientStore, useGameStore } from '~/store'
+import { useClientStore } from '~/store/useClientStore'
+import { useGameStore } from '~/store/useGameStore'
 const store = useClientStore()
 const game = useGameStore()
 const { $io } = useNuxtApp()
@@ -34,6 +37,7 @@ const onClickImage = async (thing: string) => {
   const audioBoing = new Audio('/audio/boiiing.mp3')
   const yayTomato = new Audio('/audio/yayTomato.mp3')
   store.storeThrow(thing)
+  store.calculate_score({"text": thing, "clientId": "none"})
   const message = {
     text: thing.trim(),
     clientId: store.client.id ?? 'unknown',
@@ -54,6 +58,7 @@ const onClickImage = async (thing: string) => {
   else if (store.getGameSettings.ison) {
     yayTomato.play()
   }
+  
   // if (store.getGameSettings.ison && (store.getGameSettings.type === 'NASA')) throwables.sort(() => Math.random() - 0.5)
 }
 
@@ -107,4 +112,20 @@ onMounted(() => {
   width: 50%;
   padding: 5px;
 }
+
+.k {
+  font-family: 'Roboto Mono';
+  src: url('../fonts/roboto-mono-v23-latin-regular.woff2');
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.9);
+}
+.kommitment {
+  /* roboto mono small caps */
+  font-family: 'Roboto Mono';
+  src: url('../fonts/roboto-mono-v23-latin-regular.woff2') format('woff2');
+  font-variant-caps: small-caps;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.9);
+}
+
 </style>

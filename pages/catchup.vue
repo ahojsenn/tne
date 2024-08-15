@@ -10,26 +10,17 @@ div.catchup
 </template>
 
 <script setup lang="ts">
-import type { ThrownItem } from '~/types/thrownItem'
-import { useThrownItemsStore } from '~/store'
-import type { MESSAGE, THROW_MESSAGE } from '~/types/message';
+import { useThrownItemsStore } from '~/store/useThrownItemsStore';
+
 const { $io } = useNuxtApp()
 const store = useThrownItemsStore()
 
 onMounted( () => {
-  $io.on('catchup-channel', (m: THROW_MESSAGE) => {
-    //console.log('got new message', m)
-    const item: ThrownItem = {
-        x: m.text,
-        rnd: Math.floor(Math.random() * 100000),
-      }
-    store.throw(item)
-  })
   document.body.classList.remove('bodyClassNoGame')
   document.body.classList.add('transparentMode')
 })
-document.body.classList.remove('trasnparentMode')
-  
+//document.body.classList.remove('transparentMode')
+
 </script>
 
 <style>

@@ -14,24 +14,12 @@ div
 
 
 <script setup lang="ts">
-import type { ThrownItem } from '~/types/thrownItem'
-import { useThrownItemsStore } from '~/store'
-import type { MESSAGE } from '~/types/message';
+import { useThrownItemsStore } from '~/store/useThrownItemsStore';
 const { $io } = useNuxtApp()
 const store = useThrownItemsStore()
 
 console.log("accounts: kstore loaded...") 
 
-onBeforeMount( () => {
-  $io.on('catchup-channel', (m: MESSAGE) => {
-    console.log('got new message', m)
-    const item: ThrownItem = {
-        x: m.message.text,
-        rnd: Math.floor(Math.random() * 100000),
-      }
-    store.throw(item)
-  })
-})
 </script>
 
 <style scoped>

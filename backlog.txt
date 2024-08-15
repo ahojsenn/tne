@@ -1,0 +1,16 @@
+This is my backlog
+
+DOING:
+- BUG: too many heroes in game
+
+TODO:
+- game score counting on the server or on the client or both?
+- undstand the difference between socket.io rooms and the sometimes used term 'channel'
+- get a better understanding of the socket.io API 
+- get a better understanding of the websocket standard
+- update the documentation in README.md
+
+
+DONE:
+- fix gamescore in gamemode --> it is not counting at all:
+   gameMode.isOn was not set

@@ -4,13 +4,19 @@ div
 </template>
 
 <script setup lang="ts">
-import { useClientStore, useGameStore } from '~/store'
+import { useGameStore } from '~/store/useGameStore';
+import { useClientStore } from '~/store/useClientStore';
 const game = useGameStore()
-import type { Client } from '~/types/client'
-import type { GAME } from './types/gameModes';
 const store = useClientStore()
+import type { Client } from '~/types/client'
+import type { GAME } from '~/types/gameModes';
+import type { ThrownItem } from '~/types/thrownItem'
+import type { THROW_MESSAGE } from '~/types/message'
+import { useThrownItemsStore } from '~/store/useThrownItemsStore';
+
 const secret = useCookie('secret')
 const { $io } = useNuxtApp()
+const ti_store = useThrownItemsStore()
 
 onBeforeMount(() => {
   // store a secret in a local cookie
@@ -20,9 +26,11 @@ onBeforeMount(() => {
 })
 
 onMounted( () => {
+  $io.onAny((event, ...args) => console.log('app.vue: got event:', event, args))  
+  $io.emit('register-tne-app-client')
   $io.on('connect', () => $io.emit('client-id', store.client.id))
   $io.on('new-client', (c: Client) => store.storeClient(c))
-  $io.on('tne-reset', () => {console.log("got reset") ;store.reset()})
+  $io.on('tne-reset', () => {console.log("got reset") ;store.reset_throws()})
   $io.on('gameOver', (gameScore) =>  {
     // set game to L#ufthansaa Technik as default
     store.setGameSettings({'ison': false, 'difficulty': 5, 'aim': 300, 'type': 'Lufthansa Technik'})
@@ -41,13 +49,22 @@ onMounted( () => {
     document.body.classList.add('bodyClassNoGame')
   })
   $io.on('gameMode', (gm: GAME) => {
-    // console.log(' app.$io.on. got GameMode: ', gm)
+    console.log(' app.$io.on. got GameMode: ', gm)
     store.setGameSettings(gm)
+    store.reset_tomatoGameScore()
     if (gm.ison) document.body.classList.add('gameMode')
     else document.body.classList.remove('gameMode')
     document.body.classList.add('bodyClassNoGame')
     game.set(gm.ison)
   }) 
+  $io.emit('register-catchup-client')
+  $io.on('catchup-event', (m: THROW_MESSAGE) => {
+    const item: ThrownItem = {
+        x: m.text,
+        rnd: Math.floor(Math.random() * 100000),
+      }
+    ti_store.throw(item)
+  })
 })
 </script>
 

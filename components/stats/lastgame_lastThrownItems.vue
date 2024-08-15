@@ -11,7 +11,7 @@ div
 
 <script setup lang="ts">
 import { type THROW_MESSAGE, type THROWS } from '~/types/message'
-import { useClientStore } from '~/store'
+import { useClientStore } from '~/store/useClientStore';
 const store = ref(useClientStore())
 const m = store.value.last_game_heroes
 const throws = m.reduce((acc, h) => acc = [...acc].concat(h.throws), [] as THROWS[])

@@ -69,5 +69,34 @@ yarn preview
 # bun
 bun run preview
 ```
+# Socket events on the socket server
+- global.io.on *connect*: connect a socket
+- socket.on *register-gameconsole-client*: store the connection as game console client
+...
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+
+- socket.on *register-game-console*: store the connection as game console
+- socket.on *tne*: a thing was thrown
+	- emit *cachtup-channel* with data as THROW_MESSAGE
+	- emit *tomato-game-score* if gamemode is on
+	- emit "*game-over*" if game is over
+- socket.on *last-messages*: send the last n messages
+   - emit "last-thrown-items" as messages
+- socket.on *delete-messages*: delete all messages
+	- emit *last-thrown-items* with sliced data
+   	- emit *tne-reset*
+- game_console.on *setGameMode*: store game mode
+	- global.io.emit('*gameMode*', gm)
+	- game_console.emit('tomato_game_score', 	- Effect.runSync(*last_game_hero_hitlist*))
+- socket.on *client-id*: hand out new client id with hero
+	- socket.emit('new-client', client)
+	- socket.emit('gameMode', gameMode)
+-   socket.on('get_heroes', () => { socket.emit('heroes', Effect.runSync(hero_hitlist)) })
+-      socket.on('disconnect', () => {
+      // Put optional disconnect logic here
+    }); 
+
+
+
+

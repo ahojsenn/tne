@@ -17,7 +17,7 @@ div.statistics
         stats_tomatoTrolls
   div ---
   div.small last game
-  table.small(v-if="store.last_game_heroes.length > 0")
+  table.small(v-if="store.last_game_heroes.length > 0 || true")
     tr
       th Thrown Stuff last game
       th Hero Hitlist last game
@@ -38,32 +38,40 @@ div.statistics
 
 <script setup lang="ts">
 const { $io } = useNuxtApp()
-import { on } from 'events';
+
 import { type MESSAGE, type HERO_MESSAGE } from '~/types/message'
 type clients = { hero: string; throws: number }
 const m = ref( [] as Array<MESSAGE>)
-import { useClientStore } from '~/store'
+import { useClientStore } from '~/store/useClientStore';
 const store = useClientStore()
 
 const last_game_heroes = ref([] as HERO_MESSAGE[])
 
 onMounted(() => {
-  $io.on('heroes', (msgs: HERO_MESSAGE[]) => {
-    //console.log('got HERO_MESSAGE[]...', msgs)
+  // register game-console for incoming messages
+  $io.emit('register-game-console')
+  $io.on('heroes', (msgs: HERO_MESSAGE[]) => { 
+    // console.log('in throw-statistics: got HERO_MESSAGE[]...', msgs)
     store.heroes = msgs
   })
   $io.on('tomato_game_score', (tgs) => {
+    console.log('throw_statistics: got last tomato game score', tgs, store.last_game_heroes)
     store.storeLastGameHeroes(tgs)
-    console.log('throw_statistics: got tomato game score', tgs, store.last_game_heroes)
   })
   // every three seconds emit a request for the last 10000 messages
-  setInterval(() => $io.emit('get_heroes', () => {}), 2000)
+  setInterval(() => $io.emit('get_heroes',10000), 5000)
 })
 </script>
 
 <style>
 button {
   background-color: grey;
+}
+
+/* I want to have an onclick effect on  buttons */
+button:active {
+  background-color: rgb(205, 239, 239);
+  color: black;
 }
 .statistics {
   color: white;

@@ -6,7 +6,7 @@ div Hero Hitlist: {{ store.heroes.length }}
 
 <script setup lang="ts">
 import { type THROWS, type HERO_MESSAGE } from '~/types/message'
-import { useClientStore } from '~/store'
+import { useClientStore } from '~/store/useClientStore';
 const props = useAttrs()
 const store = useClientStore()
 const count = (throws: THROWS[]) => throws.reduce((acc, cv) => acc + cv.number, 0)
