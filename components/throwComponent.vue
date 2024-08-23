@@ -1,21 +1,21 @@
 <template lang="pug">
 div.thrower(@wheel.prevent @touchmove.prevent @scroll.prevent)
-  div.f1 {{ store.getHero }} threw {{ store.getNumberOfThrows }} things, score: {{ store.getScore }}
-  span(v-if="store.getGameSettings.type==='NASA'") NASA mode active
+  div.f1 {{ clientStore.getHero }} threw {{ clientStore.getNumberOfThrows }} things, score: {{ clientStore.getScore }}
+  span(v-if="clientStore.getGameSettings.type==='NASA'") NASA mode active
   div(v-for="img,i in getImageLinks()")
     div.column(@click="onClickImage(throwables[i])" :id="throwables[i]")
       img.i1(:src="img" :alt="throwables[i]")
-      div.f1 {{store.getNumberOfThrowsOf(throwables[i])  }}
+      div.f1 {{clientStore.getNumberOfThrowsOf(throwables[i])  }}
   div
-    span.k &copy;k
-    span.kommitment ommitment 2024
+    span.k &copy;&nbsp;
+    span.kommitment kommitment 2024
 </template>
   
 <script setup lang="ts">
-import { type THROW_MESSAGE } from '~/types/message'
+import { type SCORE, type THROW_MESSAGE } from '~/types/message'
 import { useClientStore } from '~/store/useClientStore'
 import { useGameStore } from '~/store/useGameStore'
-const store = useClientStore()
+const clientStore = useClientStore()
 const game = useGameStore()
 const { $io } = useNuxtApp()
 
@@ -30,32 +30,35 @@ const rotateImages = () => {
 }
 
 const startRotation = () => setInterval(() => {
-  if (store.getGameSettings.type === 'NASA' && game.isOn) rotateImages()
+  if (clientStore.getGameSettings.type === 'NASA' && game.isOn) rotateImages()
 }, 2000)
 
 const onClickImage = async (thing: string) => {
   const audioBoing = new Audio('/audio/boiiing.mp3')
   const yayTomato = new Audio('/audio/yayTomato.mp3')
-  store.storeThrow(thing)
-  store.calculate_score({"text": thing, "clientId": "none"})
+  clientStore.storeThrow(thing)
+  clientStore.calculate_score({"text": thing, "clientId": "none"})
   const message = {
     text: thing.trim(),
-    clientId: store.client.id ?? 'unknown',
+    clientId: clientStore.client.id ?? 'unknown',
   } as THROW_MESSAGE
-  if (!$io.connected) return
+  if (!$io.connected) {
+    console.log('throwComponent.vue: not connected to server')
+    return
+  }
   $io.emit('tne', message  )
 
   // rotate images if game mode is not Startup and if gamemode is on
-  if (store.getGameSettings.type !== 'Startup' && game.isOn) rotateImages()
+  if (clientStore.getGameSettings.type !== 'Startup' && game.isOn) rotateImages()
   // iphones can not be vibrated from JS as of 03/2024
   const clientCanVibrate = window.navigator.vibrate !== undefined
   const letzVibrateTheClientFor100ms = () => window.navigator.vibrate(100)
   if (clientCanVibrate) ((letzVibrateTheClientFor100ms()))
 
-  if (store.getGameSettings.ison && thing != 'tomato') {
+  if (clientStore.getGameSettings.ison && thing != 'tomato') {
     audioBoing.play()
   }
-  else if (store.getGameSettings.ison) {
+  else if (clientStore.getGameSettings.ison) {
     yayTomato.play()
   }
   
@@ -63,6 +66,14 @@ const onClickImage = async (thing: string) => {
 }
 
 onMounted(() => {
+  console.log('throwComponent.vue: onMounted')
+  $io.onAny((event, ...args) => console.log('throwComponent.vue: got event:', event, args))
+  $io.on('connect', () => $io.emit('client-id', clientStore.client.id))
+  $io.on('client-score', (h_m_s: SCORE) => {
+    console.log('throwComponent.vue: got client-score', h_m_s)
+    clientStore.setScore(h_m_s) 
+  })
+
   document.getElementById('body')?.requestFullscreen()
   // start a function that will repeat after 2 seconds
   startRotation()

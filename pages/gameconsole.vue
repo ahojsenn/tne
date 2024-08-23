@@ -1,6 +1,6 @@
 <template lang="pug">
 div.statistics
-  h1 Throw Statistics
+  h1 Game Console
   stats_gameMode
   div ---  
   table.small
@@ -48,14 +48,15 @@ const store = useClientStore()
 const last_game_heroes = ref([] as HERO_MESSAGE[])
 
 onMounted(() => {
+  $io.onAny((event, ...args) => console.log('gameconsole: got event:', event, args))
   // register game-console for incoming messages
   $io.emit('register-game-console')
   $io.on('heroes', (msgs: HERO_MESSAGE[]) => { 
-    // console.log('in throw-statistics: got HERO_MESSAGE[]...', msgs)
+    console.log('in gameconsole: got HERO_MESSAGE[]...', msgs)
     store.heroes = msgs
   })
   $io.on('tomato_game_score', (tgs) => {
-    console.log('throw_statistics: got last tomato game score', tgs, store.last_game_heroes)
+    console.log('gameconsole: got last tomato game score', tgs, store.last_game_heroes)
     store.storeLastGameHeroes(tgs)
   })
   // every three seconds emit a request for the last 10000 messages

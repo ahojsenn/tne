@@ -1,5 +1,5 @@
 <template lang="pug">
-div 
+div
   NuxtPage 
 </template>
 
@@ -7,33 +7,48 @@ div
 import { useGameStore } from '~/store/useGameStore';
 import { useClientStore } from '~/store/useClientStore';
 const game = useGameStore()
-const store = useClientStore()
+const clientStore = useClientStore()
 import type { Client } from '~/types/client'
 import type { GAME } from '~/types/gameModes';
-import type { ThrownItem } from '~/types/thrownItem'
+
 import type { THROW_MESSAGE } from '~/types/message'
 import { useThrownItemsStore } from '~/store/useThrownItemsStore';
 
 const secret = useCookie('secret')
 const { $io } = useNuxtApp()
-const ti_store = useThrownItemsStore()
+
 
 onBeforeMount(() => {
   // store a secret in a local cookie
   secret.value = secret.value || Math.random()*100000000 +""
   // and store it in the store
-  store.client.id = secret.value
+  clientStore.client.id = secret.value
 })
 
 onMounted( () => {
-  $io.onAny((event, ...args) => console.log('app.vue: got event:', event, args))  
+  console.log('app.vue: onMounted')
+  document.body.classList.add('bodyClassNoGame')
+
+  // $io.onAny((event, ...args) => console.log('app.vue: got event:', event, args))  
   $io.emit('register-tne-app-client')
-  $io.on('connect', () => $io.emit('client-id', store.client.id))
-  $io.on('new-client', (c: Client) => store.storeClient(c))
-  $io.on('tne-reset', () => {console.log("got reset") ;store.reset_throws()})
+
+  // watch the clientStore for changes/throws and emit them to the server
+  clientStore.$subscribe((mutation, state) => {
+    // console.log('mutation: ', mutation)
+    if (!state.throws) return
+    const thing = state.LastThrownItem
+    // console.log('a change happened: ', thing , 'was thrown')
+    const message = {text: thing.trim(), clientId: clientStore.client.id ?? 'unknown',} as THROW_MESSAGE
+    if (!$io.connected) return
+    // console.log('emitting tne message: ', message)
+    //$io.emit('tne', message  )
+  })
+
+  $io.on('new-client', (c: Client) => clientStore.storeClient(c))
+  $io.on('tne-reset', () => {console.log("got reset") ;clientStore.reset_throws()})
   $io.on('gameOver', (gameScore) =>  {
     // set game to L#ufthansaa Technik as default
-    store.setGameSettings({'ison': false, 'difficulty': 5, 'aim': 300, 'type': 'Lufthansa Technik'})
+    clientStore.setGameSettings({'ison': false, 'difficulty': 5, 'aim': 300, 'type': 'Lufthansa Technik'})
     const weWon = gameScore.score >= gameScore.aim
 
     // audio
@@ -50,21 +65,17 @@ onMounted( () => {
   })
   $io.on('gameMode', (gm: GAME) => {
     console.log(' app.$io.on. got GameMode: ', gm)
-    store.setGameSettings(gm)
-    store.reset_tomatoGameScore()
+    clientStore.setGameSettings(gm)
+    clientStore.reset_tomatoGameScore()
     if (gm.ison) document.body.classList.add('gameMode')
     else document.body.classList.remove('gameMode')
     document.body.classList.add('bodyClassNoGame')
     game.set(gm.ison)
   }) 
-  $io.emit('register-catchup-client')
-  $io.on('catchup-event', (m: THROW_MESSAGE) => {
-    const item: ThrownItem = {
-        x: m.text,
-        rnd: Math.floor(Math.random() * 100000),
-      }
-    ti_store.throw(item)
-  })
+
+
+  // every 10 seconds log $io connection status
+  setInterval(() => console.log('app.vue: $io.connected: ', $io.connected), 10000)
 })
 </script>
 

@@ -9,6 +9,12 @@ export type MESSAGE = {
   }
 }
 
+export type SCORE = {
+  hits: number
+  misses: number
+  score: number
+}
+
 export type THROW_MESSAGE = {
   text: string
   clientId: string
@@ -18,7 +24,8 @@ export type THROWS = { 'text': string; 'number': number }
 
 export type HERO_MESSAGE = {
   clientId: string
-  hero: string
+  heroName: string
   throws: THROWS[]
   joined: Date
+  h_m_s: SCORE,
 }

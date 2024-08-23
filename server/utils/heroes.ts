@@ -4,7 +4,7 @@ import { HERO_MESSAGE } from '~/types/message'
 
 let replenishHeroeshowmanytimes = 0
 let heroes = [...originalHeroes]
-export const hero_hitlist = Effect.succeed([] as Array<HERO_MESSAGE>)
+export let hero_hitlist = Effect.succeed([] as Array<HERO_MESSAGE>)
 export const last_game_hero_hitlist = Effect.succeed([] as Array<HERO_MESSAGE>)
 
 
@@ -28,14 +28,15 @@ export const getHero = (): string => {
 };
 
 // reset hero hitlist
-// by setting the throws array to an empty array
-// and deleting heroes that are older than 12 hours
+// by resetting the hero_hitlist 
+// and getting each connected client to resent their client-id
 export const reset_hero_hitlist = (hl: Effect.Effect<HERO_MESSAGE[], never, never>) => {
-  Effect.runSync(hl).forEach((h) => h.throws = [])
-  Effect.runSync(hl).filter((h) => {
-    const time = new Date().getTime() - new Date(h.joined).getTime()
-    return time < 12 * 60 * 60 * 1000
-  }) /**  */
+  let hero_hitlist = Effect.succeed([] as Array<HERO_MESSAGE>)
+}
+
+// set hero_hitlist scores to zero
+export const reset_hero_scores = (hl: Array<HERO_MESSAGE>) => {
+  hl.map((heromsg) => heromsg.h_m_s = { hits: 0, misses: 0, score: 0 })
 }
 
 // add hero to hitlist
@@ -43,36 +44,37 @@ export const add_hero = (clientId: string, hl: Array<HERO_MESSAGE>, threw?: stri
   // if hero is already in hitlist, return
   if (hl.find((h) => h.clientId === clientId)) return;
   // console.log('adding hero to hitlist', clientId, threw)
-  const heroName = getHeroFromClientId(clientId);
   hl.push({
     clientId: clientId,
-    hero: heroName,
+    heroName: getHeroFromClientId(clientId).heroName,
     throws: threw ? [{ text: threw, number: 1 }] : [],
-    joined: new Date()
+    joined: new Date(),
+    h_m_s: { hits: 0, misses: 0, score: 0 }
   });
 };
 
 // get hero from clientid
-export const getHeroFromClientId = (clientId: string): string => {
+export const getHeroFromClientId = (clientId: string): HERO_MESSAGE => {
   //  const client = clients.find((c) => c.id === clientId)
   const client = Effect.runSync(hero_hitlist).find((c) => c.clientId === clientId)
-  if (client) return client.hero
+  if (client) return client
   // create a new hero if not found
-  const heroName = getHero()
-  Effect.runSync(hero_hitlist).push({
+  const hero = {
     clientId: clientId,
-    hero: heroName,
+    heroName: getHero(),
     throws: [],
-    joined: new Date()
-  })
-  return heroName
+    joined: new Date(),
+    h_m_s: { hits: 0, misses: 0, score: 0 }
+  }
+  Effect.runSync(hero_hitlist).push(hero)
+  return hero
 }
 
 export const clientIdIsKnown = (s: string) => Effect.runSync(hero_hitlist).find((c) => c.clientId === s)
 
 // find hero and add throw to the hero hitlist
 export const add_throw = (clientId: string, hl: Array<HERO_MESSAGE>, threw: string) => {
-  const heroName = getHeroFromClientId(clientId);
+  const heroName = getHeroFromClientId(clientId).heroName;
   if (!heroName) add_hero(clientId, hl, threw);
   // find hero in hero_hitlist *Attention*
   const hero = hl.find((h) => h.clientId === clientId);

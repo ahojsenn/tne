@@ -54,7 +54,8 @@ const gameOver = () => {
 const resetHeroesList = () => {
   console.log("resetHeroesList")
   store.reset_last_game_heroes()  
-  $io.emit('delete-messages', () => {})
+  $io.emit('delete-messages')
+  $io.emit('reset-hero-hitlist')
   console.log("resetHeroesList: ", store.last_game_heroes)
   store.reset_throws()
   store.reset_heroes()

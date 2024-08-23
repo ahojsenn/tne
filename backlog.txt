@@ -1,16 +1,29 @@
 This is my backlog
 
 DOING:
-- BUG: too many heroes in game
+
 
 TODO:
+- catchup auf der ./ Seite zeigt nach einiger Zeit keine Würfe mehr an
+  --> catchup.vue bekommt keine Würfe mehr als event 
+  global.io.to('catchup-channel').emit("catchup-event", data) kommt nicht mehr an.
+  log: emitting catchup-event to catchup-channel members: undefined
+
+  kann einfach sein, dass das nur im dev-mode aurftritt, weil der server neu gestartet wird...
+
+- game score counts differently on client and server
+  idea: send the score from the server wo the client wich each throw
+  
 - game score counting on the server or on the client or both?
+
+
+DONE:
 - undstand the difference between socket.io rooms and the sometimes used term 'channel'
 - get a better understanding of the socket.io API 
 - get a better understanding of the websocket standard
 - update the documentation in README.md
-
-
-DONE:
+- catchup.vue does not need to be a hero... 
+- BUG: too many heroes in game, reset hero hit list does not work
+  --> the socket.on('disconnect',... created wrongly new heroes
 - fix gamescore in gamemode --> it is not counting at all:
    gameMode.isOn was not set
