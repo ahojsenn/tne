@@ -2,22 +2,22 @@ This is my backlog
 
 DOING:
 
+- game score counts differently on client and server
+  idea: send the score from the server wo the client wich each throw
+  ? game score counting on the server or on the client or both?
+  --> scores should be counted on the server and sent to the client
+
 
 TODO:
-- catchup auf der ./ Seite zeigt nach einiger Zeit keine Würfe mehr an
+- client Store aufräumen...
+- observe: catchup auf der ./ Seite zeigt nach einiger Zeit keine Würfe mehr an
   --> catchup.vue bekommt keine Würfe mehr als event 
   global.io.to('catchup-channel').emit("catchup-event", data) kommt nicht mehr an.
   log: emitting catchup-event to catchup-channel members: undefined
-
   kann einfach sein, dass das nur im dev-mode aurftritt, weil der server neu gestartet wird...
 
-- game score counts differently on client and server
-  idea: send the score from the server wo the client wich each throw
-  
-- game score counting on the server or on the client or both?
-
-
 DONE:
+- throw reload shoud set h_m_s (score to zero)
 - undstand the difference between socket.io rooms and the sometimes used term 'channel'
 - get a better understanding of the socket.io API 
 - get a better understanding of the websocket standard

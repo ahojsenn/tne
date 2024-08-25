@@ -3,17 +3,17 @@ import { defineStore } from "pinia";
 import LastThrownItems from "~/components/stats/lastThrownItems.vue";
 import type { Client } from "~/types/client";
 import type { GAME } from "~/types/gameModes";
-import type { HERO_MESSAGE, SCORE, THROW_MESSAGE } from "~/types/message";
+import type { HERO_MESSAGE, SCORE, THROW } from "~/types/message";
 
-export type THROWS = { thing: string, number: number }
+
 
 export const useClientStore = defineStore('client', {
   state: () => ({
-    client: { hero: 'unknown', id: 'unknown', clientStr: 'unknown', nr: 0 } as Client,
+    client: { socketId: '', id: 'unknown', clientStr: 'unknown', hero: 'unknown' } as Client,
     tomatoGameScore: { "hits": 0, "misses": 0, "score": 0 },
-    throws: [] as THROWS[], // array of thrown items
-    heroes: [] as HERO_MESSAGE[],
-    last_game_heroes: [] as HERO_MESSAGE[],
+    throws: [] as THROW[], // array of thrown items
+    heroes: [] as HERO_MESSAGE[], // array of heroes for gamecenter
+    last_game_heroes: [] as HERO_MESSAGE[], // array of heroes for gamecenter
     gameSettings: { ison: false, difficulty: 5, aim: 300 } as GAME,
     LastThrownItem: '',
   }),
@@ -34,12 +34,12 @@ export const useClientStore = defineStore('client', {
     },
     storeThrow(thing: string) {
       this.LastThrownItem = thing
-      const existingThrow = this.throws.find((t) => t.thing === thing);
+      const existingThrow = this.throws.find((t) => t.text === thing);
       if (existingThrow) {
         existingThrow.number++;
       }
       else
-        this.throws.push({ thing, number: 1 });
+        this.throws.push({ text: thing, number: 1 });
     },
     // store cliend data
     storeClient(client: Client) {
@@ -64,19 +64,19 @@ export const useClientStore = defineStore('client', {
     setGameSettings(settings: GAME) {
       this.gameSettings = settings;
     },
-    calculate_score(data: THROW_MESSAGE) {
-      if (data.text === 'tomato') this.tomatoGameScore.hits++
-      else this.tomatoGameScore.misses++
-      this.tomatoGameScore.score = this.tomatoGameScore.hits - this.gameSettings.difficulty * this.tomatoGameScore.misses
-    }
+    //calculate_score(data: THROW_MESSAGE) {
+    //  if (data.text === 'tomato') this.tomatoGameScore.hits++
+    //  else this.tomatoGameScore.misses++
+    //  this.tomatoGameScore.score = this.tomatoGameScore.hits - this.gameSettings.difficulty * this.tomatoGameScore.misses
+    //}
   },
   getters: {
     getLastThrownItem: (state): string => state.LastThrownItem, // last thrown item
     getHero: (state): string => state.client.hero,
-    getThrows: (state): THROWS[] => state.throws,
+    getThrows: (state): THROW[] => state.throws,
     getNumberOfThrows: (state): number => state.throws.reduce((acc, t) => acc + t.number, 0),
     getNumberOfThrowsOf: (state) => {
-      return (thing: string) => state.throws.find((t) => t.thing === thing)?.number || 0;
+      return (thing: string) => state.throws.find((t) => t.text === thing)?.number || 0;
     },
     getScore: (state): number => state.tomatoGameScore.score,
     getHeroes: (state): HERO_MESSAGE[] => state.heroes,

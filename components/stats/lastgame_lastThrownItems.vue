@@ -10,11 +10,11 @@ div
 </template>
 
 <script setup lang="ts">
-import { type THROW_MESSAGE, type THROWS } from '~/types/message'
+import { type THROW_MESSAGE, type THROW } from '~/types/message'
 import { useClientStore } from '~/store/useClientStore';
 const store = ref(useClientStore())
 const m = store.value.last_game_heroes
-const throws = m.reduce((acc, h) => acc = [...acc].concat(h.throws), [] as THROWS[])
+const throws = m.reduce((acc, h) => acc = [...acc].concat(h.throws), [] as THROW[])
 
 const count = (thing: string) => throws.reduce((acc , cv) => cv.text === thing ? acc + 1 : acc, 0)
 const count_repair = (thing: string) => throws.reduce((acc , cv) => cv.text === thing ? acc + 1 : acc, 0)

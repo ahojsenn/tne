@@ -20,12 +20,12 @@ export type THROW_MESSAGE = {
   clientId: string
 }
 
-export type THROWS = { 'text': string; 'number': number }
+export type THROW = { 'text': string; 'number': number }
 
 export type HERO_MESSAGE = {
   clientId: string
   heroName: string
-  throws: THROWS[]
+  throws: THROW[]
   joined: Date
   h_m_s: SCORE,
 }

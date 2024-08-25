@@ -1,7 +1,7 @@
 import { GAME } from "~/types/gameModes"
-import { reset_hero_hitlist, last_game_hero_hitlist } from "./heroes";
+import { reset_hero_hitlist, last_game_hero_hitlist } from "./heroStore";
 import { HERO_MESSAGE, THROW_MESSAGE } from "~/types/message";
-import * as heroes from "./heroes";
+import * as heroes from "./heroStore";
 import { Effect } from "effect";
 
 export const tomatoGameScore = { "hits": 0, "misses": 0, "score": 0, "aim": 0 }

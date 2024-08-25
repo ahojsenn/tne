@@ -12,11 +12,11 @@ import type { Client } from '~/types/client'
 import type { GAME } from '~/types/gameModes';
 
 import type { THROW_MESSAGE } from '~/types/message'
-import { useThrownItemsStore } from '~/store/useThrownItemsStore';
+import { useClientHeroStore } from './store/useClientHeroStore';
 
 const secret = useCookie('secret')
 const { $io } = useNuxtApp()
-
+const clientHeroStore = useClientHeroStore()  
 
 onBeforeMount(() => {
   // store a secret in a local cookie
@@ -28,9 +28,7 @@ onBeforeMount(() => {
 onMounted( () => {
   console.log('app.vue: onMounted')
   document.body.classList.add('bodyClassNoGame')
-
-  // $io.onAny((event, ...args) => console.log('app.vue: got event:', event, args))  
-  $io.emit('register-tne-app-client')
+  $io.onAny((event, ...args) => console.log('app.vue: got event:', event, args))  
 
   // watch the clientStore for changes/throws and emit them to the server
   clientStore.$subscribe((mutation, state) => {
@@ -44,8 +42,16 @@ onMounted( () => {
     //$io.emit('tne', message  )
   })
 
-  $io.on('new-client', (c: Client) => clientStore.storeClient(c))
-  $io.on('tne-reset', () => {console.log("got reset") ;clientStore.reset_throws()})
+  $io.on('new-client', (c: Client) => {
+    // get this socketId
+    clientStore.client.socketId = c.socketId
+    clientStore.storeClient(c)
+    clientHeroStore.newHero(c.hero)
+  })
+  $io.on('tne-reset', () => {
+    clientStore.reset_throws()
+    // clientHeroStore.reset_hero()
+  })
   $io.on('gameOver', (gameScore) =>  {
     // set game to L#ufthansaa Technik as default
     clientStore.setGameSettings({'ison': false, 'difficulty': 5, 'aim': 300, 'type': 'Lufthansa Technik'})
@@ -72,7 +78,6 @@ onMounted( () => {
     document.body.classList.add('bodyClassNoGame')
     game.set(gm.ison)
   }) 
-
 
   // every 10 seconds log $io connection status
   setInterval(() => console.log('app.vue: $io.connected: ', $io.connected), 10000)

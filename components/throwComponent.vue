@@ -1,21 +1,23 @@
 <template lang="pug">
 div.thrower(@wheel.prevent @touchmove.prevent @scroll.prevent)
-  div.f1 {{ clientStore.getHero }} threw {{ clientStore.getNumberOfThrows }} things, score: {{ clientStore.getScore }}
+  div.f1 {{ clientHeroStore.getHero.heroName }}: {{ clientHeroStore.getNumberOfThrows }} throws, score: {{ clientHeroStore.getHeroScore }}
   span(v-if="clientStore.getGameSettings.type==='NASA'") NASA mode active
   div(v-for="img,i in getImageLinks()")
     div.column(@click="onClickImage(throwables[i])" :id="throwables[i]")
       img.i1(:src="img" :alt="throwables[i]")
-      div.f1 {{clientStore.getNumberOfThrowsOf(throwables[i])  }}
+      div.f1 {{clientHeroStore.getNumberOfThrowsOf(throwables[i])  }}
   div
     span.k &copy;&nbsp;
     span.kommitment kommitment 2024
 </template>
   
 <script setup lang="ts">
-import { type SCORE, type THROW_MESSAGE } from '~/types/message'
+import { type HERO_MESSAGE, type SCORE, type THROW_MESSAGE } from '~/types/message'
 import { useClientStore } from '~/store/useClientStore'
 import { useGameStore } from '~/store/useGameStore'
+import { useClientHeroStore } from '~/store/useClientHeroStore'
 const clientStore = useClientStore()
+const clientHeroStore = useClientHeroStore()  
 const game = useGameStore()
 const { $io } = useNuxtApp()
 
@@ -37,7 +39,8 @@ const onClickImage = async (thing: string) => {
   const audioBoing = new Audio('/audio/boiiing.mp3')
   const yayTomato = new Audio('/audio/yayTomato.mp3')
   clientStore.storeThrow(thing)
-  clientStore.calculate_score({"text": thing, "clientId": "none"})
+  clientHeroStore.storeThrow(thing)
+  //clientStore.calculate_score({"text": thing, "clientId": "none"})
   const message = {
     text: thing.trim(),
     clientId: clientStore.client.id ?? 'unknown',
@@ -68,10 +71,11 @@ const onClickImage = async (thing: string) => {
 onMounted(() => {
   console.log('throwComponent.vue: onMounted')
   $io.onAny((event, ...args) => console.log('throwComponent.vue: got event:', event, args))
+  $io.emit('register-tne-app-client')
   $io.on('connect', () => $io.emit('client-id', clientStore.client.id))
-  $io.on('client-score', (h_m_s: SCORE) => {
-    console.log('throwComponent.vue: got client-score', h_m_s)
-    clientStore.setScore(h_m_s) 
+  $io.on('client-hero', (hero: HERO_MESSAGE) => {
+    console.log('throwComponent.vue: got client-hero', hero, clientHeroStore.getHero)
+    clientHeroStore.storeHero(hero)  // set score in clientHeroStore
   })
 
   document.getElementById('body')?.requestFullscreen()

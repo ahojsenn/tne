@@ -7,12 +7,12 @@ div Hero Hitlist: {{ clientStore.last_game_heroes.length }}
 </template>
 
 <script setup lang="ts">
-import { type THROWS, type HERO_MESSAGE } from '~/types/message'
+import { type THROW, type HERO_MESSAGE } from '~/types/message'
 import { useClientStore } from '~/store/useClientStore';
 const props = useAttrs()
 const clientStore = useClientStore()
-const count = (throws: THROWS[]) => throws.reduce((acc, cv) => acc + cv.number, 0)
-const missedTomatoes = (throws: THROWS[]) => throws.reduce((acc, cv) => cv.text != 'tomato' ? acc + cv.number : acc, 0)
+const count = (throws: THROW[]) => throws.reduce((acc, cv) => acc + cv.number, 0)
+const missedTomatoes = (throws: THROW[]) => throws.reduce((acc, cv) => cv.text != 'tomato' ? acc + cv.number : acc, 0)
 const score = (h: HERO_MESSAGE ) => count(h.throws) - missedTomatoes(h.throws)*clientStore.getGameSettings.difficulty
 </script>
 

@@ -31,12 +31,21 @@ export const getHero = (): string => {
 // by resetting the hero_hitlist 
 // and getting each connected client to resent their client-id
 export const reset_hero_hitlist = (hl: Effect.Effect<HERO_MESSAGE[], never, never>) => {
-  let hero_hitlist = Effect.succeed([] as Array<HERO_MESSAGE>)
+  Effect.runSync(hl).map((h) => {
+    h.throws = []
+    h.h_m_s = { hits: 0, misses: 0, score: 0 }
+  })
+  console.log('reset_hero_hitlist: resetting hero_hitlist', JSON.stringify(hl))
 }
 
 // set hero_hitlist scores to zero
 export const reset_hero_scores = (hl: Array<HERO_MESSAGE>) => {
   hl.map((heromsg) => heromsg.h_m_s = { hits: 0, misses: 0, score: 0 })
+}
+
+export const reset_hero_score = (heroName: string, hl: Array<HERO_MESSAGE>) => {
+  const hero = hl.find((h) => h.heroName === heroName)
+  if (hero) hero.h_m_s = { hits: 0, misses: 0, score: 0 }
 }
 
 // add hero to hitlist
