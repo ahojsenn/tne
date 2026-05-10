@@ -33,10 +33,10 @@ test('tne throw 6 things', async ({ page }) => {
   }
 
   await page.goto('/gameconsole');
-  await page.getByText('thrown stuff:').click();
+  await page.getByText('thrown stuff:').first().click();
   expect(await page.isVisible('text=thrown stuff:')).toBe(true);
   // find pattern thrown stuff: %d on lage and extracdt the number
-  const thrownStuff = await page.locator('text=thrown stuff:').innerText()
+  const thrownStuff = await page.locator('text=thrown stuff:').first().innerText()
   const thrownStuffNumber = RegExp(/\d+/).exec(thrownStuff)
   console.log("thrownStuffNumber: ", thrownStuffNumber ? thrownStuffNumber[0] : 0)
 

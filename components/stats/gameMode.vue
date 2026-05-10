@@ -15,7 +15,7 @@ div(:class="{gameMode: store.getGameSettings.ison}")
   br
   button(@click="gameOver()") Game Over
   br
-  button(@click="resetHeroesList()") reset hero list
+  button(@click="resetHeroesList()") forget all the previous data
 </template>
 
 <script setup lang="ts">
