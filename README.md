@@ -74,8 +74,7 @@ bun run preview
 - socket.on *register-gameconsole-client*: store the connection as game console client
 ...
 
-
-
+ 
 - socket.on *register-game-console*: store the connection as game console
 - socket.on *tne*: a thing was thrown
 	- emit *cachtup-channel* with data as THROW_MESSAGE

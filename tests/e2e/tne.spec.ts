@@ -8,9 +8,9 @@ test('something ist served', async ({ page }) => {
 })
 
 
-test('reset throw statistics', async ({ page }) => {
+test('reset gameconsole', async ({ page }) => {
   console.log("tne throw 6 things")
-  await page.goto('/throw-statistics')
+  await page.goto('/gameconsole')
   await page.locator('body').click();
   await page.getByRole('button', { name: 'forget all the previous data' }).click();
   await expect(page.locator('[id="__nuxt"]')).toContainText('thrown stuff: 0');
@@ -18,7 +18,7 @@ test('reset throw statistics', async ({ page }) => {
 })
 test('tne throw 6 things', async ({ page }) => {
   console.log("tne throw 6 things")
-  await page.goto('/throw-statistics')
+  await page.goto('/gameconsole')
   await page.locator('body').click();
   await page.getByRole('button', { name: 'forget all the previous data' }).click();
   await expect(page.locator('[id="__nuxt"]')).toContainText('thrown stuff: 0');
@@ -32,7 +32,7 @@ test('tne throw 6 things', async ({ page }) => {
     await page.locator(`#${throwable}`).click();
   }
 
-  await page.goto('/throw-statistics');
+  await page.goto('/gameconsole');
   await page.getByText('thrown stuff:').click();
   expect(await page.isVisible('text=thrown stuff:')).toBe(true);
   // find pattern thrown stuff: %d on lage and extracdt the number
