@@ -4,31 +4,35 @@ div.statistics
   stats_gameMode
   div ---  
   table.small
-    tr
-      th Thrown Stuff
-      th Hero Hitlist
-      th Tomato Trolls
-    tr
-      td 
-        stats_lastThrownItems
-      td 
-        stats_heroHitlist
-      td
-        stats_tomatoTrolls
+    thead
+      tr
+        th Thrown Stuff
+        th Hero Hitlist
+        th Tomato Trolls
+    tbody
+      tr
+        td 
+          stats_lastThrownItems
+        td 
+          stats_heroHitlist
+        td
+          stats_tomatoTrolls
   div ---
   div.small last game
   table.small(v-if="store.last_game_heroes.length > 0 || true")
-    tr
-      th Thrown Stuff last game
-      th Hero Hitlist last game
-      th Tomato Trolls last game
-    tr
-      td 
-        stats_lastgame_lastThrownItems
-      td 
-        stats_lastgame_heroHitlist
-      td
-        stats_lastgame_tomatoTrolls
+    thead
+      tr
+        th Thrown Stuff last game
+        th Hero Hitlist last game
+        th Tomato Trolls last game
+    tbody
+      tr
+        td 
+          stats_lastgame_lastThrownItems
+        td 
+          stats_lastgame_heroHitlist
+        td
+          stats_lastgame_tomatoTrolls
 
   iframe(style="position: absolute; height: 30%; border: none; opacity: 0.5" 
         allowtransparency="true" src="catchup" 

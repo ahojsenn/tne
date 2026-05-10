@@ -3,6 +3,7 @@
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  compatibilityDate: '2026-05-10',
   ssr: false,
   nitro: {
     experimental: {
@@ -12,7 +13,6 @@ export default defineNuxtConfig({
   modules: [
     '@pinia/nuxt',
     '@nuxtjs/device',
-    '@nuxt/test-utils/module',
   ],
   devtools: { enabled: false },
   css: [
@@ -21,6 +21,12 @@ export default defineNuxtConfig({
     "vuetify/styles",
   ],
   vite: {
+    css: {
+      preprocessorOptions: {
+        sass: { api: 'modern-compiler' },
+        scss: { api: 'modern-compiler' },
+      },
+    },
     // @ts-ignore
     // curently this will lead to a type error, but hopefully will be fixed soon #justBetaThings
     ssr: {
