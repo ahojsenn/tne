@@ -2,6 +2,59 @@
 
 A real-time multiplayer throwing game. Players throw virtual items (tomatoes, eggs, shoes, cakes, frogs, stars) at targets. Results are broadcast live to a game console and a catchup animation display.
 
+## Tech Stack
+
+- **[Nuxt 3](https://nuxt.com)** — Vue 3 framework, CSR-only (no SSR)
+- **[Vue 3](https://vuejs.org)** + **[Pinia](https://pinia.vuejs.org)** — UI and client-side state
+- **[Socket.io 4](https://socket.io)** — real-time bidirectional communication
+- **[Effect.js](https://effect.website)** — functional server-side state management
+- **[Vuetify 3](https://vuetifyjs.com)** — UI components
+- **[Playwright](https://playwright.dev)** — end-to-end testing
+- **Pug** — template language (all `.vue` files use `lang="pug"`)
+
+## Pages
+
+| Route | Purpose |
+|---|---|
+| `/` | Landing page — shows QR code, catchup iframe, and throw interface |
+| `/throw` | Throw interface — players tap items to throw them |
+| `/gameconsole` | Game console — live scoreboard, hero hitlist, stats |
+| `/catchup` | Animation display — shows flying items in real time (embed or standalone) |
+| `/kommitment` | Info page |
+
+## Communication Flow
+
+```
+Player (/throw)
+  │
+  │  Socket.io emit: "tne" {text, clientId}
+  ▼
+Server middleware (server/middleware/socket.ts)
+  │
+  ├──► emit "catchup-event"    → /catchup  (animation)
+  ├──► emit "client-hero"      → throwing client (updated score)
+  ├──► emit "tomato-game-score"→ /gameconsole (if game on)
+  └──► emit "gameOver"         → all clients (if game ends)
+```
+
+## Architecture
+
+**Client state** (Pinia stores in `store/`):
+- `useClientStore` — client identity, throws, game settings
+- `useClientHeroStore` — current player's hero and score
+- `useGameStore` — game on/off state
+- `useThrownItemsStore` — items in flight for catchup animation
+
+**Server state** (Effect.js in `server/utils/`):
+- `heroStore.ts` — hero scores and hitlist
+- `clientStore.ts` — connected clients
+- `messagesStore.ts` — thrown item history
+- `gameModeStore.ts` — game mode configuration
+
+**Socket setup:**
+- Server: `server/middleware/socket.ts` (init) → `server/utils/socketHandlers.ts` (logic)
+- Client: `plugins/socketClient.ts` — exposes `$io` via `useNuxtApp().$io`
+
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
 ## Setup
