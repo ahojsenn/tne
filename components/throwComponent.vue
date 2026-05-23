@@ -2,8 +2,8 @@
 div.thrower(@wheel.prevent @touchmove.prevent @scroll.prevent)
   div.f1 {{ clientHeroStore.getHero.heroName }}: {{ clientHeroStore.getNumberOfThrows }} throws, score: {{ clientHeroStore.getHeroScore }}
   span(v-if="clientStore.getGameSettings.type==='NASA'") NASA mode active
-  div(v-for="img,i in getImageLinks()")
-    div.column(@click="onClickImage(throwables[i])" :id="throwables[i]")
+  div(v-for="img,i in getImageLinks()" :key="img")
+    div.column(@pointerdown="onClickImage(throwables[i])" :id="throwables[i]")
       img.i1(:src="img" :alt="throwables[i]")
       div.f1 {{clientHeroStore.getNumberOfThrowsOf(throwables[i])  }}
   div
@@ -35,37 +35,50 @@ const startRotation = () => setInterval(() => {
   if (clientStore.getGameSettings.type === 'NASA' && game.isOn) rotateImages()
 }, 2000)
 
-const onClickImage = async (thing: string) => {
-  const audioBoing = new Audio('/audio/boiiing.mp3')
-  const yayTomato = new Audio('/audio/yayTomato.mp3')
-  clientStore.storeThrow(thing)
-  clientHeroStore.storeThrow(thing)
-  //clientStore.calculate_score({"text": thing, "clientId": "none"})
-  const message = {
-    text: thing.trim(),
-    clientId: clientStore.client.id ?? 'unknown',
-  } as THROW_MESSAGE
+const audioBoing = new Audio('/audio/boiiing.mp3')
+const yayTomato = new Audio('/audio/yayTomato.mp3')
+
+// Batch state/DOM updates so rapid taps don't trigger re-renders mid-tap-sequence.
+// Emits fire instantly; store updates are flushed 150ms after the last tap.
+const pendingThrows: string[] = []
+let flushTimer: ReturnType<typeof setTimeout> | null = null
+
+const flushPending = () => {
+  const batch = [...pendingThrows]
+  pendingThrows.length = 0
+  flushTimer = null
+  for (const t of batch) {
+    clientStore.storeThrow(t)
+    clientHeroStore.storeThrow(t)
+  }
+  if (clientStore.getGameSettings.type !== 'Startup' && game.isOn) rotateImages()
+}
+
+const onClickImage = (thing: string) => {
   if (!$io.connected) {
     console.log('throwComponent.vue: not connected to server')
     return
   }
-  $io.emit('tne', message  )
+  // emit immediately — synchronous, no DOM side effects
+  $io.emit('tne', {
+    text: thing.trim(),
+    clientId: clientStore.client.id ?? 'unknown',
+  } as THROW_MESSAGE)
 
-  // rotate images if game mode is not Startup and if gamemode is on
-  if (clientStore.getGameSettings.type !== 'Startup' && game.isOn) rotateImages()
-  // iphones can not be vibrated from JS as of 03/2024
-  const clientCanVibrate = window.navigator.vibrate !== undefined
-  const letzVibrateTheClientFor100ms = () => window.navigator.vibrate(100)
-  if (clientCanVibrate) ((letzVibrateTheClientFor100ms()))
+  // queue store update — DOM stays frozen until tapping pauses
+  pendingThrows.push(thing)
+  if (flushTimer) clearTimeout(flushTimer)
+  flushTimer = setTimeout(flushPending, 150)
 
-  if (clientStore.getGameSettings.ison && thing != 'tomato') {
+  if (window.navigator.vibrate) window.navigator.vibrate(100)
+
+  if (clientStore.getGameSettings.ison && thing !== 'tomato') {
+    audioBoing.currentTime = 0
     audioBoing.play()
-  }
-  else if (clientStore.getGameSettings.ison) {
+  } else if (clientStore.getGameSettings.ison) {
+    yayTomato.currentTime = 0
     yayTomato.play()
   }
-  
-  // if (store.getGameSettings.ison && (store.getGameSettings.type === 'NASA')) throwables.sort(() => Math.random() - 0.5)
 }
 
 onMounted(() => {
@@ -126,6 +139,8 @@ onMounted(() => {
   float: left;
   width: 50%;
   padding: 5px;
+  touch-action: manipulation;
+  user-select: none;
 }
 
 .k {

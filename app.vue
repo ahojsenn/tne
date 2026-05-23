@@ -1,9 +1,25 @@
 <template lang="pug">
 div
-  NuxtPage 
+  div.nav-menu(style="position: fixed; top: 10px; left: 10px; z-index: 9999")
+    button.nav-toggle(@click="drawer = !drawer") ☰
+    div.nav-drawer(v-if="drawer")
+      a.nav-item(v-for="item in navItems" :key="item.title" :href="item.href" @click="drawer = false")
+        span {{ item.title }}
+  NuxtPage
 </template>
 
 <script setup lang="ts">
+const navItems = [
+  { title: 'Home',         href: '/' },
+  { title: 'Throw',        href: '/throw' },
+  { title: 'Game Console', href: '/gameconsole' },
+  { title: 'Catchup',      href: '/catchup' },
+  { title: 'Login',        href: '/login' },
+  { title: 'Kommitment',   href: '/kommitment' },
+]
+
+const drawer = ref(false)
+
 import { useGameStore } from '~/store/useGameStore';
 import { useClientStore } from '~/store/useClientStore';
 const game = useGameStore()
@@ -85,6 +101,46 @@ onMounted( () => {
 </script>
 
 <style>
+.nav-menu {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 9999;
+}
+
+.nav-toggle {
+  background: black;
+  color: greenyellow;
+  border: 1px solid greenyellow;
+  border-radius: 4px;
+  font-size: 1.2em;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+.nav-drawer {
+  position: absolute;
+  top: 36px;
+  left: 0;
+  background: black;
+  border: 1px solid greenyellow;
+  border-radius: 4px;
+  min-width: 160px;
+  padding: 6px 0;
+}
+
+.nav-item {
+  display: block;
+  color: greenyellow;
+  text-decoration: none;
+  padding: 8px 16px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.nav-item:hover {
+  background: rgba(173, 255, 47, 0.15);
+}
+
 .bodyClassNoGame {
   background-color: rgba(0, 0, 0, 1);
   color: white;
