@@ -14,7 +14,6 @@ const navItems = [
   { title: 'Throw',        href: '/throw' },
   { title: 'Game Console', href: '/gameconsole' },
   { title: 'Catchup',      href: '/catchup' },
-  { title: 'Login',        href: '/login' },
   { title: 'Kommitment',   href: '/kommitment' },
 ]
 
