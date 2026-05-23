@@ -78,6 +78,130 @@ Game over is triggered when `|score| >= aim`.
 
 
 
+## Installation Guide (macOS / Windows)
+
+This guide takes you from a completely empty system to a running development environment.
+
+### 1. Install Git
+
+**macOS:**
+```bash
+# Install Homebrew first (https://brew.sh)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Then install Git
+brew install git
+```
+
+**Windows:**
+Download and run the installer from https://git-scm.com/download/win  
+Use all default options. After install, open **Git Bash** for all commands below.
+
+Verify:
+```bash
+git --version
+```
+
+---
+
+### 2. Install Node.js
+
+Use **Node Version Manager** — it lets you switch Node versions easily.
+
+**macOS:**
+```bash
+brew install nvm
+# Follow the instructions to add nvm to your shell profile, then:
+nvm install 20
+nvm use 20
+```
+
+**Windows:**
+Download and install **nvm-windows** from https://github.com/coreybutler/nvm-windows/releases  
+Then in a new terminal:
+```bash
+nvm install 20
+nvm use 20
+```
+
+Verify:
+```bash
+node --version   # should show v20.x.x
+npm --version
+```
+
+---
+
+### 3. Install Yarn
+
+```bash
+npm install -g yarn
+```
+
+Verify:
+```bash
+yarn --version
+```
+
+---
+
+### 4. Clone the Repository
+
+```bash
+git clone https://github.com/ahojsenn/tne.git
+cd tne
+```
+
+---
+
+### 5. Install Dependencies
+
+```bash
+yarn install
+```
+
+This installs all packages including Nuxt 3, Vue 3, Socket.io, Vuetify, Pinia and Effect.js.
+
+---
+
+### 6. Start the Development Server
+
+```bash
+npm run dev
+```
+
+Open http://localhost:3000 in your browser.
+
+To expose the server on your local network (so phones can connect):
+```bash
+npm run dev -- --host
+```
+
+The terminal will show a local network URL (e.g. `http://192.168.x.x:3000`) — open that on any phone on the same Wi-Fi to play.
+
+---
+
+### 7. Open the Right Pages
+
+| URL | Who opens it |
+|---|---|
+| `http://localhost:3000/` or `/throw` | Each player on their phone |
+| `http://localhost:3000/gameconsole` | Game master / big screen |
+| `http://localhost:3000/catchup` | Animation display / second screen |
+
+---
+
+### Troubleshooting
+
+- **Port 3000 already in use** — run `npm run dev -- --port 3001`
+- **Socket.io not connecting** — make sure all devices are on the same Wi-Fi network
+- **`yarn install` fails** — try deleting `node_modules/` and `yarn.lock`, then run `yarn install` again
+- **Windows: `node` not found after nvm install** — close and reopen the terminal
+
+---
+
+## Quick Start (existing install)
+
 Make sure to install the dependencies:
 
 ```bash
