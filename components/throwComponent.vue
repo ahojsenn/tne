@@ -3,7 +3,7 @@ div.thrower(@wheel.prevent @touchmove.prevent @scroll.prevent)
   div.f1 {{ clientHeroStore.getHero.heroName }}: {{ clientHeroStore.getNumberOfThrows }} throws, score: {{ clientHeroStore.getHeroScore }}
   span(v-if="clientStore.getGameSettings.type==='NASA'") NASA mode active
   div(v-for="img,i in getImageLinks()" :key="img")
-    div.column(@pointerdown="onClickImage(throwables[i])" :id="throwables[i]")
+    div.column(@pointerdown="onClickImage($event, throwables[i])" :id="throwables[i]")
       img.i1(:src="img" :alt="throwables[i]")
       div.f1 {{clientHeroStore.getNumberOfThrowsOf(throwables[i])  }}
   div
@@ -20,6 +20,10 @@ const clientStore = useClientStore()
 const clientHeroStore = useClientHeroStore()  
 const game = useGameStore()
 const { $io } = useNuxtApp()
+
+useHead({
+  meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' }]
+})
 
 const connected = ref(false)
 let throwables= ref(['star', 'cake', 'tomato', 'egg', 'frog', 'shoe'])
@@ -49,12 +53,24 @@ const flushPending = () => {
   flushTimer = null
   for (const t of batch) {
     clientStore.storeThrow(t)
-    clientHeroStore.storeThrow(t)
   }
   if (clientStore.getGameSettings.type !== 'Startup' && game.isOn) rotateImages()
 }
 
-const onClickImage = (thing: string) => {
+// Synthetic mouse pointerdown events fire up to ~350ms after a touch event.
+// Track the last pointer type + time so we can discard them.
+let lastPointerType = ''
+let lastEmitAt = 0
+
+const onClickImage = (event: PointerEvent, thing: string) => {
+  if (!event.isPrimary) return
+  const now = Date.now()
+  // Discard synthetic mouse event that follows a real touch tap
+  if (event.pointerType === 'mouse' && lastPointerType === 'touch' && now - lastEmitAt < 500) return
+
+  lastPointerType = event.pointerType
+  lastEmitAt = now
+
   if (!$io.connected) {
     console.log('throwComponent.vue: not connected to server')
     return
@@ -81,7 +97,18 @@ const onClickImage = (thing: string) => {
   }
 }
 
+// Prevent pinch-zoom and double-tap zoom (iOS Safari ignores user-scalable=no)
+let lastTouchEnd = 0
+const preventPinch = (e: TouchEvent) => { if (e.touches.length > 1) e.preventDefault() }
+const preventDoubleTap = (e: TouchEvent) => {
+  const now = Date.now()
+  if (now - lastTouchEnd < 300) e.preventDefault()
+  lastTouchEnd = now
+}
+
 onMounted(() => {
+  document.addEventListener('touchstart', preventPinch, { passive: false })
+  document.addEventListener('touchend', preventDoubleTap, { passive: false })
   console.log('throwComponent.vue: onMounted')
   $io.onAny((event, ...args) => console.log('throwComponent.vue: got event:', event, args))
   $io.emit('register-tne-app-client')
@@ -98,6 +125,11 @@ onMounted(() => {
     startRotation()
   })
 })
+
+onUnmounted(() => {
+  document.removeEventListener('touchstart', preventPinch)
+  document.removeEventListener('touchend', preventDoubleTap)
+})
 </script>
 
 <style>
@@ -109,6 +141,7 @@ onMounted(() => {
   padding: 0px;
   text-align: center; 
   z-index: 80;
+  touch-action: pan-x pan-y;
 }
 
 .f1 {
