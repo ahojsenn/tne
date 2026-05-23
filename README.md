@@ -57,7 +57,26 @@ Server middleware (server/middleware/socket.ts)
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
-## Setup
+## Game Modes
+
+Game modes are set from `/gameconsole`. The **aim** scales with the number of connected players: `aim = 10 + 10 × players`.
+
+The **score** formula is: `score = tomato_hits − difficulty × misses`
+
+Game over is triggered when `|score| >= aim`.
+
+| Mode | Difficulty | Tomato hit | Any other throw | Icon shuffle |
+|---|---|---|---|---|
+| **Startup** | 1 | +1 | −1 | On throw |
+| **Lufthansa Technik** | 3 | +1 | −3 | On throw |
+| **NASA** | 5 | +1 | −5 | On throw + every 2s automatically |
+
+- **Throw mode** (game off) — no scoring, free throwing, icons don't shuffle
+- **Startup** — easy introduction mode, low penalty for non-tomato throws
+- **Lufthansa Technik** — medium difficulty, wrong throws cost more
+- **NASA** — hardest mode, icons constantly reshuffle to confuse players, high miss penalty
+
+
 
 Make sure to install the dependencies:
 
