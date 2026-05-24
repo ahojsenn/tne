@@ -7,6 +7,8 @@ div
         span {{ item.title }}
       a.nav-item(v-if="spreadsheetUrl" :href="spreadsheetUrl" target="_blank" @click="drawer = false")
         span 📊 Spreadsheet
+      a.nav-item(href="https://github.com/ahojsenn/tne" target="_blank" @click="drawer = false")
+        span 🐙 GitHub
   NuxtPage
 </template>
 
