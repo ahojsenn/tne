@@ -21,7 +21,7 @@ set +e # rsync is strange
 echo "Deploy stuff to "$TARGETSERVER $TARGETDIR
 $SSHSERVER mkdir -p $TARGETDIR
 set -x
-rsync  --copy-links --hard-links --stats -avRe "ssh -p $SSHPORT" ./.output ./ubuntuserver $DEPLOYMENTTARGET
+rsync  --copy-links --hard-links --stats --delete -avRe "ssh -p $SSHPORT" ./.output ./ubuntuserver $DEPLOYMENTTARGET
 scp .env $DEPLOYMENTTARGET
 set +x
 echo "done copying the $SOURCEDIR"
