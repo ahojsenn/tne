@@ -5,6 +5,8 @@ div
     div.nav-drawer(v-if="drawer")
       a.nav-item(v-for="item in navItems" :key="item.title" :href="item.href" @click="drawer = false")
         span {{ item.title }}
+      a.nav-item(v-if="spreadsheetUrl" :href="spreadsheetUrl" target="_blank" @click="drawer = false")
+        span 📊 Spreadsheet
   NuxtPage
 </template>
 
@@ -18,6 +20,12 @@ const navItems = [
 ]
 
 const drawer = ref(false)
+const spreadsheetUrl = ref<string | null>(null)
+
+onMounted(async () => {
+  const data = await $fetch<{ url: string | null }>('/api/spreadsheet-url')
+  spreadsheetUrl.value = data.url
+})
 
 import { useGameStore } from '~/store/useGameStore';
 import { useClientStore } from '~/store/useClientStore';
