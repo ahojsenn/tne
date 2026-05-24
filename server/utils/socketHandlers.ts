@@ -8,6 +8,7 @@ import * as clients from './clientStore'
 import * as gameMode from './gameModeStore'
 import * as messages from './messagesStore'
 import { GAME } from '~/types/gameModes'
+import { logGameOver } from './gameLogger'
 
 export function handle_client_id(socket: Socket, global: MyGlobal, newid: string): void {
   // find client by id
@@ -106,7 +107,11 @@ export function handle_tne(socket: Socket, global: MyGlobal, data: THROW_MESSAGE
       gameMode.gameMode.ison = false
       global.io.emit('gameMode', gameMode.gameMode)
       global.io.emit('gameOver', { score: gameMode.tomatoGameScore.score, aim: gameMode.tomatoGameScore.aim })
-      global.io.to('tne-gameconsole-channel').emit('tomato_game_score', Effect.runSync(heroes.last_game_hero_hitlist))
+      const lastHeroes = Effect.runSync(heroes.last_game_hero_hitlist)
+      global.io.to('tne-gameconsole-channel').emit('tomato_game_score', lastHeroes)
+      // save game summary to Google Sheets
+      logGameOver(gameMode.gameMode, lastHeroes, gameMode.tomatoGameScore)
+        .catch(e => console.warn('[socketHandlers] logGameOver failed:', e))
     }
   }
 

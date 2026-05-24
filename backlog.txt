@@ -4,6 +4,13 @@ DOING:
 
 
 TODO:
+- Todo: 
+
+- Bei "game over" eine Zusammenfassung des Spiels in Google Sheets Tabellenblatt "games" speichern:
+  event-id, Datum/Uhrzeit, Spielart, Hero-Hitlist (eine Zelle), Troll-Score (eine Zelle).
+  Falls das Tabellenblatt "games" nicht existiert, wird es automatisch angelegt. [DONE]
+
+- happenings einbauen, so dass ich für jedes event/Konferenz ein happening erstellen kann
 - client Store aufräumen...
 - observe: catchup auf der ./ Seite zeigt nach einiger Zeit keine Würfe mehr an
   --> catchup.vue bekommt keine Würfe mehr als event 
@@ -12,6 +19,8 @@ TODO:
   kann einfach sein, dass das nur im dev-mode aurftritt, weil der server neu gestartet wird...
 
 DONE:
+- Autorisierung für die gameconsole einbauen
+- Persistenzschicht einbauen, bspw google sheets...
 - game score counts differently on client and server
   idea: send the score from the server wo the client wich each throw
   ? game score counting on the server or on the client or both?
