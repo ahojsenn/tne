@@ -27,7 +27,7 @@ export async function logGameOver(
       .filter(h => h.hits > 0 || h.misses > 0)
       .sort((a, b) => b.score - a.score)
       .map(h => `${h.heroName}: H${h.hits} M${h.misses} S${h.score}`)
-      .join(' | ') || '(no throws)'
+      .join('\n') || '(no throws)'
 
     // One cell: overall troll/tomato score
     const trollSummary = `hits:${tomatoScore.hits} misses:${tomatoScore.misses} score:${tomatoScore.score} aim:${tomatoScore.aim}`
@@ -53,7 +53,7 @@ export async function logGameOver(
       .filter(h => h.misses > 0)
       .sort((a, b) => b.misses - a.misses)
       .map(h => `${h.heroName}:${h.misses}`)
-      .join(' | ') || '(no trolls)'
+      .join('\n') || '(no trolls)'
 
     await appendRows(`${SHEET}!A:G`, [[eventId, dateTime, gameType, thrownStuffSummary, heroSummary, trollSummary, trollHitlist]])
     console.log(`[gameLogger] saved ${eventId} to sheets`)
