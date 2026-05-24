@@ -1,6 +1,18 @@
-import { existsSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { config as dotenvConfig } from 'dotenv'
+
+function loadEnvFile(path: string): void {
+  const lines = readFileSync(path, 'utf-8').split('\n')
+  for (const line of lines) {
+    const trimmed = line.trim()
+    if (!trimmed || trimmed.startsWith('#')) continue
+    const eq = trimmed.indexOf('=')
+    if (eq < 0) continue
+    const key = trimmed.slice(0, eq).trim()
+    const val = trimmed.slice(eq + 1).trim().replace(/^['"]|['"]$/g, '')
+    if (key && !(key in process.env)) process.env[key] = val
+  }
+}
 
 export default defineNitroPlugin(() => {
   const required = [
@@ -22,8 +34,12 @@ export default defineNitroPlugin(() => {
   // If vars are missing, try to load .env from project root (handles the case where
   // cwd differs from project root, e.g. `node tomatoes-and-eggs/.output/server/index.mjs`)
   if (missing().length > 0 && existsSync(scriptEnvPath)) {
-    dotenvConfig({ path: scriptEnvPath, override: false })
-    console.log(`[envCheck] loaded .env from ${scriptEnvPath}`)
+    try {
+      loadEnvFile(scriptEnvPath)
+      console.log(`[envCheck] loaded .env from ${scriptEnvPath}`)
+    } catch (e) {
+      console.warn(`[envCheck] failed to load .env from ${scriptEnvPath}:`, e)
+    }
   }
 
   const stillMissing = missing()
@@ -50,3 +66,4 @@ ${stillMissing.map(k => `║    • ${k.padEnd(56)}║`).join('\n')}
     console.log('[envCheck] ✅ All required environment variables are set.')
   }
 })
+
