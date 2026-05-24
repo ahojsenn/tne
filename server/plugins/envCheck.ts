@@ -1,6 +1,5 @@
 import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { config as dotenvConfig } from 'dotenv'
 
 export default defineNitroPlugin(() => {
@@ -10,9 +9,11 @@ export default defineNitroPlugin(() => {
     'GOOGLE_SHEETS_SPREADSHEET_ID',
   ]
 
-  // In production the server runs as .output/server/index.mjs — two levels up is the project root
-  const scriptDir = fileURLToPath(new URL('.', import.meta.url))
-  const projectRoot = resolve(scriptDir, '..', '..')
+  // Derive project root from the actual script path (process.argv[1] is reliable in bundles,
+  // unlike import.meta.url which Nitro may resolve to '/' after bundling).
+  // e.g. /home/hannes/tomatoes-and-eggs/.output/server/index.mjs -> ../../.. -> project root
+  const scriptPath = resolve(process.argv[1] ?? '')
+  const projectRoot = resolve(scriptPath, '../../..')
   const cwdEnvPath = resolve(process.cwd(), '.env')
   const scriptEnvPath = resolve(projectRoot, '.env')
 
