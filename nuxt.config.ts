@@ -5,10 +5,17 @@
 export default defineNuxtConfig({
   compatibilityDate: '2026-05-10',
   ssr: false,
+  runtimeConfig: {
+    // Server-only (not exposed to client)
+    googleServiceAccountEmail: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL ?? '',
+    googleServiceAccountPrivateKey: process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY ?? '',
+    googleSheetsSpreadsheetId: process.env.GOOGLE_SHEETS_SPREADSHEET_ID ?? '',
+  },
   nitro: {
     experimental: {
       websocket: true
-    }
+    },
+    errorHandler: '~/server/error-handler',
   },
   modules: [
     '@pinia/nuxt',
