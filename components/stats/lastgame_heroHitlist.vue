@@ -2,7 +2,7 @@
 div Hero Hitlist: {{ clientStore.last_game_heroes.length }}
   div(v-for="hero,i in clientStore.last_game_heroes.sort((a,b) => score(b)-score(a))") 
     span(v-if='count(hero.throws)>0') 
-      span {{i+1}}... {{ hero.hero }} threw {{ count(hero.throws) }} times
+      span {{i+1}}... {{ hero.heroName }} threw {{ count(hero.throws) }} times
       span &nbsp; score: {{ score(hero) }}
 </template>
 

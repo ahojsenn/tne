@@ -2,7 +2,7 @@
 div Tomato Trolls: {{ store.getTrollsLastGame.length }} 
   div(v-for="hero,i in store.getTrollsLastGame") 
     span(v-if='count(hero.throws)>0') 
-      span {{i+1}}... {{ hero.hero }} missed {{ countMisses(hero.throws) }} tomatoes
+      span {{i+1}}... {{ hero.heroName }} missed {{ countMisses(hero.throws) }} tomatoes
 </template>
 
 <script setup lang="ts">
