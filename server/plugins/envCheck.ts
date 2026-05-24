@@ -1,33 +1,48 @@
 import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { config as dotenvConfig } from 'dotenv'
 
 export default defineNitroPlugin(() => {
-  const cwd = process.cwd()
-  const envPath = resolve(cwd, '.env')
-
   const required = [
     'GOOGLE_SERVICE_ACCOUNT_EMAIL',
     'GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY',
     'GOOGLE_SHEETS_SPREADSHEET_ID',
   ]
 
-  const missing = required.filter(k => !process.env[k])
+  // In production the server runs as .output/server/index.mjs — two levels up is the project root
+  const scriptDir = fileURLToPath(new URL('.', import.meta.url))
+  const projectRoot = resolve(scriptDir, '..', '..')
+  const cwdEnvPath = resolve(process.cwd(), '.env')
+  const scriptEnvPath = resolve(projectRoot, '.env')
 
-  if (missing.length > 0) {
-    const envExists = existsSync(envPath)
+  const missing = () => required.filter(k => !process.env[k])
+
+  // If vars are missing, try to load .env from project root (handles the case where
+  // cwd differs from project root, e.g. `node tomatoes-and-eggs/.output/server/index.mjs`)
+  if (missing().length > 0 && existsSync(scriptEnvPath)) {
+    dotenvConfig({ path: scriptEnvPath, override: false })
+    console.log(`[envCheck] loaded .env from ${scriptEnvPath}`)
+  }
+
+  const stillMissing = missing()
+  if (stillMissing.length > 0) {
     console.error(`
 ╔══════════════════════════════════════════════════════════════╗
 ║              ❌  MISSING ENVIRONMENT VARIABLES               ║
 ╠══════════════════════════════════════════════════════════════╣
 ║  Missing keys:                                               ║
-${missing.map(k => `║    • ${k.padEnd(56)}║`).join('\n')}
+${stillMissing.map(k => `║    • ${k.padEnd(56)}║`).join('\n')}
 ╠══════════════════════════════════════════════════════════════╣
-║  .env file expected at:                                      ║
-║    ${envPath.padEnd(58)}║
-║  .env file present: ${(envExists ? '✅ YES' : '❌ NO').padEnd(42)}║
+║  .env searched at (cwd):                                     ║
+║    ${cwdEnvPath.padEnd(58)}║
+║    present: ${(existsSync(cwdEnvPath) ? '✅ YES' : '❌ NO').padEnd(49)}║
+║  .env searched at (project root):                            ║
+║    ${scriptEnvPath.padEnd(58)}║
+║    present: ${(existsSync(scriptEnvPath) ? '✅ YES' : '❌ NO').padEnd(49)}║
 ╠══════════════════════════════════════════════════════════════╣
 ║  Working directory (process.cwd()):                          ║
-║    ${cwd.padEnd(58)}║
+║    ${process.cwd().padEnd(58)}║
 ╚══════════════════════════════════════════════════════════════╝
 `)
   } else {
