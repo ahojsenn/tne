@@ -16,11 +16,17 @@ export async function logGameOver(
     const dateTime = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' })
     const gameType = game.type ?? 'unknown'
 
-    // One cell: sorted hero list with individual scores
+    // One cell: sorted hero list with individual scores (computed from throws, since last_game_hero_hitlist only populates throws, not h_m_s)
     const heroSummary = heroHitlist
-      .filter(h => h.h_m_s.hits > 0 || h.h_m_s.misses > 0)
-      .sort((a, b) => b.h_m_s.score - a.h_m_s.score)
-      .map(h => `${h.heroName}: H${h.h_m_s.hits} M${h.h_m_s.misses} S${h.h_m_s.score}`)
+      .map(h => {
+        const hits = h.throws.find(t => t.text === 'tomato')?.number ?? 0
+        const misses = h.throws.filter(t => t.text !== 'tomato').reduce((a, t) => a + t.number, 0)
+        const score = hits - game.difficulty * misses
+        return { heroName: h.heroName, hits, misses, score }
+      })
+      .filter(h => h.hits > 0 || h.misses > 0)
+      .sort((a, b) => b.score - a.score)
+      .map(h => `${h.heroName}: H${h.hits} M${h.misses} S${h.score}`)
       .join(' | ') || '(no throws)'
 
     // One cell: overall troll/tomato score
