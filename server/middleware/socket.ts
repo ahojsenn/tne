@@ -14,29 +14,12 @@ import { logQuizResults } from '../utils/quizLogger'
 
 export const global = {} as MyGlobal
 
-// Suppress EPIPE/ECONNRESET errors from stale clients reconnecting after a restart.
-// Nuxt dev mode registers its own unhandledRejection handler that logs everything —
-// we remove all existing handlers and replace with ours so EPIPE noise is filtered.
-function isExpectedSocketError(reason: any): boolean {
-  if (!reason) return false
-  const code = reason.code ?? ''
-  const msg: string = reason.message ?? String(reason)
-  return (
-    code === 'EPIPE' ||
-    code === 'ECONNRESET' ||
-    code === 'ECONNABORTED' ||
-    msg.includes('EPIPE') ||
-    msg.includes('ECONNRESET') ||
-    msg.includes('write after end') ||
-    msg.includes('read ECONNRESET')
-  )
+function isExpectedSocketError(err: any): boolean {
+  const code = err?.code ?? ''
+  const msg: string = err?.message ?? String(err)
+  return code === 'EPIPE' || code === 'ECONNRESET' || code === 'ECONNABORTED' ||
+    msg.includes('EPIPE') || msg.includes('ECONNRESET') || msg.includes('write after end')
 }
-
-process.removeAllListeners('unhandledRejection')
-process.on('unhandledRejection', (reason: any) => {
-  if (isExpectedSocketError(reason)) return
-  console.error('[unhandledRejection]', reason)
-})
 
 export default defineEventHandler((event) => {
   if (global.io) return

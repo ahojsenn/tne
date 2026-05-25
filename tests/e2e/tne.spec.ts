@@ -1,45 +1,46 @@
 import { test, expect } from '@playwright/test';
 
+// Bypass the auth gate by pre-setting sessionStorage
+async function bypassAuth(page: any) {
+  await page.addInitScript(() => {
+    sessionStorage.setItem('tne-console-auth', '1')
+  })
+}
 
 test('something ist served', async ({ page }) => {
   await page.goto('/')
-  await page.getByRole('img', { name: 'egg' }).click();
-  await page.goto('/');
+  await expect(page.getByRole('img', { name: 'egg' })).toBeVisible({ timeout: 10000 })
+  await page.getByRole('img', { name: 'egg' }).click()
 })
-
 
 test('reset gameconsole', async ({ page }) => {
-  console.log("tne throw 6 things")
+  await bypassAuth(page)
   await page.goto('/gameconsole')
-  await page.locator('body').click();
-  await page.getByRole('button', { name: 'forget all the previous data' }).click();
-  await expect(page.locator('[id="__nuxt"]')).toContainText('thrown stuff: 0');
-
+  await expect(page.getByRole('button', { name: 'forget all the previous data' })).toBeVisible({ timeout: 10000 })
+  await page.getByRole('button', { name: 'forget all the previous data' }).click()
+  await expect(page.locator('[id="__nuxt"]')).toContainText('thrown stuff: 0')
 })
+
 test('tne throw 6 things', async ({ page }) => {
-  console.log("tne throw 6 things")
+  await bypassAuth(page)
   await page.goto('/gameconsole')
-  await page.locator('body').click();
-  await page.getByRole('button', { name: 'forget all the previous data' }).click();
-  await expect(page.locator('[id="__nuxt"]')).toContainText('thrown stuff: 0');
+  await expect(page.getByRole('button', { name: 'forget all the previous data' })).toBeVisible({ timeout: 10000 })
+  await page.getByRole('button', { name: 'forget all the previous data' }).click()
+  await expect(page.locator('[id="__nuxt"]')).toContainText('thrown stuff: 0')
 
   await page.goto('/throw')
   const throwables = ['cake', 'egg', 'tomato', 'shoe', 'star', 'frog']
   for (const throwable of throwables) {
-    expect(page.locator(`#${throwable}`)).toBeDefined()
     console.log(`throwing ${throwable}`)
-    expect(page.getByRole("img", { "name": throwable })).toBeDefined()
-    await page.locator(`#${throwable}`).click();
+    await expect(page.locator(`#${throwable}`)).toBeVisible({ timeout: 10000 })
+    await page.locator(`#${throwable}`).click()
   }
 
-  await page.goto('/gameconsole');
-  await page.getByText('thrown stuff:').first().click();
-  expect(await page.isVisible('text=thrown stuff:')).toBe(true);
-  // find pattern thrown stuff: %d on lage and extracdt the number
+  await bypassAuth(page)
+  await page.goto('/gameconsole')
+  await expect(page.locator('text=thrown stuff:').first()).toBeVisible({ timeout: 10000 })
   const thrownStuff = await page.locator('text=thrown stuff:').first().innerText()
   const thrownStuffNumber = RegExp(/\d+/).exec(thrownStuff)
   console.log("thrownStuffNumber: ", thrownStuffNumber ? thrownStuffNumber[0] : 0)
-
   expect(thrownStuffNumber ? parseInt(thrownStuffNumber[0]) : 0).toBeGreaterThanOrEqual(0)
-
 })
