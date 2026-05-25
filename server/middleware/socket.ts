@@ -14,9 +14,9 @@ import { logQuizResults } from '../utils/quizLogger'
 
 export const global = {} as MyGlobal
 
-// Suppress EPIPE errors from clients that disconnect mid-handshake.
-// Without this, Socket.io's initial connection attempts cause unhandledRejections
-// that Nuxt dev mode treats as fatal and restarts the server.
+// Suppress EPIPE/ECONNRESET errors from stale clients reconnecting after a restart.
+// Nuxt dev mode registers its own unhandledRejection handler that logs everything —
+// we remove all existing handlers and replace with ours so EPIPE noise is filtered.
 function isExpectedSocketError(reason: any): boolean {
   if (!reason) return false
   const code = reason.code ?? ''
@@ -32,6 +32,7 @@ function isExpectedSocketError(reason: any): boolean {
   )
 }
 
+process.removeAllListeners('unhandledRejection')
 process.on('unhandledRejection', (reason: any) => {
   if (isExpectedSocketError(reason)) return
   console.error('[unhandledRejection]', reason)
