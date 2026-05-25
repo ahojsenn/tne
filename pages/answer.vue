@@ -35,6 +35,8 @@ onMounted(() => {
     activeQuestion.value = q
     voted.value = false
   })
+  // Request current active question in case it was set before this page loaded
+  $io.emit('get-active-question')
 })
 
 function submitAnswer(answerId: string) {

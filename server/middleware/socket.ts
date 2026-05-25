@@ -113,6 +113,9 @@ export default defineEventHandler((event) => {
       global.io.emit('active-question', q)
       global.io.emit('quiz-vote-update', { questionId: q?.id ?? null, votes: {} })
     })
+    socket.on('get-active-question', () => {
+      socket.emit('active-question', quizStore.getActiveQuestion())
+    })
     socket.on('submit-answer', ({ questionId, answerId }: { questionId: string; answerId: string }) => {
       quizStore.recordVote(questionId, answerId)
       global.io.emit('quiz-vote-update', { questionId, votes: quizStore.getVotes(questionId) })
