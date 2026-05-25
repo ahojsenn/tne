@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  div.nav-menu(style="position: fixed; top: 10px; left: 10px; z-index: 9999")
+  div.nav-menu(style="position: fixed; top: 10px; right: 10px; z-index: 9999")
     button.nav-toggle(@click="drawer = !drawer") ☰
     div.nav-drawer(v-if="drawer")
       a.nav-item(v-for="item in navItems" :key="item.title" :href="item.href" @click="drawer = false")
@@ -115,7 +115,7 @@ onMounted( () => {
 .nav-menu {
   position: fixed;
   top: 10px;
-  left: 10px;
+  right: 10px;
   z-index: 9999;
 }
 
@@ -132,7 +132,7 @@ onMounted( () => {
 .nav-drawer {
   position: absolute;
   top: 36px;
-  left: 0;
+  right: 0;
   background: black;
   border: 1px solid greenyellow;
   border-radius: 4px;
