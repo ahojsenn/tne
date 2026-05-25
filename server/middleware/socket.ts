@@ -16,8 +16,23 @@ export const global = {} as MyGlobal
 // Suppress EPIPE errors from clients that disconnect mid-handshake.
 // Without this, Socket.io's initial connection attempts cause unhandledRejections
 // that Nuxt dev mode treats as fatal and restarts the server.
+function isExpectedSocketError(reason: any): boolean {
+  if (!reason) return false
+  const code = reason.code ?? ''
+  const msg: string = reason.message ?? String(reason)
+  return (
+    code === 'EPIPE' ||
+    code === 'ECONNRESET' ||
+    code === 'ECONNABORTED' ||
+    msg.includes('EPIPE') ||
+    msg.includes('ECONNRESET') ||
+    msg.includes('write after end') ||
+    msg.includes('read ECONNRESET')
+  )
+}
+
 process.on('unhandledRejection', (reason: any) => {
-  if (reason?.code === 'EPIPE' || reason?.message === 'write EPIPE') return
+  if (isExpectedSocketError(reason)) return
   console.error('[unhandledRejection]', reason)
 })
 
@@ -36,9 +51,7 @@ export default defineEventHandler((event) => {
   const httpServer = (node.res.socket as any).server
   httpServer.on('connection', (sock: NodeJS.ErrnoException & { on: Function }) => {
     sock.on('error', (err: NodeJS.ErrnoException) => {
-      // Silently ignore expected disconnection errors
-      if (err.code === 'EPIPE' || err.code === 'ECONNRESET') return
-      if ((err as any).message === 'write after end') return
+      if (isExpectedSocketError(err)) return
       console.error('[socket] tcp error:', err)
     })
   })
