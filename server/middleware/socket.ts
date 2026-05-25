@@ -65,13 +65,19 @@ export default defineEventHandler((event) => {
   console.log(`[env] NODE_ENV=${process.env.NODE_ENV ?? 'undefined'} → ${isProd ? '🚀 production' : '🛠️  development'}`)
   console.log(`[env] spreadsheet ID: ${sheetId ?? '⚠️  not set'}`)
 
-  // Load config from Google Sheets asynchronously on startup
-  const timeoutPromise = new Promise((_, reject) =>
-    setTimeout(() => reject(new Error('timeout after 15s')), 15000)
-  )
-  Promise.race([loadConfig(), timeoutPromise])
-    .then((cfg: any) => console.log('[socket] config loaded, admin user:', cfg.adminUser))
-    .catch(err => console.warn('[socket] could not load config from Google Sheets:', err?.message ?? err))
+  // Load config from Google Sheets asynchronously on startup.
+  // Skip immediately if credentials are not configured (local dev without Sheets).
+  const hasSheetsCreds = !!(process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY && sheetId)
+  if (!hasSheetsCreds) {
+    console.warn('[socket] Google Sheets credentials not set — skipping config load (set ADMIN_PASSWORD for local auth)')
+  } else {
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('timeout after 15s')), 15000)
+    )
+    Promise.race([loadConfig(), timeoutPromise])
+      .then((cfg: any) => console.log('[socket] config loaded, admin user:', cfg.adminUser))
+      .catch(err => console.warn('[socket] could not load config from Google Sheets:', err?.message ?? err))
+  }
 
 
   const emitHeroesToGameConsole = (socket: Socket) => {
