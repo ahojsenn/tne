@@ -3,23 +3,23 @@ import { type Question } from '~/types/quiz'
 
 export default defineEventHandler(async (): Promise<Question[]> => {
   const [questionRows, answerRows] = await Promise.all([
-    readRange('questions!A:B'),
-    readRange('answers!A:C'),
+    readRange('questions!A:C'),  // id, questions, answertype
+    readRange('answers!A:C'),    // answertype, answer_id, answer_text
   ])
 
-  // Build answer map: question_id -> [{id, text}]
+  // Build answer map: answertype -> [{id, text}]
   const answerMap: Record<string, { id: string; text: string }[]> = {}
-  for (const [questionId, answerId, answerText] of answerRows.slice(1)) {
-    if (!questionId || !answerId || !answerText) continue
-    if (!answerMap[questionId]) answerMap[questionId] = []
-    answerMap[questionId].push({ id: answerId, text: answerText })
+  for (const [answerType, answerId, answerText] of answerRows.slice(1)) {
+    if (!answerType || !answerId || !answerText) continue
+    if (!answerMap[answerType]) answerMap[answerType] = []
+    answerMap[answerType].push({ id: answerId, text: answerText })
   }
 
-  // Build questions list
+  // Build questions list — join on answertype
   const questions: Question[] = []
-  for (const [id, text] of questionRows.slice(1)) {
+  for (const [id, text, answerType] of questionRows.slice(1)) {
     if (!id || !text) continue
-    questions.push({ id, text, answers: answerMap[id] ?? [] })
+    questions.push({ id, text, answers: answerMap[answerType] ?? [] })
   }
 
   return questions
