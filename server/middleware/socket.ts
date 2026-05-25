@@ -7,8 +7,17 @@ import * as gameMode from '../utils/gameModeStore'
 import * as messages from '../utils/messagesStore'
 import * as handlers from '../utils/socketHandlers'
 import { GAME } from '~/types/gameModes'
+import { loadConfig } from '../utils/configStore'
 
 export const global = {} as MyGlobal
+
+// Suppress EPIPE errors from clients that disconnect mid-handshake.
+// Without this, Socket.io's initial connection attempts cause unhandledRejections
+// that Nuxt dev mode treats as fatal and restarts the server.
+process.on('unhandledRejection', (reason: any) => {
+  if (reason?.code === 'EPIPE' || reason?.message === 'write EPIPE') return
+  console.error('[unhandledRejection]', reason)
+})
 
 export default defineEventHandler((event) => {
   if (global.io) return
@@ -18,7 +27,29 @@ export default defineEventHandler((event) => {
     return
   }/** */
   global.io = new Server((node.res.socket as any).server)
+
+  // Suppress EPIPE/ECONNRESET from clients that disconnect mid-handshake.
+  // Adding an error listener to each raw transport socket prevents Node.js
+  // from turning these expected disconnects into unhandled rejections.
+  const httpServer = (node.res.socket as any).server
+  httpServer.on('connection', (sock: NodeJS.ErrnoException & { on: Function }) => {
+    sock.on('error', (err: NodeJS.ErrnoException) => {
+      // Silently ignore expected disconnection errors
+      if (err.code === 'EPIPE' || err.code === 'ECONNRESET') return
+      if ((err as any).message === 'write after end') return
+      console.error('[socket] tcp error:', err)
+    })
+  })
   console.log('Socket.io server initiated: ')
+
+  // Load config from Google Sheets asynchronously on startup
+  const timeoutPromise = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error('timeout after 15s')), 15000)
+  )
+  Promise.race([loadConfig(), timeoutPromise])
+    .then((cfg: any) => console.log('[socket] config loaded, admin user:', cfg.adminUser))
+    .catch(err => console.warn('[socket] could not load config from Google Sheets:', err?.message ?? err))
+
 
   const emitHeroesToGameConsole = (socket: Socket) => {
     console.log('emitHeroesToGameConsole')
