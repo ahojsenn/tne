@@ -1,0 +1,214 @@
+<template lang="pug">
+div
+  //- Password gate
+  .auth-gate(v-if="!authenticated")
+    .auth-card
+      h2 🎯 Quiz
+      input.auth-input(
+        v-model="password"
+        type="password"
+        placeholder="Password"
+        :disabled="checking"
+        @keyup.enter="login"
+        autofocus
+      )
+      p.auth-error(v-if="error") {{ error }}
+      button.auth-btn(:disabled="checking" @click="login") {{ checking ? '…' : 'Enter' }}
+
+  //- Quiz console
+  .quiz-console(v-if="authenticated")
+    h1 🎯 Quiz Console
+    p.status(v-if="activeQuestion")
+      | Active: 
+      strong {{ activeQuestion.text }}
+      button.deactivate-btn(@click="activateQuestion(null)") ✕ Deactivate
+    p.status.none(v-else) No active question
+
+    .loading(v-if="loading") Loading questions…
+    .error-msg(v-if="fetchError") {{ fetchError }}
+
+    .question-list(v-if="!loading")
+      .question-card(
+        v-for="q in questions"
+        :key="q.id"
+        :class="{ active: activeQuestion?.id === q.id }"
+        @click="activateQuestion(q)"
+      )
+        .question-text {{ q.text }}
+        .answers
+          span.answer(v-for="a in q.answers" :key="a.id") {{ a.text }}
+</template>
+
+<script setup lang="ts">
+import { type Question } from '~/types/quiz'
+
+const { $io } = useNuxtApp()
+
+// --- Auth ---
+const authenticated = ref(false)
+const password = ref('')
+const error = ref('')
+const checking = ref(false)
+
+onMounted(() => {
+  if (sessionStorage.getItem('tne-console-auth') === '1') {
+    authenticated.value = true
+    fetchQuestions()
+  }
+})
+
+async function login() {
+  if (!password.value) return
+  error.value = ''
+  checking.value = true
+  try {
+    await $fetch('/api/auth/verify', {
+      method: 'POST',
+      body: { password: password.value },
+    })
+    sessionStorage.setItem('tne-console-auth', '1')
+    authenticated.value = true
+    fetchQuestions()
+  } catch (e: any) {
+    error.value = e?.data?.statusMessage === 'Wrong password'
+      ? 'Wrong password, try again.'
+      : 'Could not verify — please retry.'
+  } finally {
+    checking.value = false
+    password.value = ''
+  }
+}
+
+// --- Questions ---
+const questions = ref<Question[]>([])
+const activeQuestion = ref<Question | null>(null)
+const loading = ref(false)
+const fetchError = ref('')
+
+async function fetchQuestions() {
+  loading.value = true
+  fetchError.value = ''
+  try {
+    questions.value = await $fetch<Question[]>('/api/quiz/questions')
+  } catch (e: any) {
+    fetchError.value = 'Could not load questions from Google Sheets.'
+  } finally {
+    loading.value = false
+  }
+}
+
+function activateQuestion(q: Question | null) {
+  activeQuestion.value = q
+  $io.emit('activate-question', q)
+}
+</script>
+
+<style scoped lang="scss">
+.quiz-console {
+  color: white;
+  font-family: 'Lucida Console', 'Courier New', monospace;
+  padding: 20px;
+
+  h1 { margin-bottom: 16px; }
+}
+
+.status {
+  margin-bottom: 16px;
+  font-size: 0.9em;
+  color: greenyellow;
+  &.none { color: #888; }
+}
+
+.deactivate-btn {
+  margin-left: 12px;
+  font-size: 0.8em;
+  padding: 2px 8px;
+  background: #555;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  &:hover { background: #c0392b; }
+}
+
+.question-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 700px;
+}
+
+.question-card {
+  background: #1e1e1e;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 14px 18px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+
+  &:hover { border-color: greenyellow; }
+  &.active { border-color: greenyellow; background: #1a2e1a; }
+}
+
+.question-text {
+  font-size: 1em;
+  margin-bottom: 8px;
+}
+
+.answers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.answer {
+  background: #2a2a2a;
+  border: 1px solid #555;
+  border-radius: 4px;
+  padding: 3px 10px;
+  font-size: 0.8em;
+  color: #ccc;
+}
+
+.loading, .error-msg { color: #888; font-size: 0.9em; }
+.error-msg { color: #ff6b6b; }
+
+// Auth gate (shared with gameconsole)
+.auth-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.auth-card {
+  background: #1e1e1e;
+  border: 1px solid #444;
+  border-radius: 10px;
+  padding: 32px;
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-family: 'Courier New', Courier, monospace;
+  color: white;
+
+  h2 { margin: 0; font-size: 1.2em; }
+}
+.auth-input {
+  background: #2a2a2a;
+  border: 1px solid #555;
+  border-radius: 4px;
+  color: white;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1em;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  &:focus { outline: 2px solid greenyellow; border-color: greenyellow; }
+}
+.auth-error { color: #ff6b6b; margin: 0; font-size: 0.85em; }
+.auth-btn { width: 100%; padding: 10px; font-size: 1em; }
+</style>

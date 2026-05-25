@@ -8,6 +8,8 @@ import * as messages from '../utils/messagesStore'
 import * as handlers from '../utils/socketHandlers'
 import { GAME } from '~/types/gameModes'
 import { loadConfig } from '../utils/configStore'
+import { type Question } from '~/types/quiz'
+import * as quizStore from '../utils/quizStore'
 
 export const global = {} as MyGlobal
 
@@ -79,6 +81,10 @@ export default defineEventHandler((event) => {
     })
     socket.on('client-id', (newid: string) => handlers.handle_client_id(socket, global, newid))
     socket.on('get_heroes', () => { socket.emit('heroes', Effect.runSync(heroes.hero_hitlist)) })
+    socket.on('activate-question', (q: Question | null) => {
+      quizStore.setActiveQuestion(q)
+      global.io.emit('active-question', q)
+    })
     socket.on('disconnect', (reason) => { console.log('Client disconnected: ', socket.id, reason) });
   })
 })
