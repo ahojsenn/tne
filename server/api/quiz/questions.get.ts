@@ -4,7 +4,7 @@ import { type Question } from '~/types/quiz'
 function parseAnswerType(answerType: string): { id: string; text: string }[] {
   if (!answerType) return []
   return answerType
-    .split(';')
+    .split('/')
     .map(s => s.trim())
     .filter(Boolean)
     .map(s => {
