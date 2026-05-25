@@ -17,6 +17,7 @@ const navItems = [
   { title: 'Home',         href: '/' },
   { title: 'Throw',        href: '/throw' },
   { title: 'Game Console', href: '/gameconsole' },
+  { title: 'Quiz',         href: '/quiz' },
   { title: 'Catchup',      href: '/catchup' },
   { title: 'Kommitment',   href: '/kommitment' },
 ]
