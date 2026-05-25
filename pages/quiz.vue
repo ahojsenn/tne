@@ -42,14 +42,15 @@ div
               span.answer(v-for="a in q.answers" :key="a.id") {{ a.text }}
 
       .right-panel
-        //- QR code
+        //- QR code (inline, not floating)
         .qr-section
           p.qr-label Scan to answer:
-          qrcode(path="answer")
+          .qr-inline
+            qrcode(path="answer")
 
-        //- Live vote results
-        .vote-results(v-if="activeQuestion && totalVotes > 0")
-          p.vote-title Live results ({{ totalVotes }} votes)
+        //- Answer options + live vote results (shown as soon as question is active)
+        .vote-results(v-if="activeQuestion")
+          p.vote-title {{ totalVotes > 0 ? `Live results (${totalVotes} votes)` : 'Answer options' }}
           .vote-bar(v-for="a in activeQuestion.answers" :key="a.id")
             .vote-label {{ a.text }}
             .bar-track
@@ -165,6 +166,11 @@ onMounted(() => {
     font-size: 0.85em;
     color: #aaa;
     margin-bottom: 8px;
+  }
+  .qr-inline {
+    position: relative;
+    width: 256px;
+    height: 256px;
   }
 }
 
