@@ -9,7 +9,7 @@ export default defineEventHandler(async (): Promise<Question[]> => {
 
   // Build answer map: question_id -> [{id, text}]
   const answerMap: Record<string, { id: string; text: string }[]> = {}
-  for (const [questionId, answerId, answerText] of answerRows) {
+  for (const [questionId, answerId, answerText] of answerRows.slice(1)) {
     if (!questionId || !answerId || !answerText) continue
     if (!answerMap[questionId]) answerMap[questionId] = []
     answerMap[questionId].push({ id: answerId, text: answerText })
@@ -17,7 +17,7 @@ export default defineEventHandler(async (): Promise<Question[]> => {
 
   // Build questions list
   const questions: Question[] = []
-  for (const [id, text] of questionRows) {
+  for (const [id, text] of questionRows.slice(1)) {
     if (!id || !text) continue
     questions.push({ id, text, answers: answerMap[id] ?? [] })
   }
