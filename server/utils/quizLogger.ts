@@ -8,7 +8,10 @@ export async function logQuizResults(
   votes: Record<string, number>,
 ): Promise<void> {
   try {
-    await ensureSheet(SHEET)
+    const isNew = await ensureSheet(SHEET)
+    if (isNew) {
+      await appendRows(`${SHEET}!A:E`, [['event', 'question_id', 'question_text', 'total_votes', 'results']])
+    }
 
     const totalVotes = Object.values(votes).reduce((s, n) => s + n, 0)
     const dateTime = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' })

@@ -57,8 +57,9 @@ export async function readRange(range: string): Promise<string[][]> {
 
 /**
  * Ensure a sheet with the given title exists; creates it if missing.
+ * Returns true if the sheet was freshly created.
  */
-export async function ensureSheet(sheetTitle: string): Promise<void> {
+export async function ensureSheet(sheetTitle: string): Promise<boolean> {
   const spreadsheetId = getSpreadsheetId()
   const auth = await getAuthClient()
   const sheets = google.sheets({ version: 'v4', auth })
@@ -70,7 +71,9 @@ export async function ensureSheet(sheetTitle: string): Promise<void> {
       requestBody: { requests: [{ addSheet: { properties: { title: sheetTitle } } }] },
     })
     console.log(`[sheetsClient] created sheet "${sheetTitle}"`)
+    return true
   }
+  return false
 }
 
 /**
