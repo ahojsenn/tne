@@ -38,11 +38,18 @@ async function getAuthClient(): Promise<JWT> {
  * @param range e.g. "config!A:B"
  * @returns 2D array of cell values
  */
+function getSpreadsheetId(): string {
+  const isProd = process.env.NODE_ENV === 'production'
+  const id = isProd
+    ? process.env.GOOGLE_SHEETS_SPREADSHEET_ID
+    : (process.env.GOOGLE_SHEETS_SPREADSHEET_ID_DEV ?? process.env.GOOGLE_SHEETS_SPREADSHEET_ID)
+  if (!id) throw new Error('Missing GOOGLE_SHEETS_SPREADSHEET_ID env var')
+  console.log(`[sheetsClient] using ${isProd ? 'production' : 'dev'} spreadsheet`)
+  return id
+}
+
 export async function readRange(range: string): Promise<string[][]> {
-  const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID
-  if (!spreadsheetId) {
-    throw new Error('Missing GOOGLE_SHEETS_SPREADSHEET_ID env var')
-  }
+  const spreadsheetId = getSpreadsheetId()
   const auth = await getAuthClient()
   const sheets = google.sheets({ version: 'v4', auth })
   const res = await sheets.spreadsheets.values.get({ spreadsheetId, range })
@@ -53,8 +60,7 @@ export async function readRange(range: string): Promise<string[][]> {
  * Ensure a sheet with the given title exists; creates it if missing.
  */
 export async function ensureSheet(sheetTitle: string): Promise<void> {
-  const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID
-  if (!spreadsheetId) throw new Error('Missing GOOGLE_SHEETS_SPREADSHEET_ID env var')
+  const spreadsheetId = getSpreadsheetId()
   const auth = await getAuthClient()
   const sheets = google.sheets({ version: 'v4', auth })
   const meta = await sheets.spreadsheets.get({ spreadsheetId })
@@ -74,10 +80,7 @@ export async function ensureSheet(sheetTitle: string): Promise<void> {
  * @param rows  array of value arrays
  */
 export async function appendRows(range: string, rows: string[][]): Promise<void> {
-  const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID
-  if (!spreadsheetId) {
-    throw new Error('Missing GOOGLE_SHEETS_SPREADSHEET_ID env var')
-  }
+  const spreadsheetId = getSpreadsheetId()
   const auth = await getAuthClient()
   const sheets = google.sheets({ version: 'v4', auth })
   await sheets.spreadsheets.values.append({
