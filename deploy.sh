@@ -1,56 +1,52 @@
 #!/bin/bash
-#
-export TARGETUSER=hannes
-export TARGETSERVER=konfi.kommitment.works # kommitment hetzner server
-export SOURCEDIR=`echo ${PWD##*/}`
-export TARGETDIR=/home/$TARGETUSER/$SOURCEDIR/
-export DEPLOYMENTTARGET=$TARGETUSER@$TARGETSERVER:$TARGETDIR
-export SSHPORT=22
-export SSHSERVER="ssh -p"$SSHPORT" -t $TARGETUSER@$TARGETSERVER"
-export HTTPPORT=3000
-export HTTPSPORT=3000
-export WEBSERVERCMD="node tomatoes-and-eggs/.output/server/index.mjs"
-export LOGFILE="/tmp/tomatoesAndEggs.log"
-export TARGETPROGRAM=simpleServer
+set -e
 
-$SSHSERVER "killall -q node"
+TARGETUSER=hannes
+TARGETSERVER=konfi.kommitment.works
+SOURCEDIR=$(basename "$PWD")
+TARGETDIR=/home/$TARGETUSER/$SOURCEDIR/
+DEPLOYMENTTARGET=$TARGETUSER@$TARGETSERVER:$TARGETDIR
+SSHPORT=22
+SSH="ssh -p $SSHPORT -t $TARGETUSER@$TARGETSERVER"
+
+# Build
 yarn build
 
-# rsync html
-set +e # rsync is strange
-echo "Deploy stuff to "$TARGETSERVER $TARGETDIR
-$SSHSERVER mkdir -p $TARGETDIR
-set -x
-rsync  --copy-links --hard-links --stats --delete -avRe "ssh -p $SSHPORT" ./.output ./ubuntuserver $DEPLOYMENTTARGET
+# Sync build output and server config
+echo "Deploying to $TARGETSERVER:$TARGETDIR"
+$SSH "mkdir -p $TARGETDIR"
+set +e
+rsync --copy-links --hard-links --delete -avRe "ssh -p $SSHPORT" ./.output ./ubuntuserver $DEPLOYMENTTARGET
 scp .env $DEPLOYMENTTARGET
-set +x
-echo "done copying the $SOURCEDIR"
-echo
-echo
+set -e
+echo "Files copied."
 
-# generate service file, https://wiki.ubuntuusers.de/Howto/systemd_Service_Unit_Beispiel/
-#
-$SSHSERVER "killall node; true"
-
-# alle sudo-Befehle in einem einzigen interaktiven SSH-Call (ein Passwort-Prompt)
-ssh -p $SSHPORT -t $TARGETUSER@$TARGETSERVER "
+# Install and restart services (single sudo prompt)
+$SSH "
   cd $TARGETDIR
   sudo cp ubuntuserver/tne.service /etc/systemd/system/tne.service
   sudo systemctl enable tne.service
   sudo systemctl restart tne.service
   sudo cp ubuntuserver/nginx-tne.conf /etc/nginx/sites-available/tne.conf
   sudo ln -sf /etc/nginx/sites-available/tne.conf /etc/nginx/sites-enabled/tne.conf
-  sudo nginx -t && sudo systemctl reload nginx
+  sudo nginx -t && sudo systemctl restart nginx
   sudo ufw deny 3000 2>/dev/null || true
 "
 
-# stop and start the server
-# ... 
-echo "starting the webserver..."
-set -x
-set -e
-# $SSHSERVER "(cd $TARGETDIR; $WEBSERVERCMD > $LOGFILE 2>&1 &)"
-$SSHSERVER "service fail2ban stop"
-set +x
-echo try https://$TARGETSERVER
 open https://$TARGETSERVER
+
+# Health check with retries
+MAX_RETRIES=5
+RETRY_INTERVAL=5
+for i in $(seq 1 $MAX_RETRIES); do
+  sleep $RETRY_INTERVAL
+  echo "Checking deployment (attempt $i/$MAX_RETRIES)..."
+  HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 https://$TARGETSERVER)
+  if [ "$HTTP_STATUS" = "200" ]; then
+    echo "✅ Deployment OK — https://$TARGETSERVER returned HTTP $HTTP_STATUS"
+    exit 0
+  fi
+  echo "   Got HTTP $HTTP_STATUS, retrying in ${RETRY_INTERVAL}s..."
+done
+echo "❌ Deployment check failed after $MAX_RETRIES attempts — last status: HTTP $HTTP_STATUS"
+exit 1
