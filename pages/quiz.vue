@@ -41,6 +41,22 @@ div
             .answers
               span.answer(v-for="a in q.answers" :key="a.id") {{ a.text }}
 
+        //- Add new question form
+        .add-question-form
+          button.toggle-form-btn(@click="showForm = !showForm") {{ showForm ? '▲ Abbrechen' : '＋ Neue Frage' }}
+          transition(name="form-fade")
+            .form-body(v-if="showForm")
+              label Frage
+              input.form-input(v-model="newQuestion" placeholder="Wie oft...?" @keyup.enter="saveQuestion")
+              label Antwortoptionen
+              input.form-input(
+                v-model="newAnswerType"
+                placeholder="täglich/wöchentlich/nie"
+              )
+              p.form-hint Format: Option A/Option B/Option C
+              p.form-error(v-if="formError") {{ formError }}
+              button.save-btn(:disabled="saving" @click="saveQuestion") {{ saving ? 'Speichern…' : 'Speichern' }}
+
       .right-panel
         //- QR code (inline, not floating)
         .qr-section
@@ -122,6 +138,33 @@ function activateQuestion(q: Question | null) {
   $io.emit('activate-question', q)
 }
 
+// --- Add question form ---
+const showForm = ref(false)
+const newQuestion = ref('')
+const newAnswerType = ref('')
+const saving = ref(false)
+const formError = ref('')
+
+async function saveQuestion() {
+  if (!newQuestion.value.trim()) return
+  saving.value = true
+  formError.value = ''
+  try {
+    await $fetch('/api/quiz/questions', {
+      method: 'POST',
+      body: { question: newQuestion.value, answerType: newAnswerType.value },
+    })
+    newQuestion.value = ''
+    newAnswerType.value = ''
+    showForm.value = false
+    await fetchQuestions()
+  } catch (e: any) {
+    formError.value = 'Speichern fehlgeschlagen — bitte erneut versuchen.'
+  } finally {
+    saving.value = false
+  }
+}
+
 // --- Votes ---
 const votes = ref<Record<string, number>>({})
 const totalVotes = computed(() => Object.values(votes.value).reduce((s, n) => s + n, 0))
@@ -165,7 +208,7 @@ onMounted(() => {
   .qr-label {
     font-size: 0.85em;
     color: #aaa;
-    margin-bottom: 8px;
+    margin-bottom: 1em;
   }
   .qr-inline {
     position: relative;
@@ -272,6 +315,85 @@ onMounted(() => {
 
 .loading, .error-msg { color: #888; font-size: 0.9em; }
 .error-msg { color: #ff6b6b; }
+
+.add-question-form {
+  margin-top: 20px;
+  max-width: 700px;
+}
+
+.toggle-form-btn {
+  background: #2a2a2a;
+  border: 1px solid #555;
+  color: greenyellow;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9em;
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  &:hover { border-color: greenyellow; }
+}
+
+.form-body {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 16px;
+
+  label {
+    font-size: 0.8em;
+    color: #aaa;
+    margin-bottom: 2px;
+  }
+}
+
+.form-input {
+  background: #2a2a2a;
+  border: 1px solid #555;
+  border-radius: 4px;
+  color: white;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.95em;
+  padding: 8px 10px;
+  width: 100%;
+  box-sizing: border-box;
+  &:focus { outline: 2px solid greenyellow; border-color: greenyellow; }
+}
+
+.form-hint {
+  font-size: 0.75em;
+  color: #666;
+  margin: 0;
+}
+
+.form-error {
+  font-size: 0.8em;
+  color: #ff6b6b;
+  margin: 0;
+}
+
+.save-btn {
+  background: greenyellow;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.95em;
+  padding: 8px 16px;
+  cursor: pointer;
+  align-self: flex-start;
+  margin-top: 4px;
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+  &:hover:not(:disabled) { background: #aaff00; }
+}
+
+.form-fade-enter-active,
+.form-fade-leave-active { transition: opacity 0.2s ease; }
+.form-fade-enter-from,
+.form-fade-leave-to { opacity: 0; }
 
 // Auth gate (shared with gameconsole)
 .auth-gate {
