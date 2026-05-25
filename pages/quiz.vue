@@ -18,25 +18,43 @@ div
   //- Quiz console
   .quiz-console(v-if="authenticated")
     h1 🎯 Quiz Console
-    p.status(v-if="activeQuestion")
-      | Active: 
-      strong {{ activeQuestion.text }}
-      button.deactivate-btn(@click="activateQuestion(null)") ✕ Deactivate
-    p.status.none(v-else) No active question
 
-    .loading(v-if="loading") Loading questions…
-    .error-msg(v-if="fetchError") {{ fetchError }}
+    .console-layout
+      .left-panel
+        p.status(v-if="activeQuestion")
+          | Active: 
+          strong {{ activeQuestion.text }}
+          button.deactivate-btn(@click="activateQuestion(null)") ✕ Deactivate
+        p.status.none(v-else) No active question
 
-    .question-list(v-if="!loading")
-      .question-card(
-        v-for="q in questions"
-        :key="q.id"
-        :class="{ active: activeQuestion?.id === q.id }"
-        @click="activateQuestion(q)"
-      )
-        .question-text {{ q.text }}
-        .answers
-          span.answer(v-for="a in q.answers" :key="a.id") {{ a.text }}
+        .loading(v-if="loading") Loading questions…
+        .error-msg(v-if="fetchError") {{ fetchError }}
+
+        .question-list(v-if="!loading")
+          .question-card(
+            v-for="q in questions"
+            :key="q.id"
+            :class="{ active: activeQuestion?.id === q.id }"
+            @click="activateQuestion(q)"
+          )
+            .question-text {{ q.text }}
+            .answers
+              span.answer(v-for="a in q.answers" :key="a.id") {{ a.text }}
+
+      .right-panel
+        //- QR code
+        .qr-section
+          p.qr-label Scan to answer:
+          qrcode(path="answer")
+
+        //- Live vote results
+        .vote-results(v-if="activeQuestion && totalVotes > 0")
+          p.vote-title Live results ({{ totalVotes }} votes)
+          .vote-bar(v-for="a in activeQuestion.answers" :key="a.id")
+            .vote-label {{ a.text }}
+            .bar-track
+              .bar-fill(:style="{ width: votePercent(a.id) + '%' }")
+            .vote-count {{ votes[a.id] ?? 0 }} ({{ votePercent(a.id) }}%)
 </template>
 
 <script setup lang="ts">
@@ -99,8 +117,24 @@ async function fetchQuestions() {
 
 function activateQuestion(q: Question | null) {
   activeQuestion.value = q
+  votes.value = {}
   $io.emit('activate-question', q)
 }
+
+// --- Votes ---
+const votes = ref<Record<string, number>>({})
+const totalVotes = computed(() => Object.values(votes.value).reduce((s, n) => s + n, 0))
+
+function votePercent(answerId: string): number {
+  if (!totalVotes.value) return 0
+  return Math.round(((votes.value[answerId] ?? 0) / totalVotes.value) * 100)
+}
+
+onMounted(() => {
+  $io.on('quiz-vote-update', ({ questionId, votes: v }: { questionId: string; votes: Record<string, number> }) => {
+    if (activeQuestion.value?.id === questionId) votes.value = v
+  })
+})
 </script>
 
 <style scoped lang="scss">
@@ -110,6 +144,66 @@ function activateQuestion(q: Question | null) {
   padding: 20px;
 
   h1 { margin-bottom: 16px; }
+}
+
+.console-layout {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.left-panel { flex: 1; min-width: 0; }
+
+.right-panel {
+  width: 280px;
+  flex-shrink: 0;
+}
+
+.qr-section {
+  margin-bottom: 24px;
+  .qr-label {
+    font-size: 0.85em;
+    color: #aaa;
+    margin-bottom: 8px;
+  }
+}
+
+.vote-results {
+  .vote-title {
+    font-size: 0.85em;
+    color: greenyellow;
+    margin-bottom: 10px;
+  }
+}
+
+.vote-bar {
+  margin-bottom: 10px;
+
+  .vote-label {
+    font-size: 0.8em;
+    color: #ccc;
+    margin-bottom: 3px;
+  }
+
+  .bar-track {
+    background: #2a2a2a;
+    border-radius: 4px;
+    height: 14px;
+    overflow: hidden;
+    margin-bottom: 2px;
+  }
+
+  .bar-fill {
+    background: greenyellow;
+    height: 100%;
+    transition: width 0.3s ease;
+    border-radius: 4px;
+  }
+
+  .vote-count {
+    font-size: 0.75em;
+    color: #888;
+  }
 }
 
 .status {

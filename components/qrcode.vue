@@ -11,18 +11,18 @@ div
       :dotsOptions="{type: 'square',color: '#ffffff'}"
       :corners-dot-options="{type: undefined,color: '#ffffff'}"
       :cornersSquareOptions="{ type: 'square', color: '#ffffff' }"
-   
       )
     div.text {{value}}
 </template>
 
 <script setup lang="ts">
-// SyntaxError: The requested module 'qrcode-vue3' does not provide an export named 'default'
-
 import QRCodeVue3 from "qrcode-vue3"  
 const qrcode = QRCodeVue3
 
-const value = useRequestURL()+'throw'
+const props = withDefaults(defineProps<{ path?: string }>(), { path: 'throw' })
+
+const baseUrl = useRequestURL()
+const value = computed(() => `${baseUrl.origin}/${props.path}`)
 const size = 256
 </script>
 
