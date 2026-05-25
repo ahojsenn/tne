@@ -44,7 +44,6 @@ function getSpreadsheetId(): string {
     ? process.env.GOOGLE_SHEETS_SPREADSHEET_ID
     : (process.env.GOOGLE_SHEETS_SPREADSHEET_ID_DEV ?? process.env.GOOGLE_SHEETS_SPREADSHEET_ID)
   if (!id) throw new Error('Missing GOOGLE_SHEETS_SPREADSHEET_ID env var')
-  console.log(`[sheetsClient] using ${isProd ? 'production' : 'dev'} spreadsheet`)
   return id
 }
 

@@ -44,6 +44,14 @@ export default defineEventHandler((event) => {
   })
   console.log('Socket.io server initiated: ')
 
+  // Log environment and spreadsheet in use
+  const isProd = process.env.NODE_ENV === 'production'
+  const sheetId = isProd
+    ? process.env.GOOGLE_SHEETS_SPREADSHEET_ID
+    : (process.env.GOOGLE_SHEETS_SPREADSHEET_ID_DEV ?? process.env.GOOGLE_SHEETS_SPREADSHEET_ID)
+  console.log(`[env] NODE_ENV=${process.env.NODE_ENV ?? 'undefined'} → ${isProd ? '🚀 production' : '🛠️  development'}`)
+  console.log(`[env] spreadsheet ID: ${sheetId ?? '⚠️  not set'}`)
+
   // Load config from Google Sheets asynchronously on startup
   const timeoutPromise = new Promise((_, reject) =>
     setTimeout(() => reject(new Error('timeout after 15s')), 15000)
