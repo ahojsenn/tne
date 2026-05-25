@@ -1,5 +1,9 @@
 This is my backlog
 
+now I try this:
+https://github.com/ahojsenn/tne/issues
+
+
 
 BACKLOG:
 - happenings einbauen, so dass ich für jedes event/Konferenz ein happening erstellen kann
