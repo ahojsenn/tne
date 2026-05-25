@@ -84,6 +84,11 @@ export default defineEventHandler((event) => {
     socket.on('activate-question', (q: Question | null) => {
       quizStore.setActiveQuestion(q)
       global.io.emit('active-question', q)
+      global.io.emit('quiz-vote-update', { questionId: q?.id ?? null, votes: {} })
+    })
+    socket.on('submit-answer', ({ questionId, answerId }: { questionId: string; answerId: string }) => {
+      quizStore.recordVote(questionId, answerId)
+      global.io.emit('quiz-vote-update', { questionId, votes: quizStore.getVotes(questionId) })
     })
     socket.on('disconnect', (reason) => { console.log('Client disconnected: ', socket.id, reason) });
   })
