@@ -5,6 +5,16 @@ export default defineEventHandler(async (event) => {
   if (!body?.password) {
     throw createError({ statusCode: 400, statusMessage: 'password required' })
   }
+
+  // Env var fallback for local dev (no Google Sheets needed)
+  const envPassword = process.env.ADMIN_PASSWORD
+  if (envPassword) {
+    if (body.password !== envPassword) {
+      throw createError({ statusCode: 401, statusMessage: 'Wrong password' })
+    }
+    return { ok: true }
+  }
+
   // Use cached config if available; otherwise try to load with a short timeout
   let config = getConfig()
   if (!config) {
