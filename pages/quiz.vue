@@ -70,7 +70,7 @@ div
           .vote-bar(v-for="a in activeQuestion.answers" :key="a.id")
             .bar-track
               .bar-fill(:style="{ width: votePercent(a.id) + '%' }")
-              .bar-label {{ a.text }}
+              .bar-label {{ a.text }}{{ votes[a.id] ? ` · ${votes[a.id]} (${votePercent(a.id)}%)` : '' }}
           .star-stats(v-if="activeQuestion.starRating !== undefined && totalVotes > 0")
             span.stat-item ⌀ {{ starAverage.toFixed(2) }}
             span.stat-sep &nbsp;·&nbsp;
