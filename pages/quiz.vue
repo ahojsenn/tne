@@ -53,7 +53,7 @@ div
                 v-model="newAnswerType"
                 placeholder="daily/weekly/never"
               )
-              p.form-hint Format: Option A/Option B/Option C
+              p.form-hint Format: Option A/Option B/Option C or 0-5 for star rating
               p.form-error(v-if="formError") {{ formError }}
               button.save-btn(:disabled="saving" @click="saveQuestion") {{ saving ? 'Saving…' : 'Save' }}
 
@@ -68,10 +68,13 @@ div
         .vote-results(v-if="activeQuestion")
           p.vote-title {{ totalVotes > 0 ? `Live results (${totalVotes} votes)` : 'Answer options' }}
           .vote-bar(v-for="a in activeQuestion.answers" :key="a.id")
-            .vote-label {{ a.text }}
             .bar-track
               .bar-fill(:style="{ width: votePercent(a.id) + '%' }")
-            .vote-count {{ votes[a.id] ?? 0 }} ({{ votePercent(a.id) }}%)
+              .bar-label {{ a.text }}
+          .star-stats(v-if="activeQuestion.starRating !== undefined && totalVotes > 0")
+            span.stat-item ⌀ {{ starAverage.toFixed(2) }}
+            span.stat-sep &nbsp;·&nbsp;
+            span.stat-item RMS {{ starRms.toFixed(2) }}
 </template>
 
 <script setup lang="ts">
@@ -174,6 +177,25 @@ function votePercent(answerId: string): number {
   return Math.round(((votes.value[answerId] ?? 0) / totalVotes.value) * 100)
 }
 
+const starAverage = computed(() => {
+  if (!activeQuestion.value || totalVotes.value === 0) return 0
+  let sum = 0
+  for (const a of activeQuestion.value.answers) {
+    sum += parseInt(a.id) * (votes.value[a.id] ?? 0)
+  }
+  return sum / totalVotes.value
+})
+
+const starRms = computed(() => {
+  if (!activeQuestion.value || totalVotes.value === 0) return 0
+  let sumSq = 0
+  for (const a of activeQuestion.value.answers) {
+    const val = parseInt(a.id)
+    sumSq += val * val * (votes.value[a.id] ?? 0)
+  }
+  return Math.sqrt(sumSq / totalVotes.value)
+})
+
 onMounted(() => {
   $io.on('quiz-vote-update', ({ questionId, votes: v }: { questionId: string; votes: Record<string, number> }) => {
     if (activeQuestion.value?.id === questionId) votes.value = v
@@ -225,21 +247,26 @@ onMounted(() => {
   }
 }
 
-.vote-bar {
-  margin-bottom: 10px;
+.star-stats {
+  margin-top: 12px;
+  font-size: 0.85em;
+  color: greenyellow;
+  display: flex;
+  align-items: center;
 
-  .vote-label {
-    font-size: 0.8em;
-    color: #ccc;
-    margin-bottom: 3px;
-  }
+  .stat-item { font-weight: bold; }
+  .stat-sep { color: #555; }
+}
+
+.vote-bar {
+  margin-bottom: 6px;
 
   .bar-track {
+    position: relative;
     background: #2a2a2a;
     border-radius: 4px;
-    height: 14px;
+    height: 22px;
     overflow: hidden;
-    margin-bottom: 2px;
   }
 
   .bar-fill {
@@ -249,9 +276,19 @@ onMounted(() => {
     border-radius: 4px;
   }
 
-  .vote-count {
-    font-size: 0.75em;
-    color: #888;
+  .bar-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    font-size: 0.78em;
+    color: white;
+    mix-blend-mode: difference;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
   }
 }
 
