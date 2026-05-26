@@ -15,7 +15,7 @@ teleport(to="body")
 
         .confirmation(v-else)
           .confirmation-icon ✅
-          p Danke für deine Antwort!
+          p Thanks for your answer!
 </template>
 
 <script setup lang="ts">
@@ -38,6 +38,7 @@ function submitAnswer(answerId: string) {
   if (!activeQuestion.value || voted.value) return
   $io.emit('submit-answer', { questionId: activeQuestion.value.id, answerId })
   voted.value = true
+  setTimeout(() => { activeQuestion.value = null }, 5000)
 }
 </script>
 

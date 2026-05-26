@@ -43,19 +43,19 @@ div
 
         //- Add new question form
         .add-question-form
-          button.toggle-form-btn(@click="showForm = !showForm") {{ showForm ? '▲ Abbrechen' : '＋ Neue Frage' }}
+          button.toggle-form-btn(@click="showForm = !showForm") {{ showForm ? '▲ Cancel' : '＋ New Question' }}
           transition(name="form-fade")
             .form-body(v-if="showForm")
-              label Frage
-              input.form-input(v-model="newQuestion" placeholder="Wie oft...?" @keyup.enter="saveQuestion")
-              label Antwortoptionen
+              label Question
+              input.form-input(v-model="newQuestion" placeholder="How often...?" @keyup.enter="saveQuestion")
+              label Answer options
               input.form-input(
                 v-model="newAnswerType"
-                placeholder="täglich/wöchentlich/nie"
+                placeholder="daily/weekly/never"
               )
               p.form-hint Format: Option A/Option B/Option C
               p.form-error(v-if="formError") {{ formError }}
-              button.save-btn(:disabled="saving" @click="saveQuestion") {{ saving ? 'Speichern…' : 'Speichern' }}
+              button.save-btn(:disabled="saving" @click="saveQuestion") {{ saving ? 'Saving…' : 'Save' }}
 
       .right-panel
         //- QR code (inline, not floating)
@@ -159,7 +159,7 @@ async function saveQuestion() {
     showForm.value = false
     await fetchQuestions()
   } catch (e: any) {
-    formError.value = 'Speichern fehlgeschlagen — bitte erneut versuchen.'
+    formError.value = 'Save failed — please try again.'
   } finally {
     saving.value = false
   }
