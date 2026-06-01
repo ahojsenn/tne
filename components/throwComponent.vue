@@ -13,12 +13,15 @@ div.thrower(@wheel.prevent @touchmove.prevent @scroll.prevent)
   
 <script setup lang="ts">
 import { type HERO_MESSAGE, type SCORE, type THROW_MESSAGE } from '~/types/message'
+import type { ThrownItem } from '~/types/thrownItem'
 import { useClientStore } from '~/store/useClientStore'
 import { useGameStore } from '~/store/useGameStore'
 import { useClientHeroStore } from '~/store/useClientHeroStore'
+import { useThrownItemsStore } from '~/store/useThrownItemsStore'
 const clientStore = useClientStore()
 const clientHeroStore = useClientHeroStore()  
 const game = useGameStore()
+const ti_store = useThrownItemsStore()
 const { $io } = useNuxtApp()
 
 useHead({
@@ -80,6 +83,9 @@ const onClickImage = (event: PointerEvent, thing: string) => {
     text: thing.trim(),
     clientId: clientStore.client.id ?? 'unknown',
   } as THROW_MESSAGE)
+
+  // add to background animation store (only own throws)
+  ti_store.throw({ x: thing.trim(), rnd: Math.floor(Math.random() * 100000) } as ThrownItem)
 
   // queue store update — DOM stays frozen until tapping pauses
   pendingThrows.push(thing)
