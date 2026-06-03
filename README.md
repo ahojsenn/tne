@@ -112,21 +112,21 @@ Use **Node Version Manager** — it lets you switch Node versions easily.
 ```bash
 brew install nvm
 # Follow the instructions to add nvm to your shell profile, then:
-nvm install 20
-nvm use 20
+nvm install 22
+nvm use 22
 ```
 
 **Windows:**
 Download and install **nvm-windows** from https://github.com/coreybutler/nvm-windows/releases  
 Then in a new terminal:
 ```bash
-nvm install 20
-nvm use 20
+nvm install 22
+nvm use 22
 ```
 
 Verify:
 ```bash
-node --version   # should show v20.x.x
+node --version   # should show v22.x.x
 npm --version
 ```
 
