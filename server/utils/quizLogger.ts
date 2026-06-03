@@ -10,7 +10,7 @@ export async function logQuizResults(
   try {
     const isNew = await ensureSheet(SHEET)
     if (isNew) {
-      await appendRows(`${SHEET}!A:E`, [['event', 'question_id', 'question_text', 'total_votes', 'results']])
+      await appendRows(`${SHEET}!A:G`, [['event', 'question_id', 'question_text', 'total_votes', 'results', 'average', 'rms']])
     }
 
     const totalVotes = Object.values(votes).reduce((s, n) => s + n, 0)
@@ -23,8 +23,26 @@ export async function logQuizResults(
       return `${a.text}: ${count} (${pct}%)`
     }).join(' / ')
 
-    const row = [dateTime, question.id, question.text, String(totalVotes), answerCell]
-    await appendRows(`${SHEET}!A:E`, [row])
+    // For star-rating questions, compute average and RMS
+    let avgCell = ''
+    let rmsCell = ''
+    if (question.starRating !== undefined && totalVotes > 0) {
+      let sumVal = 0
+      let sumSq = 0
+      for (const a of question.answers) {
+        const val = parseInt(a.id)
+        const count = votes[a.id] ?? 0
+        sumVal += val * count
+        sumSq += val * val * count
+      }
+      const avg = sumVal / totalVotes
+      const rms = Math.sqrt(sumSq / totalVotes)
+      avgCell = avg.toFixed(2)
+      rmsCell = rms.toFixed(2)
+    }
+
+    const row = [dateTime, question.id, question.text, String(totalVotes), answerCell, avgCell, rmsCell]
+    await appendRows(`${SHEET}!A:G`, [row])
     console.log(`[quizLogger] saved results for question "${question.id}" (${totalVotes} votes)`)
   } catch (err) {
     console.warn('[quizLogger] could not save quiz results to sheets:', err)
