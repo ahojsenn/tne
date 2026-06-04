@@ -80,15 +80,33 @@ export async function ensureSheet(sheetTitle: string): Promise<boolean> {
  * Append rows to a sheet.
  * @param range e.g. "log!A:Z"
  * @param rows  array of value arrays
+ * @param valueInputOption  'USER_ENTERED' (default) or 'RAW' — use RAW for auth/sensitive data
  */
-export async function appendRows(range: string, rows: string[][]): Promise<void> {
+export async function appendRows(range: string, rows: string[][], valueInputOption: 'USER_ENTERED' | 'RAW' = 'USER_ENTERED'): Promise<void> {
   const spreadsheetId = getSpreadsheetId()
   const auth = await getAuthClient()
   const sheets = google.sheets({ version: 'v4', auth })
   await sheets.spreadsheets.values.append({
     spreadsheetId,
     range,
-    valueInputOption: 'USER_ENTERED',
+    valueInputOption,
     requestBody: { values: rows },
+  })
+}
+
+/**
+ * Overwrite a specific range with the given values.
+ * @param range e.g. "speakers!A3:F3"
+ * @param values 2D array matching the range dimensions
+ */
+export async function updateRange(range: string, values: string[][]): Promise<void> {
+  const spreadsheetId = getSpreadsheetId()
+  const auth = await getAuthClient()
+  const sheets = google.sheets({ version: 'v4', auth })
+  await sheets.spreadsheets.values.update({
+    spreadsheetId,
+    range,
+    valueInputOption: 'RAW',
+    requestBody: { values },
   })
 }

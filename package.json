@@ -14,8 +14,12 @@
   "dependencies": {
     "@mdi/font": "^7.4.47",
     "@pinia/nuxt": "^0.5.1",
+    "@types/bcrypt": "^6.0.0",
+    "@types/nodemailer": "^8.0.0",
+    "bcrypt": "^6.0.0",
     "effect": "^2.4.16",
     "googleapis": "^172.0.0",
+    "nodemailer": "^8.0.10",
     "nuxt": "3.11.1",
     "pinia": "^2.1.7",
     "pug": "^3.0.2",
