@@ -1,17 +1,10 @@
 <template lang="pug">
-div.register-page
-  div.register-card
-    h2.register-title 🎤 Speaker Registration
-    p.register-subtitle Create your Tomatoes &amp; Eggs speaker account
+div.login-page
+  div.login-card
+    h2.login-title 🎤 Speaker Login
+    p.login-subtitle Welcome back to Tomatoes &amp; Eggs
 
-    div.alert.alert-success(v-if="successMessage") {{ successMessage }}
-
-    form(v-if="!successMessage" @submit.prevent="submit")
-      div.field-group
-        label(for="displayName") Display name
-        input#displayName(v-model="form.displayName" type="text" autocomplete="name" :class="{ error: errors.displayName }")
-        span.field-error(v-if="errors.displayName") {{ errors.displayName }}
-
+    form(@submit.prevent="submit")
       div.field-group
         label(for="email") Email
         input#email(v-model="form.email" type="email" autocomplete="email" :class="{ error: errors.email }")
@@ -20,35 +13,37 @@ div.register-page
       div.field-group
         label(for="password") Password
         div.password-wrap
-          input#password(v-model="form.password" :type="showPassword ? 'text' : 'password'" autocomplete="new-password" :class="{ error: errors.password }")
+          input#password(v-model="form.password" :type="showPassword ? 'text' : 'password'" autocomplete="current-password" :class="{ error: errors.password }")
           button.toggle-pw(type="button" @click="showPassword = !showPassword") {{ showPassword ? '🙈' : '👁' }}
         span.field-error(v-if="errors.password") {{ errors.password }}
-
-      div.field-group
-        label(for="confirmPassword") Confirm password
-        input#confirmPassword(v-model="form.confirmPassword" :type="showPassword ? 'text' : 'password'" autocomplete="new-password" :class="{ error: errors.confirmPassword }")
-        span.field-error(v-if="errors.confirmPassword") {{ errors.confirmPassword }}
 
       div.alert.alert-error(v-if="serverError") {{ serverError }}
 
       button.submit-btn(type="submit" :disabled="loading")
-        span(v-if="loading") ⏳ Registering…
-        span(v-else) Register
+        span(v-if="loading") ⏳ Logging in…
+        span(v-else) Login
+
+    div.links
+      a(href="/speaker/register") Don't have an account? Register
 </template>
 
 <script setup lang="ts">
-const form = reactive({ displayName: '', email: '', password: '', confirmPassword: '' })
-const errors = reactive({ displayName: '', email: '', password: '', confirmPassword: '' })
+const form = reactive({ email: '', password: '' })
+const errors = reactive({ email: '', password: '' })
 const loading = ref(false)
 const serverError = ref('')
-const successMessage = ref('')
 const showPassword = ref(false)
 
+onMounted(async () => {
+  try {
+    await $fetch('/api/speaker/me')
+    await navigateTo('/speaker/dashboard')
+  } catch {}
+})
+
 function validate(): boolean {
-  errors.displayName = form.displayName.trim() ? '' : 'Display name is required'
   errors.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email) ? '' : 'Valid email is required'
-  errors.password = form.password.length >= 8 ? '' : 'Password must be at least 8 characters'
-  errors.confirmPassword = form.password === form.confirmPassword ? '' : 'Passwords do not match'
+  errors.password = form.password ? '' : 'Password is required'
   return !Object.values(errors).some(Boolean)
 }
 
@@ -57,11 +52,8 @@ async function submit() {
   if (!validate()) return
   loading.value = true
   try {
-    await $fetch('/api/speaker/register', {
-      method: 'POST',
-      body: { ...form },
-    })
-    successMessage.value = 'Check your inbox! We sent you a confirmation email. Click the link to activate your account.'
+    await $fetch('/api/speaker/login', { method: 'POST', body: { ...form } })
+    await navigateTo('/speaker/dashboard')
   } catch (e: any) {
     serverError.value = e?.data?.statusMessage ?? 'Something went wrong — please try again.'
   } finally {
@@ -71,7 +63,7 @@ async function submit() {
 </script>
 
 <style scoped lang="scss">
-.register-page {
+.login-page {
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -80,7 +72,7 @@ async function submit() {
   box-sizing: border-box;
 }
 
-.register-card {
+.login-card {
   background: #111;
   border: 1px solid greenyellow;
   border-radius: 8px;
@@ -90,14 +82,14 @@ async function submit() {
   font-family: 'Courier New', Courier, monospace;
 }
 
-.register-title {
+.login-title {
   color: greenyellow;
   font-size: 1.3em;
   text-align: center;
   margin: 0 0 6px;
 }
 
-.register-subtitle {
+.login-subtitle {
   color: #aaa;
   font-size: 0.85em;
   text-align: center;
@@ -162,12 +154,6 @@ async function submit() {
   padding: 12px 14px;
 }
 
-.alert-success {
-  background: rgba(0, 200, 80, 0.15);
-  border: 1px solid #0c8;
-  color: #0c8;
-}
-
 .alert-error {
   background: rgba(255, 60, 60, 0.15);
   border: 1px solid #f44;
@@ -186,8 +172,19 @@ async function submit() {
   padding: 12px;
   width: 100%;
   transition: opacity 0.15s;
+  margin-bottom: 16px;
 
   &:hover:not(:disabled) { opacity: 0.85; }
   &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
+.links {
+  text-align: center;
+  font-size: 0.85em;
+
+  a {
+    color: greenyellow;
+    text-decoration: underline;
+  }
 }
 </style>

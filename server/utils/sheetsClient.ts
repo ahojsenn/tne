@@ -110,3 +110,25 @@ export async function updateRange(range: string, values: string[][]): Promise<vo
     requestBody: { values },
   })
 }
+
+/**
+ * Delete a single row from a sheet by its 1-based row index.
+ * @param sheetTitle e.g. "speakers"
+ * @param rowIndex   1-based row number (as returned by speakerStore)
+ */
+export async function deleteRow(sheetTitle: string, rowIndex: number): Promise<void> {
+  const spreadsheetId = getSpreadsheetId()
+  const auth = await getAuthClient()
+  const sheets = google.sheets({ version: 'v4', auth })
+  const meta = await sheets.spreadsheets.get({ spreadsheetId })
+  const sheet = meta.data.sheets?.find(s => s.properties?.title === sheetTitle)
+  if (!sheet?.properties) throw new Error(`Sheet "${sheetTitle}" not found`)
+  const sheetId = sheet.properties.sheetId!
+  const zeroIndex = rowIndex - 1
+  await sheets.spreadsheets.batchUpdate({
+    spreadsheetId,
+    requestBody: {
+      requests: [{ deleteDimension: { range: { sheetId, dimension: 'ROWS', startIndex: zeroIndex, endIndex: zeroIndex + 1 } } }],
+    },
+  })
+}

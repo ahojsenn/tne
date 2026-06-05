@@ -70,6 +70,7 @@ export default defineConfig({
 
   /* Server is started by the test script (scripts/test.sh) */
   webServer: {
+    command: 'npm run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: true,
     timeout: 60000,

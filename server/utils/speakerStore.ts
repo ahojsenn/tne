@@ -1,4 +1,4 @@
-import { readRange, appendRows, updateRange, ensureSheet } from './sheetsClient'
+import { readRange, appendRows, updateRange, deleteRow, ensureSheet } from './sheetsClient'
 import type { Speaker } from '~/types/speaker'
 
 const SHEET = 'speakers'
@@ -62,4 +62,8 @@ export async function appendSpeaker(speaker: Speaker): Promise<void> {
 
 export async function updateSpeakerRow(rowIndex: number, speaker: Speaker): Promise<void> {
   await updateRange(`${SHEET}!A${rowIndex}:F${rowIndex}`, [speakerToRow(speaker)])
+}
+
+export async function deleteSpeakerRow(rowIndex: number): Promise<void> {
+  await deleteRow(SHEET, rowIndex)
 }

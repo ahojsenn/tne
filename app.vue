@@ -21,6 +21,7 @@ const navItems = [
   { title: 'Answer',       href: '/answer' },
   { title: 'Catchup',      href: '/catchup' },
   { title: 'Kommitment',   href: '/kommitment' },
+  { title: '🎤 Speaker Login', href: '/speaker/login' },
 ]
 
 const drawer = ref(false)

@@ -1,4 +1,4 @@
-export type SpeakerStatus = 'pending' | 'active' | 'deleted'
+export type SpeakerStatus = 'pending' | 'active'
 
 export type Speaker = {
   email: string

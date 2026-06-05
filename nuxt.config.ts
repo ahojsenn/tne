@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     googleServiceAccountEmail: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL ?? '',
     googleServiceAccountPrivateKey: process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY ?? '',
     googleSheetsSpreadsheetId: process.env.GOOGLE_SHEETS_SPREADSHEET_ID ?? '',
+    sessionSecret: process.env.SESSION_SECRET ?? '',
   },
   nitro: {
     experimental: {
@@ -28,6 +29,9 @@ export default defineNuxtConfig({
     "vuetify/styles",
   ],
   vite: {
+    server: {
+      allowedHosts: ['tne-dev.v39.lug-stormarn.de'],
+    },
     css: {
       preprocessorOptions: {
         sass: { api: 'modern-compiler' },
