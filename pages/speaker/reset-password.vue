@@ -55,9 +55,15 @@ const tokenError = ref('')
 const success = ref(false)
 const showPassword = ref(false)
 
-onMounted(() => {
+onMounted(async () => {
   if (!token) {
     tokenError.value = 'Invalid or missing reset token. Please request a new password reset.'
+    return
+  }
+  try {
+    await $fetch(`/api/speaker/verify-reset-token?token=${encodeURIComponent(token)}`)
+  } catch {
+    tokenError.value = 'This reset link is invalid or has expired. Please request a new one.'
   }
 })
 
