@@ -7,4 +7,6 @@ export type Speaker = {
   status: SpeakerStatus
   confirmToken?: string
   confirmTokenExpiry?: string // ISO 8601
+  resetToken?: string
+  resetTokenExpiry?: string // ISO 8601
 }

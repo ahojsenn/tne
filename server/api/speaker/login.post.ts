@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import { findSpeakerByEmail } from '~/server/utils/speakerStore'
 import { useSpeakerSession } from '~/server/utils/session'
 

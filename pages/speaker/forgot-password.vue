@@ -1,52 +1,38 @@
 <template lang="pug">
-div.login-page
-  div.login-card
-    h2.login-title 🎤 Speaker Login
-    p.login-subtitle Welcome back to Tomatoes &amp; Eggs
+div.forgot-page
+  div.forgot-card
+    h2.forgot-title 🔑 Reset Password
+    p.forgot-subtitle Enter your email and we'll send you a reset link
 
-    form(@submit.prevent="submit")
+    div.alert.alert-success(v-if="success")
+      | If that email is registered, you'll receive a reset link shortly. Check your inbox.
+
+    form(v-if="!success" @submit.prevent="submit")
       div.field-group
         label(for="email") Email
         input#email(v-model="form.email" type="email" autocomplete="email" :class="{ error: errors.email }")
         span.field-error(v-if="errors.email") {{ errors.email }}
 
-      div.field-group
-        label(for="password") Password
-        div.password-wrap
-          input#password(v-model="form.password" :type="showPassword ? 'text' : 'password'" autocomplete="current-password" :class="{ error: errors.password }")
-          button.toggle-pw(type="button" @click="showPassword = !showPassword") {{ showPassword ? '🙈' : '👁' }}
-        span.field-error(v-if="errors.password") {{ errors.password }}
-
       div.alert.alert-error(v-if="serverError") {{ serverError }}
 
       button.submit-btn(type="submit" :disabled="loading")
-        span(v-if="loading") ⏳ Logging in…
-        span(v-else) Login
+        span(v-if="loading") ⏳ Sending…
+        span(v-else) Send reset link
 
     div.links
-      a(href="/speaker/register") Don't have an account? Register
-      br
-      a(href="/speaker/forgot-password") Forgot password?
+      a(href="/speaker/login") Back to login
 </template>
 
 <script setup lang="ts">
-const form = reactive({ email: '', password: '' })
-const errors = reactive({ email: '', password: '' })
+const form = reactive({ email: '' })
+const errors = reactive({ email: '' })
 const loading = ref(false)
 const serverError = ref('')
-const showPassword = ref(false)
-
-onMounted(async () => {
-  try {
-    await $fetch('/api/speaker/me')
-    await navigateTo('/speaker/dashboard')
-  } catch {}
-})
+const success = ref(false)
 
 function validate(): boolean {
   errors.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email) ? '' : 'Valid email is required'
-  errors.password = form.password ? '' : 'Password is required'
-  return !Object.values(errors).some(Boolean)
+  return !errors.email
 }
 
 async function submit() {
@@ -54,8 +40,8 @@ async function submit() {
   if (!validate()) return
   loading.value = true
   try {
-    await $fetch('/api/speaker/login', { method: 'POST', body: { ...form } })
-    await navigateTo('/speaker/dashboard')
+    await $fetch('/api/speaker/forgot-password', { method: 'POST', body: { email: form.email } })
+    success.value = true
   } catch (e: any) {
     serverError.value = e?.data?.statusMessage ?? 'Something went wrong — please try again.'
   } finally {
@@ -65,7 +51,7 @@ async function submit() {
 </script>
 
 <style scoped lang="scss">
-.login-page {
+.forgot-page {
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -74,7 +60,7 @@ async function submit() {
   box-sizing: border-box;
 }
 
-.login-card {
+.forgot-card {
   background: #111;
   border: 1px solid greenyellow;
   border-radius: 8px;
@@ -84,14 +70,14 @@ async function submit() {
   font-family: 'Courier New', Courier, monospace;
 }
 
-.login-title {
+.forgot-title {
   color: greenyellow;
   font-size: 1.3em;
   text-align: center;
   margin: 0 0 6px;
 }
 
-.login-subtitle {
+.forgot-subtitle {
   color: #aaa;
   font-size: 0.85em;
   text-align: center;
@@ -125,24 +111,6 @@ async function submit() {
   }
 }
 
-.password-wrap {
-  display: flex;
-  gap: 8px;
-
-  input { flex: 1; }
-}
-
-.toggle-pw {
-  background: #1e1e1e;
-  border: 1px solid #555;
-  border-radius: 4px;
-  color: white;
-  cursor: pointer;
-  font-size: 1em;
-  padding: 0 10px;
-  &:hover { border-color: greenyellow; }
-}
-
 .field-error {
   color: #f66;
   font-size: 0.8em;
@@ -154,6 +122,12 @@ async function submit() {
   font-size: 0.9em;
   margin-bottom: 16px;
   padding: 12px 14px;
+}
+
+.alert-success {
+  background: rgba(0, 200, 80, 0.15);
+  border: 1px solid #0c8;
+  color: #0c8;
 }
 
 .alert-error {
@@ -173,8 +147,8 @@ async function submit() {
   font-weight: bold;
   padding: 12px;
   width: 100%;
-  transition: opacity 0.15s;
   margin-bottom: 16px;
+  transition: opacity 0.15s;
 
   &:hover:not(:disabled) { opacity: 0.85; }
   &:disabled { opacity: 0.5; cursor: not-allowed; }

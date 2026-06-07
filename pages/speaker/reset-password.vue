@@ -1,51 +1,69 @@
 <template lang="pug">
-div.login-page
-  div.login-card
-    h2.login-title 🎤 Speaker Login
-    p.login-subtitle Welcome back to Tomatoes &amp; Eggs
+div.reset-page
+  div.reset-card
+    h2.reset-title 🔑 Set New Password
 
-    form(@submit.prevent="submit")
-      div.field-group
-        label(for="email") Email
-        input#email(v-model="form.email" type="email" autocomplete="email" :class="{ error: errors.email }")
-        span.field-error(v-if="errors.email") {{ errors.email }}
+    div.alert.alert-error(v-if="tokenError") {{ tokenError }}
 
+    div.alert.alert-success(v-if="success")
+      | Your password has been reset successfully.
+      br
+      a(href="/speaker/login") Log in with your new password
+
+    form(v-if="!tokenError && !success" @submit.prevent="submit")
       div.field-group
-        label(for="password") Password
+        label(for="newPassword") New password
         div.password-wrap
-          input#password(v-model="form.password" :type="showPassword ? 'text' : 'password'" autocomplete="current-password" :class="{ error: errors.password }")
+          input#newPassword(
+            v-model="form.password"
+            :type="showPassword ? 'text' : 'password'"
+            autocomplete="new-password"
+            :class="{ error: errors.password }"
+          )
           button.toggle-pw(type="button" @click="showPassword = !showPassword") {{ showPassword ? '🙈' : '👁' }}
         span.field-error(v-if="errors.password") {{ errors.password }}
+
+      div.field-group
+        label(for="confirmPassword") Confirm new password
+        input#confirmPassword(
+          v-model="form.confirmPassword"
+          :type="showPassword ? 'text' : 'password'"
+          autocomplete="new-password"
+          :class="{ error: errors.confirmPassword }"
+        )
+        span.field-error(v-if="errors.confirmPassword") {{ errors.confirmPassword }}
 
       div.alert.alert-error(v-if="serverError") {{ serverError }}
 
       button.submit-btn(type="submit" :disabled="loading")
-        span(v-if="loading") ⏳ Logging in…
-        span(v-else) Login
+        span(v-if="loading") ⏳ Resetting…
+        span(v-else) Reset password
 
-    div.links
-      a(href="/speaker/register") Don't have an account? Register
-      br
-      a(href="/speaker/forgot-password") Forgot password?
+    div.links(v-if="!success")
+      a(href="/speaker/login") Back to login
 </template>
 
 <script setup lang="ts">
-const form = reactive({ email: '', password: '' })
-const errors = reactive({ email: '', password: '' })
+const route = useRoute()
+const token = route.query.token as string | undefined
+
+const form = reactive({ password: '', confirmPassword: '' })
+const errors = reactive({ password: '', confirmPassword: '' })
 const loading = ref(false)
 const serverError = ref('')
+const tokenError = ref('')
+const success = ref(false)
 const showPassword = ref(false)
 
-onMounted(async () => {
-  try {
-    await $fetch('/api/speaker/me')
-    await navigateTo('/speaker/dashboard')
-  } catch {}
+onMounted(() => {
+  if (!token) {
+    tokenError.value = 'Invalid or missing reset token. Please request a new password reset.'
+  }
 })
 
 function validate(): boolean {
-  errors.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email) ? '' : 'Valid email is required'
-  errors.password = form.password ? '' : 'Password is required'
+  errors.password = form.password.length >= 8 ? '' : 'Password must be at least 8 characters'
+  errors.confirmPassword = form.password === form.confirmPassword ? '' : 'Passwords do not match'
   return !Object.values(errors).some(Boolean)
 }
 
@@ -54,10 +72,19 @@ async function submit() {
   if (!validate()) return
   loading.value = true
   try {
-    await $fetch('/api/speaker/login', { method: 'POST', body: { ...form } })
-    await navigateTo('/speaker/dashboard')
+    await $fetch('/api/speaker/reset-password', {
+      method: 'POST',
+      body: { token, password: form.password, confirmPassword: form.confirmPassword },
+    })
+    success.value = true
+    await navigateTo('/speaker/login?reset=1')
   } catch (e: any) {
-    serverError.value = e?.data?.statusMessage ?? 'Something went wrong — please try again.'
+    const msg = e?.data?.statusMessage ?? ''
+    if (msg.includes('expired') || msg.includes('Invalid')) {
+      tokenError.value = 'This reset link is invalid or has expired. Please request a new one.'
+    } else {
+      serverError.value = msg || 'Something went wrong — please try again.'
+    }
   } finally {
     loading.value = false
   }
@@ -65,7 +92,7 @@ async function submit() {
 </script>
 
 <style scoped lang="scss">
-.login-page {
+.reset-page {
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -74,7 +101,7 @@ async function submit() {
   box-sizing: border-box;
 }
 
-.login-card {
+.reset-card {
   background: #111;
   border: 1px solid greenyellow;
   border-radius: 8px;
@@ -84,16 +111,9 @@ async function submit() {
   font-family: 'Courier New', Courier, monospace;
 }
 
-.login-title {
+.reset-title {
   color: greenyellow;
   font-size: 1.3em;
-  text-align: center;
-  margin: 0 0 6px;
-}
-
-.login-subtitle {
-  color: #aaa;
-  font-size: 0.85em;
   text-align: center;
   margin: 0 0 24px;
 }
@@ -156,6 +176,14 @@ async function submit() {
   padding: 12px 14px;
 }
 
+.alert-success {
+  background: rgba(0, 200, 80, 0.15);
+  border: 1px solid #0c8;
+  color: #0c8;
+
+  a { color: #0c8; }
+}
+
 .alert-error {
   background: rgba(255, 60, 60, 0.15);
   border: 1px solid #f44;
@@ -173,8 +201,8 @@ async function submit() {
   font-weight: bold;
   padding: 12px;
   width: 100%;
-  transition: opacity 0.15s;
   margin-bottom: 16px;
+  transition: opacity 0.15s;
 
   &:hover:not(:disabled) { opacity: 0.85; }
   &:disabled { opacity: 0.5; cursor: not-allowed; }

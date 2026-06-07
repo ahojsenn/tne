@@ -9,6 +9,14 @@ DEPLOYMENTTARGET=$TARGETUSER@$TARGETSERVER:$TARGETDIR
 SSHPORT=22
 SSH="ssh -p $SSHPORT -t $TARGETUSER@$TARGETSERVER"
 
+# Finally block: always stream production logs after the script exits (success or failure),
+# so you can immediately see what the server is doing. Press Ctrl+C to stop tailing.
+trap '
+  echo ""
+  echo "📋 Streaming production logs from $TARGETSERVER — press Ctrl+C to stop"
+  ssh -p $SSHPORT $TARGETUSER@$TARGETSERVER "tail -f /tmp/tne.log"
+' EXIT
+
 # Build
 yarn build
 
@@ -50,3 +58,5 @@ for i in $(seq 1 $MAX_RETRIES); do
 done
 echo "❌ Deployment check failed after $MAX_RETRIES attempts — last status: HTTP $HTTP_STATUS"
 exit 1
+
+
