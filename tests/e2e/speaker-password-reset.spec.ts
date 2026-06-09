@@ -129,7 +129,7 @@ test.describe.serial('Password reset flow @issue-24', () => {
     await page.getByLabel('Confirm new password').fill(NEW_PASSWORD)
     await page.getByRole('button', { name: /reset/i }).click()
 
-    await expect(page).toHaveURL('/speaker/login', { timeout: 10000 })
+    await expect(page).toHaveURL('/speaker/login?reset=1', { timeout: 10000 })
     await expect(page.locator('.alert-success')).toBeVisible({ timeout: 5000 })
   })
 
@@ -158,7 +158,7 @@ test.describe.serial('Password reset flow @issue-24', () => {
     await page.getByLabel('New password', { exact: true }).fill(NEW_PASSWORD)
     await page.getByLabel('Confirm new password').fill(NEW_PASSWORD)
     await page.getByRole('button', { name: /reset/i }).click()
-    await expect(page).toHaveURL('/speaker/login', { timeout: 10000 })
+    await expect(page).toHaveURL('/speaker/login?reset=1', { timeout: 10000 })
 
     // Try to reuse the same token
     await page.goto(`/speaker/reset-password?token=${token}`)

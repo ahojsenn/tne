@@ -4,6 +4,8 @@ div.login-page
     h2.login-title 🎤 Speaker Login
     p.login-subtitle Welcome back to Tomatoes &amp; Eggs
 
+    div.alert.alert-success(v-if="resetSuccess") Your password has been reset. You can now log in with your new password.
+
     form(@submit.prevent="submit")
       div.field-group
         label(for="email") Email
@@ -30,11 +32,13 @@ div.login-page
 </template>
 
 <script setup lang="ts">
+const route = useRoute()
 const form = reactive({ email: '', password: '' })
 const errors = reactive({ email: '', password: '' })
 const loading = ref(false)
 const serverError = ref('')
 const showPassword = ref(false)
+const resetSuccess = computed(() => route.query.reset === '1')
 
 onMounted(async () => {
   try {
@@ -154,6 +158,12 @@ async function submit() {
   font-size: 0.9em;
   margin-bottom: 16px;
   padding: 12px 14px;
+}
+
+.alert-success {
+  background: rgba(0, 200, 80, 0.15);
+  border: 1px solid #0c8;
+  color: #0c8;
 }
 
 .alert-error {
