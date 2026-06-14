@@ -13,5 +13,5 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 401, statusMessage: 'Not authenticated' })
   }
 
-  return { email: found.speaker.email, displayName: found.speaker.displayName }
+  return { email: found.speaker.email, displayName: found.speaker.displayName, heroName: found.speaker.heroName ?? null }
 })

@@ -9,4 +9,5 @@ export type Speaker = {
   confirmTokenExpiry?: string // ISO 8601
   resetToken?: string
   resetTokenExpiry?: string // ISO 8601
+  heroName?: string
 }
