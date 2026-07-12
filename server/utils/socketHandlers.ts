@@ -119,3 +119,12 @@ export function handle_tne(socket: Socket, global: MyGlobal, data: THROW_MESSAGE
     data.text, hero.heroName, hero.h_m_s)
 
 }
+
+export function handle_set_speaker_hero(socket: Socket, global: MyGlobal, data: { clientId: string; heroName: string }): void {
+  if (!data?.clientId || !data?.heroName) return
+  heroes.setHeroNameForClient(data.clientId, data.heroName)
+  const hero = heroes.getHeroFromClientId(data.clientId)
+  console.log('set-speaker-hero: renamed hero to', data.heroName, 'for client', data.clientId)
+  socket.emit('client-hero', hero)
+  global.io.to('console-channel').emit('heroes', Effect.runSync(heroes.hero_hitlist))
+}

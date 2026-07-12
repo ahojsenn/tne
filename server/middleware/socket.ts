@@ -92,6 +92,7 @@ export default defineEventHandler((event) => {
       socket.emit('tomato_game_score', Effect.runSync(heroes.last_game_hero_hitlist))
     })
     socket.on('client-id', (newid: string) => handlers.handle_client_id(socket, global, newid))
+    socket.on('set-speaker-hero', (data: { clientId: string; heroName: string }) => handlers.handle_set_speaker_hero(socket, global, data))
     socket.on('get_heroes', () => { socket.emit('heroes', Effect.runSync(heroes.hero_hitlist)) })
     socket.on('activate-question', (q: Question | null) => {
       // Save results of the previous question before switching

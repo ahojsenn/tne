@@ -112,16 +112,40 @@ const preventDoubleTap = (e: TouchEvent) => {
   lastTouchEnd = now
 }
 
+const speakerHeroName = ref<string | null>(null)
+let heroRegistered = false
+
 onMounted(() => {
   document.addEventListener('touchstart', preventPinch, { passive: false })
   document.addEventListener('touchend', preventDoubleTap, { passive: false })
   console.log('throwComponent.vue: onMounted')
+
+  // Check if user is a registered speaker with a custom hero name.
+  // The 401 case (not a speaker) is silently ignored.
+  $fetch<{ heroName: string | null }>('/api/speaker/me')
+    .then((me) => {
+      if (me?.heroName) {
+        speakerHeroName.value = me.heroName
+        if (heroRegistered) {
+          $io.emit('set-speaker-hero', { clientId: clientStore.client.id, heroName: me.heroName })
+        }
+      }
+    })
+    .catch(() => {})
+
   $io.onAny((event, ...args) => console.log('throwComponent.vue: got event:', event, args))
   $io.emit('register-tne-app-client')
   $io.on('connect', () => $io.emit('client-id', clientStore.client.id))
   $io.on('client-hero', (hero: HERO_MESSAGE) => {
     console.log('throwComponent.vue: got client-hero', hero, clientHeroStore.getHero)
-    clientHeroStore.storeHero(hero)  // set score in clientHeroStore
+    clientHeroStore.storeHero(hero)
+    // Apply speaker's custom hero name if not yet reflected by the server
+    if (!heroRegistered) {
+      heroRegistered = true
+      if (speakerHeroName.value && hero.heroName !== speakerHeroName.value) {
+        $io.emit('set-speaker-hero', { clientId: hero.clientId || clientStore.client.id, heroName: speakerHeroName.value })
+      }
+    }
   })
 
   document.getElementById('body')?.requestFullscreen()

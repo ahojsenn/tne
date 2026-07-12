@@ -81,6 +81,14 @@ export const getHeroFromClientId = (clientId: string): HERO_MESSAGE => {
 
 export const clientIdIsKnown = (s: string) => Effect.runSync(hero_hitlist).find((c) => c.clientId === s)
 
+// rename a hero in all hitlists — used when a speaker's custom hero name arrives
+export const setHeroNameForClient = (clientId: string, heroName: string): void => {
+  const hero = Effect.runSync(hero_hitlist).find((h) => h.clientId === clientId)
+  if (hero) hero.heroName = heroName
+  const lastHero = Effect.runSync(last_game_hero_hitlist).find((h) => h.clientId === clientId)
+  if (lastHero) lastHero.heroName = heroName
+}
+
 // find hero and add throw to the hero hitlist
 export const add_throw = (clientId: string, hl: Array<HERO_MESSAGE>, threw: string) => {
   const heroName = getHeroFromClientId(clientId).heroName;
