@@ -1,9 +1,21 @@
-import { readRange, appendRows, updateRange, deleteRow, ensureSheet } from './sheetsClient'
+import { createHash } from 'node:crypto'
+import { readRange, updateRange, deleteRow, ensureSheet } from './sheetsClient'
 import type { Speaker } from '~/types/speaker'
 
 const SHEET = 'speakers'
 // columns: email(A) | display_name(B) | password_hash(C) | status(D) | confirm_token(E) | token_expiry(F) | reset_token(G) | reset_expiry(H) | hero_name(I)
+// reset_token(G) holds a SHA-256 digest, never the token itself — see hashResetToken().
 const RANGE = `${SHEET}!A:I`
+
+/**
+ * Reset tokens are stored hashed, so read access to the spreadsheet does not
+ * hand out the ability to take over accounts. Plain SHA-256 is enough here (no
+ * bcrypt): the token is a 122-bit random UUID, so there is nothing to brute
+ * force. Anyone who has the plaintext can still look the row up.
+ */
+export function hashResetToken(token: string): string {
+  return createHash('sha256').update(token).digest('hex')
+}
 
 type SpeakerRow = { speaker: Speaker; rowIndex: number }
 
@@ -58,19 +70,46 @@ export async function findSpeakerByToken(token: string): Promise<SpeakerRow | nu
   return { speaker: rowToSpeaker(dataRows[idx]), rowIndex: idx + 2 }
 }
 
+/** Takes the plaintext token from the reset link; matches it against the stored digest. */
 export async function findSpeakerByResetToken(token: string): Promise<SpeakerRow | null> {
   const { dataRows } = await getAllRows()
-  const idx = dataRows.findIndex(r => r[6] === token)
+  const digest = hashResetToken(token)
+  const idx = dataRows.findIndex(r => r[6] === digest)
   if (idx === -1) return null
   return { speaker: rowToSpeaker(dataRows[idx]), rowIndex: idx + 2 }
 }
 
+const HEADER = ['email', 'display_name', 'password_hash', 'status', 'confirm_token', 'token_expiry', 'reset_token', 'reset_expiry', 'hero_name']
+
+/**
+ * Read-then-write is only safe if no second append reads the same row count in
+ * between — two parallel registrations would otherwise both target the last row
+ * and one would overwrite the other. Requests are serialised per server process,
+ * which is where the concurrency actually comes from (one Nitro instance).
+ */
+let appendQueue: Promise<unknown> = Promise.resolve()
+
+/**
+ * Writes to an explicit row range instead of values.append: append picks its
+ * target column by guessing where the "table" is, and once a row carried a
+ * hero_name while the header still ended at token_expiry it started guessing
+ * column I — new speakers were written to I:Q, where every lookup (which reads
+ * the email from column A) missed them, silently.
+ */
 export async function appendSpeaker(speaker: Speaker): Promise<void> {
-  const isNew = await ensureSheet(SHEET)
-  if (isNew) {
-    await appendRows(`${SHEET}!A:I`, [['email', 'display_name', 'password_hash', 'status', 'confirm_token', 'token_expiry', 'reset_token', 'reset_expiry', 'hero_name']], 'RAW')
+  const write = async () => {
+    const isNew = await ensureSheet(SHEET)
+    if (isNew) {
+      await updateRange(`${SHEET}!A1:I1`, [HEADER])
+    }
+    const { rows } = await getAllRows()
+    const target = Math.max(rows.length, 1) + 1 // past the last row, never over the header
+    await updateRange(`${SHEET}!A${target}:I${target}`, [speakerToRow(speaker)])
   }
-  await appendRows(`${SHEET}!A:I`, [speakerToRow(speaker)], 'RAW')
+
+  const run = appendQueue.then(write, write)
+  appendQueue = run.catch(() => {}) // a failed append must not wedge the queue
+  return run
 }
 
 export async function updateSpeakerRow(rowIndex: number, speaker: Speaker): Promise<void> {

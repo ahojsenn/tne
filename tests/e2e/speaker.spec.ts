@@ -24,13 +24,13 @@ async function confirmEmail(page: any, email = TEST_EMAIL) {
   await expect(page.locator('.alert-success')).toBeVisible({ timeout: 10000 })
 }
 
-async function login(page: any, email = TEST_EMAIL) {
+async function login(page: any, email = TEST_EMAIL, displayName = TEST_NAME) {
   await page.goto('/speaker/login')
   await page.getByLabel('Email').fill(email)
   await page.getByLabel('Password').fill(TEST_PASSWORD)
   await page.getByRole('button', { name: 'Login' }).click()
   await expect(page).toHaveURL('/speaker/dashboard', { timeout: 10000 })
-  await expect(page.locator('.welcome')).toContainText(TEST_NAME)
+  await expect(page.locator('.welcome')).toContainText(displayName)
 }
 
 async function deleteAccount(page: any) {
@@ -85,8 +85,9 @@ test.describe.serial('Speaker auth flow', () => {
 
 test('cannot login with unconfirmed account', async ({ page }) => {
   const email = `playwright-unconfirmed-${Date.now()}@test.example`
+  const displayName = 'Unconfirmed User'
   await page.goto('/speaker/register')
-  await page.getByLabel('Display name').fill('Unconfirmed User')
+  await page.getByLabel('Display name').fill(displayName)
   await page.getByLabel('Email').fill(email)
   await page.getByLabel('Password', { exact: true }).fill(TEST_PASSWORD)
   await page.getByLabel('Confirm password').fill(TEST_PASSWORD)
@@ -101,6 +102,6 @@ test('cannot login with unconfirmed account', async ({ page }) => {
 
   // Cleanup: confirm and delete
   await confirmEmail(page, email)
-  await login(page, email)
+  await login(page, email, displayName)
   await deleteAccount(page)
 })

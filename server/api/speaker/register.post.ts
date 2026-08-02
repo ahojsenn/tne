@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto'
 import bcrypt from 'bcryptjs'
 import { findSpeakerByEmail, appendSpeaker, updateSpeakerRow } from '~/server/utils/speakerStore'
 import { sendConfirmationEmail } from '~/server/utils/mailer'
+import { getSiteUrl } from '~/server/utils/siteUrl'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event) as { email?: string; displayName?: string; password?: string; confirmPassword?: string }
@@ -45,13 +46,7 @@ export default defineEventHandler(async (event) => {
     await appendSpeaker({ email, displayName, passwordHash, status: 'pending', confirmToken, confirmTokenExpiry })
   }
 
-  const siteUrl = process.env.SITE_URL?.replace(/\/$/, '')
-    ?? (() => {
-      const proto = getHeader(event, 'x-forwarded-proto') ?? getRequestURL(event).protocol.replace(':', '')
-      const host = getHeader(event, 'host') ?? getRequestURL(event).host
-      return `${proto}://${host}`
-    })()
-  const confirmUrl = `${siteUrl}/speaker/confirm?token=${confirmToken}`
+  const confirmUrl = `${getSiteUrl(event)}/speaker/confirm?token=${confirmToken}`
   await sendConfirmationEmail(email, confirmUrl)
 
   return { ok: true }

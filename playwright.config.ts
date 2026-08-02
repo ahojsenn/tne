@@ -17,8 +17,11 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  /* One worker everywhere: the specs share a dev server that compiles on demand
+   * and talks to Google Sheets on nearly every request. Under three workers it
+   * stops accepting connections and tests fail with ERR_CONNECTION_REFUSED —
+   * noise that looks exactly like a real regression. */
+  workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */

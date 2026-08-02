@@ -183,4 +183,33 @@ test.describe.serial('Password reset flow @issue-24', () => {
     await page.getByRole('button', { name: /reset/i }).click()
     await expect(page.locator('.field-error, .alert-error')).toBeVisible({ timeout: 5000 })
   })
+
+  test('the reset form stays hidden until the token has been verified', { tag: '@issue-24' }, async ({ page }) => {
+    await page.goto('/speaker/reset-password?token=totally-invalid-token')
+    // Verifying hits the spreadsheet and takes seconds — during that time the
+    // user must see a pending state, never a form that is about to disappear.
+    await expect(page.locator('.alert-info')).toBeVisible({ timeout: 5000 })
+    await expect(page.getByLabel('New password', { exact: true })).toBeHidden()
+    await expect(page.locator('.alert-error')).toBeVisible({ timeout: 20000 })
+    await expect(page.locator('.alert-info')).toBeHidden()
+  })
+})
+
+test('forgot-password rate-limits repeated requests for the same email @issue-24', async () => {
+  // Own email so the counter is independent of the suite above. The dev cap is
+  // 8 per 15 min (3 in production) — see forgot-password.post.ts.
+  test.setTimeout(90000) // 8 accepted requests, each doing a spreadsheet lookup
+
+  const email = `playwright-ratelimit-${Date.now()}@test.example`
+  const ctx = await playwrightRequest.newContext({ baseURL: 'http://localhost:3000' })
+
+  const statuses: number[] = []
+  for (let i = 0; i < 9; i++) {
+    const res = await ctx.post('/api/speaker/forgot-password', { data: { email } })
+    statuses.push(res.status())
+  }
+  await ctx.dispose()
+
+  expect(statuses.slice(0, 8)).toEqual(Array(8).fill(200))
+  expect(statuses[8]).toBe(429)
 })
