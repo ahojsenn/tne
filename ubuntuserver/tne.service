@@ -5,6 +5,11 @@ Description=TNE-Server
 Type=simple
 User=hannes
 WorkingDirectory=/home/hannes/tomatoes-and-eggs
+# Nitro already inlines NODE_ENV=production when building .output, but several
+# code paths read it at runtime (prod spreadsheet, SITE_URL, disabling the
+# test-* endpoints, reset rate limits). Set it explicitly rather than relying on
+# a build-time substitution.
+Environment=NODE_ENV=production
 ExecStart=/home/hannes/.nvm/versions/node/v20.12.0/bin/node /home/hannes/tomatoes-and-eggs/.output/server/index.mjs
 StandardOutput=append:/tmp/tne.log
 StandardError=append:/tmp/tne.log

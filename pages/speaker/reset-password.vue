@@ -3,6 +3,8 @@ div.reset-page
   div.reset-card
     h2.reset-title 🔑 Set New Password
 
+    div.alert.alert-info(v-if="verifying") ⏳ Checking your reset link…
+
     div.alert.alert-error(v-if="tokenError") {{ tokenError }}
 
     div.alert.alert-success(v-if="success")
@@ -10,7 +12,7 @@ div.reset-page
       br
       a(href="/speaker/login") Log in with your new password
 
-    form(v-if="!tokenError && !success" @submit.prevent="submit")
+    form(v-if="!verifying && !tokenError && !success" @submit.prevent="submit")
       div.field-group
         label(for="newPassword") New password
         div.password-wrap
@@ -54,16 +56,23 @@ const serverError = ref('')
 const tokenError = ref('')
 const success = ref(false)
 const showPassword = ref(false)
+// Verifying hits the spreadsheet and takes a few seconds. Withhold the form
+// until we know the link is good, so nobody types a password into a form that
+// is about to be replaced by an error.
+const verifying = ref(true)
 
 onMounted(async () => {
   if (!token) {
     tokenError.value = 'Invalid or missing reset token. Please request a new password reset.'
+    verifying.value = false
     return
   }
   try {
     await $fetch(`/api/speaker/verify-reset-token?token=${encodeURIComponent(token)}`)
   } catch {
     tokenError.value = 'This reset link is invalid or has expired. Please request a new one.'
+  } finally {
+    verifying.value = false
   }
 })
 
@@ -194,6 +203,13 @@ async function submit() {
   background: rgba(255, 60, 60, 0.15);
   border: 1px solid #f44;
   color: #f66;
+}
+
+.alert-info {
+  background: rgba(150, 150, 150, 0.12);
+  border: 1px solid #555;
+  color: #aaa;
+  text-align: center;
 }
 
 .submit-btn {
