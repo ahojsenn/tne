@@ -1,109 +1,106 @@
 #!/bin/bash
+# Manual deploy — the escape hatch for when GitHub Actions is unavailable.
+#
+# The normal path is `git tag v1.2.3 && git push origin v1.2.3`, which runs
+# .github/workflows/deploy.yml. This script exists for the day that isn't an
+# option, and it deliberately goes through the SAME server-side release
+# manager (ubuntuserver/release.sh) so a hand-rolled deploy lands in exactly
+# the layout the pipeline expects — same release dir, same atomic symlink
+# flip, same verification, same automatic rollback.
+#
+#   ./deploy.sh              build, ship, activate
+#   ./deploy.sh --logs       ...then stream production logs
+#   ./deploy.sh --rollback   return production to the previous release
+#   ./deploy.sh --status     what is live right now
+#
+# Requires the server to have been prepared once by ubuntuserver/bootstrap.sh.
+#
+# (shift-based arg loop rather than `for arg in "$@"`: macOS still ships bash
+# 3.2, where expanding "$@" with no positional parameters trips `set -u`.)
 set -euo pipefail
-
-# Usage: ./deploy.sh [--logs]
-#   --logs   after a successful deploy, stream production logs (Ctrl+C to stop)
-# (shift-based loop rather than `for arg in "$@"`: macOS still ships bash 3.2,
-# where expanding "$@" with no positional parameters trips `set -u`.)
-TAIL_LOGS=0
-while [ $# -gt 0 ]; do
-  case "$1" in
-    --logs) TAIL_LOGS=1 ;;
-    *) echo "Unknown option: $1" >&2; echo "Usage: $0 [--logs]" >&2; exit 2 ;;
-  esac
-  shift
-done
 
 TARGETUSER=hannes
 TARGETSERVER=konfi.kommitment.works
 SSHPORT=22
+ROOT=/home/$TARGETUSER/tne
+RELEASE_SH=$ROOT/bin/release.sh
+SSH="ssh -p $SSHPORT $TARGETUSER@$TARGETSERVER"
 
-# The remote application directory. This MUST be a literal that matches the
-# paths baked into ubuntuserver/tne.service — it used to be derived from
-# $(basename "$PWD"), which meant renaming the local checkout silently
-# redirected the deploy while systemd kept running the old directory.
-# check_service_paths_match below keeps the two from drifting apart again.
-APPDIR=/home/$TARGETUSER/tomatoes-and-eggs
-DEPLOYMENTTARGET=$TARGETUSER@$TARGETSERVER:$APPDIR/
-SSH="ssh -p $SSHPORT -t $TARGETUSER@$TARGETSERVER"
+TAIL_LOGS=0
+ACTION=deploy
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --logs)     TAIL_LOGS=1 ;;
+    --rollback) ACTION=rollback ;;
+    --status)   ACTION=status ;;
+    *) echo "Unknown option: $1" >&2
+       echo "Usage: $0 [--logs] [--rollback] [--status]" >&2; exit 2 ;;
+  esac
+  shift
+done
 
-check_service_paths_match() {
-  local unit=ubuntuserver/tne.service
-  local workdir execpath
-  workdir=$(grep -E '^WorkingDirectory=' "$unit" | cut -d= -f2- || true)
-  execpath=$(grep -E '^ExecStart=' "$unit" | awk '{print $NF}' || true)
-
-  if [ "$workdir" != "$APPDIR" ]; then
-    echo "❌ $unit has WorkingDirectory=$workdir but APPDIR=$APPDIR" >&2
-    exit 1
-  fi
-  if [ "$execpath" != "$APPDIR/.output/server/index.mjs" ]; then
-    echo "❌ $unit runs $execpath, expected $APPDIR/.output/server/index.mjs" >&2
-    exit 1
+tail_logs_if_requested() {
+  if [ "$TAIL_LOGS" = "1" ]; then
+    echo ""
+    echo "📋 Streaming production logs from $TARGETSERVER — press Ctrl+C to stop"
+    $SSH "tail -f /tmp/tne.log"
   fi
 }
-check_service_paths_match
 
-# Build. npm, not yarn: the repo ships package-lock.json (there is no
-# yarn.lock) and `npm ci` is what CI runs, so yarn would resolve a different
-# dependency tree than the one the tests ran against.
+# Fail early and clearly if the server has not been bootstrapped, rather than
+# part-way through with a half-uploaded release.
+$SSH "test -x $RELEASE_SH" \
+  || { echo "❌ $RELEASE_SH not found on $TARGETSERVER." >&2
+       echo "   Run ubuntuserver/bootstrap.sh on the server first — see ubuntuserver/README.md." >&2
+       exit 1; }
+
+case "$ACTION" in
+  status)   $SSH "$RELEASE_SH status";   exit 0 ;;
+  rollback) $SSH "$RELEASE_SH rollback"; tail_logs_if_requested; exit 0 ;;
+esac
+
+# ------------------------------------------------------------------ build
+# npm, not yarn: the repo ships package-lock.json (there is no yarn.lock) and
+# `npm ci` is what CI runs, so yarn would resolve a different dependency tree
+# than the one the tests ran against.
 npm ci
 npm run build
 
-# Sync build output and server config. No `set +e` around this: if the copy
-# fails we must not go on to restart the service on stale or half-written files.
-echo "Deploying to $TARGETSERVER:$APPDIR"
-$SSH "mkdir -p $APPDIR"
-rsync --copy-links --hard-links --delete -avRe "ssh -p $SSHPORT" ./.output ./ubuntuserver "$DEPLOYMENTTARGET"
-scp .env "$DEPLOYMENTTARGET"
-echo "Files copied."
+# ---------------------------------------------------------------- package
+# Release ids are UTC-timestamp-first so they sort chronologically on the
+# server. A manual build off an uncommitted tree is tagged -dirty, so
+# `release.sh status` can never imply the deployed code matches a commit.
+SHA=$(git rev-parse --short HEAD 2>/dev/null || echo nogit)
+if [ -n "$(git status --porcelain 2>/dev/null)" ]; then
+  SHA="$SHA-dirty"
+  echo "⚠️  Working tree has uncommitted changes — deploying as $SHA"
+fi
+RELEASE_ID="$(date -u +%Y%m%dT%H%M%SZ)-$SHA"
+TARBALL="$RELEASE_ID.tar.gz"
 
-# Install and restart services (single sudo prompt).
-# `set -e` inside the remote shell too — without it any sudo below could fail
-# and the deploy would still report success.
-$SSH "
-  set -e
-  cd $APPDIR
-  sudo cp ubuntuserver/tne.service /etc/systemd/system/tne.service
-  # Required after touching the unit file: systemd serves a cached copy, so
-  # without this an edited tne.service never actually takes effect.
-  sudo systemctl daemon-reload
-  sudo systemctl enable tne.service
-  sudo systemctl restart tne.service
-  sudo cp ubuntuserver/nginx-tne.conf /etc/nginx/sites-available/tne.conf
-  sudo ln -sf /etc/nginx/sites-available/tne.conf /etc/nginx/sites-enabled/tne.conf
-  # nginx -t gates the reload and a failed test now fails the deploy —
-  # otherwise a broken config sits in sites-enabled and detonates on the next
-  # unrelated reload. reload, not restart: no dropped connections.
-  sudo nginx -t
-  sudo systemctl reload nginx
-  sudo ufw deny 3000 2>/dev/null || true
-"
+cat > RELEASE_INFO <<EOF
+release=$RELEASE_ID
+commit=$(git rev-parse HEAD 2>/dev/null || echo unknown)
+ref=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo unknown)
+built=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+actor=$(whoami)@$(hostname -s) (manual deploy.sh)
+EOF
 
-# Health check with retries
-MAX_RETRIES=5
-RETRY_INTERVAL=5
-HTTP_STATUS=""
-for i in $(seq 1 $MAX_RETRIES); do
-  sleep $RETRY_INTERVAL
-  echo "Checking deployment (attempt $i/$MAX_RETRIES)..."
-  HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "https://$TARGETSERVER")
-  if [ "$HTTP_STATUS" = "200" ]; then
-    echo "✅ Deployment OK — https://$TARGETSERVER returned HTTP $HTTP_STATUS"
-    # `if`, not `[ … ] && open` — under `set -e` the latter would abort the
-    # script on non-macOS, where the test fails.
-    if [ "$(uname)" = "Darwin" ]; then open "https://$TARGETSERVER"; fi
-    if [ "$TAIL_LOGS" = "1" ]; then
-      echo ""
-      echo "📋 Streaming production logs from $TARGETSERVER — press Ctrl+C to stop"
-      ssh -p $SSHPORT "$TARGETUSER@$TARGETSERVER" "tail -f /tmp/tne.log"
-    fi
-    exit 0
-  fi
-  echo "   Got HTTP $HTTP_STATUS, retrying in ${RETRY_INTERVAL}s..."
-done
+echo "Packaging $TARBALL"
+tar -czf "$TARBALL" .output ubuntuserver RELEASE_INFO
+rm -f RELEASE_INFO
+trap 'rm -f "$TARBALL"' EXIT
 
-echo "❌ Deployment check failed after $MAX_RETRIES attempts — last status: HTTP $HTTP_STATUS" >&2
-echo "--- last 40 lines of /tmp/tne.log ---" >&2
-ssh -p $SSHPORT "$TARGETUSER@$TARGETSERVER" "tail -n 40 /tmp/tne.log" >&2 || true
-exit 1
+# ----------------------------------------------------------------- ship
+echo "Uploading to $TARGETSERVER:$ROOT/incoming/"
+scp -P $SSHPORT "$TARBALL" "$TARGETUSER@$TARGETSERVER:$ROOT/incoming/"
+
+# release.sh flips the symlink, restarts, verifies the running process really
+# is the new release, health-checks, and rolls back by itself if any of that
+# fails. A non-zero exit here means production was returned to the previous
+# release — not that it is broken.
+$SSH "$RELEASE_SH activate $ROOT/incoming/$TARBALL"
+
+echo "✅ Deployed $RELEASE_ID"
+if [ "$(uname)" = "Darwin" ]; then open "https://$TARGETSERVER"; fi
+tail_logs_if_requested
