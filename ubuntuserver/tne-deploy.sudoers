@@ -1,0 +1,14 @@
+# Installed by bootstrap.sh to /etc/sudoers.d/tne-deploy (mode 0440).
+#
+# The deploy pipeline runs unattended over ssh, with no TTY and no password, so
+# the one privileged step it needs — restarting the service after the release
+# symlink is flipped — has to be passwordless. This grant is deliberately a
+# single exact command: no wildcards, no `systemctl *`, no daemon-reload.
+#
+# Everything else the deploy touches is unprivileged: unpacking into
+# ~/tne/releases, swapping the ~/tne/current symlink, and reading service state
+# (`systemctl show` and `is-active` do not require root).
+#
+# Changing the unit file or the nginx config is NOT part of a deploy — those go
+# through bootstrap.sh, run by a human with an interactive sudo password.
+hannes ALL=(root) NOPASSWD: /usr/bin/systemctl restart tne.service

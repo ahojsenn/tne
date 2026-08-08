@@ -1,16 +1,32 @@
 [Unit]
 Description=TNE-Server
+After=network.target
 
 [Service]
 Type=simple
 User=hannes
-WorkingDirectory=/home/hannes/tomatoes-and-eggs
+
+# Both paths go through the `current` symlink, which release.sh swaps
+# atomically. systemd resolves the symlink at start, so a restart always picks
+# up whichever release is live at that moment — and nothing here has to change
+# when a new release is deployed.
+WorkingDirectory=/home/hannes/tne/current
+ExecStart=/home/hannes/.nvm/versions/node/v20.12.0/bin/node /home/hannes/tne/current/.output/server/index.mjs
+
 # Nitro already inlines NODE_ENV=production when building .output, but several
 # code paths read it at runtime (prod spreadsheet, SITE_URL, disabling the
 # test-* endpoints, reset rate limits). Set it explicitly rather than relying on
 # a build-time substitution.
 Environment=NODE_ENV=production
-ExecStart=/home/hannes/.nvm/versions/node/v20.12.0/bin/node /home/hannes/tomatoes-and-eggs/.output/server/index.mjs
+
+# Secrets are NOT set here. Each release dir carries a .env symlink to
+# /home/hannes/tne/shared/.env, which the app's envCheck nitro plugin loads at
+# startup. That keeps the 1734-character service-account key out of systemd's
+# environment-file escaping rules, and keeps secrets off CI entirely.
+
+Restart=on-failure
+RestartSec=5
+
 StandardOutput=append:/tmp/tne.log
 StandardError=append:/tmp/tne.log
 

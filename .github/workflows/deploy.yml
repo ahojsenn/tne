@@ -1,0 +1,150 @@
+name: Deploy to production
+
+# Tag-triggered so a deploy is always a deliberate, named act:
+#   git tag v1.4.0 && git push origin v1.4.0
+# workflow_dispatch is there for re-running a deploy without cutting a new tag.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      skip_tests:
+        description: 'Skip the Playwright gate (emergency deploys only)'
+        type: boolean
+        default: false
+
+# Never let two deploys race for the `current` symlink. Queue them instead of
+# cancelling: a half-finished deploy that gets cancelled mid-restart is worse
+# than a slow one.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  DEPLOY_HOST: konfi.kommitment.works
+  DEPLOY_USER: hannes
+  # Matches the interpreter in ubuntuserver/tne.service. Building on the same
+  # version prod runs removes the "worked on my laptop" class of failure.
+  NODE_VERSION: 20.12.0
+
+jobs:
+  test:
+    name: Playwright
+    if: ${{ github.event_name != 'workflow_dispatch' || !inputs.skip_tests }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: npm ci
+      - run: npx playwright install --with-deps
+      - run: npx playwright test
+        env:
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          GOOGLE_SERVICE_ACCOUNT_EMAIL: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
+          GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY }}
+          # Both point at the dev sheet, exactly as in playwright.yml — the
+          # production spreadsheet ID is deliberately not available to CI.
+          GOOGLE_SHEETS_SPREADSHEET_ID: ${{ secrets.GOOGLE_SHEETS_SPREADSHEET_ID_DEV }}
+          GOOGLE_SHEETS_SPREADSHEET_ID_DEV: ${{ secrets.GOOGLE_SHEETS_SPREADSHEET_ID_DEV }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+  deploy:
+    name: Build and release
+    needs: [test]
+    # `always()` plus an explicit result check so an intentionally skipped test
+    # job still allows the deploy, while a *failed* one never does.
+    if: ${{ always() && needs.test.result != 'failure' && needs.test.result != 'cancelled' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: production
+      url: https://konfi.kommitment.works
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # `npm ci`, not `npm install`: the build must come from the committed
+      # lockfile, and never silently resolve a newer dependency tree.
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Package release
+        id: package
+        run: |
+          set -euo pipefail
+          RELEASE_ID="$(date -u +%Y%m%dT%H%M%SZ)-$(git rev-parse --short HEAD)"
+          echo "release_id=$RELEASE_ID" >> "$GITHUB_OUTPUT"
+
+          # Shipped inside the release so `release.sh status` can always answer
+          # "what exactly is live right now" — something the old deploy never
+          # recorded anywhere.
+          cat > RELEASE_INFO <<EOF
+          release=$RELEASE_ID
+          commit=$(git rev-parse HEAD)
+          ref=${{ github.ref }}
+          built=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          actor=${{ github.actor }}
+          run=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          EOF
+
+          tar -czf "$RELEASE_ID.tar.gz" .output ubuntuserver RELEASE_INFO
+          ls -lh "$RELEASE_ID.tar.gz"
+
+      - name: Configure SSH
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_SSH_KNOWN_HOSTS: ${{ secrets.DEPLOY_SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          # Pinned host keys, not StrictHostKeyChecking=no — otherwise the
+          # first MITM on the runner's network gets the deploy key.
+          printf '%s\n' "$DEPLOY_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Upload release
+        run: |
+          set -euo pipefail
+          scp -i ~/.ssh/deploy_key -o IdentitiesOnly=yes \
+            "${{ steps.package.outputs.release_id }}.tar.gz" \
+            "$DEPLOY_USER@$DEPLOY_HOST:/home/$DEPLOY_USER/tne/incoming/"
+
+      # release.sh does the flip, restart, verification and — if anything fails
+      # — the rollback, all server-side. It exits non-zero on failure, which
+      # fails this step.
+      - name: Activate release
+        run: |
+          set -euo pipefail
+          ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes "$DEPLOY_USER@$DEPLOY_HOST" \
+            "/home/$DEPLOY_USER/tne/bin/release.sh activate /home/$DEPLOY_USER/tne/incoming/${{ steps.package.outputs.release_id }}.tar.gz"
+
+      - name: Report what is live
+        if: always()
+        run: |
+          ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes "$DEPLOY_USER@$DEPLOY_HOST" \
+            "/home/$DEPLOY_USER/tne/bin/release.sh status" || true
+
+      - name: Clean up failed upload
+        if: failure()
+        run: |
+          ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes "$DEPLOY_USER@$DEPLOY_HOST" \
+            "rm -f /home/$DEPLOY_USER/tne/incoming/${{ steps.package.outputs.release_id }}.tar.gz" || true
