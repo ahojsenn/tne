@@ -7,9 +7,9 @@ Nitro build behind nginx. Deploys are tag-triggered GitHub Actions runs.
 git tag v1.4.0 && git push origin v1.4.0
 ```
 
-That builds on Node 20.12.0 (the version prod runs), gates on Playwright, ships
-a release tarball, flips a symlink, restarts, verifies, and rolls back on its
-own if the new release does not come up healthy.
+That builds on Node 24.18.0, gates on Playwright, ships a release tarball,
+flips a symlink, restarts, verifies, and rolls back on its own if the new
+release does not come up healthy.
 
 ## Layout on the server
 
@@ -162,6 +162,21 @@ above is exercised for real rather than mocked.
 
 Known gaps, deliberately not addressed here:
 
+- **Build and runtime Node versions have drifted apart.** The server runs
+  20.12.0, but the dependency tree can no longer be built on it —
+  `unplugin-utils` requires `>=20.19.0`, and older versions die during
+  `nuxt prepare` with `module.createRequire is not a function`. CI therefore
+  builds on 24.18.0 and ships the output to a 20.12.0 runtime.
+
+  This works today — the release currently serving production was built on an
+  even newer Node (25.x, on a laptop) — and a build too new for the runtime
+  would fail the health check and be rolled back automatically. But it is a gap
+  worth closing, by installing a current Node on the server and pointing
+  `ExecStart` at it:
+  ```bash
+  ssh hannes@konfi.kommitment.works 'bash -lc "nvm install 24 && nvm alias default 24"'
+  # then update ExecStart in tne.service to the new path and re-run bootstrap.sh
+  ```
 - **Logs** go to `/tmp/tne.log`, append-only, no rotation, wiped on reboot.
   Moving to journald needs `hannes` in the `adm` or `systemd-journal` group.
 - **No smoke test beyond HTTP 200.** The health check confirms the app answers,

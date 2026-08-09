@@ -108,30 +108,36 @@ git --version
 
 Use **Node Version Manager** — it lets you switch Node versions easily.
 
-Use **20.12.0**: that is what production runs and what the CI build pins, so
-matching it locally keeps "works on my machine" out of the picture.
+Use **Node 24** — that is what CI builds and tests on.
 
 **macOS:**
 ```bash
 brew install nvm
 # Follow the instructions to add nvm to your shell profile, then:
-nvm install 20.12.0
-nvm use 20.12.0
+nvm install 24
+nvm use 24
 ```
 
 **Windows:**
 Download and install **nvm-windows** from https://github.com/coreybutler/nvm-windows/releases  
 Then in a new terminal:
 ```bash
-nvm install 20.12.0
-nvm use 20.12.0
+nvm install 24
+nvm use 24
 ```
 
 Verify:
 ```bash
-node --version   # should show v20.12.0
+node --version   # should show v24.x.x
 npm --version
 ```
+
+**Minimum is 20.19.0.** One of the build dependencies (`unplugin-utils`)
+requires it, and on anything older `npm ci` fails during `nuxt prepare` with
+`module.createRequire is not a function`.
+
+Production *runs* Node 20.12.0, but only the built output runs there — it is
+plain JavaScript and is not tied to the version that produced it.
 
 ---
 
@@ -242,8 +248,8 @@ the Nitro build behind nginx. Deploys are tag-triggered:
 git tag v1.4.0 && git push origin v1.4.0
 ```
 
-That runs `.github/workflows/deploy.yml`, which builds on Node 20.12.0 (the
-version production runs), gates on the Playwright suite, ships a release, flips
+That runs `.github/workflows/deploy.yml`, which builds on Node 24.18.0,
+gates on the Playwright suite, ships a release, flips
 a symlink, restarts, verifies the new release is really the one serving
 traffic, and **rolls back on its own** if it does not come up healthy.
 
