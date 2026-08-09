@@ -108,44 +108,34 @@ git --version
 
 Use **Node Version Manager** — it lets you switch Node versions easily.
 
+Use **20.12.0**: that is what production runs and what the CI build pins, so
+matching it locally keeps "works on my machine" out of the picture.
+
 **macOS:**
 ```bash
 brew install nvm
 # Follow the instructions to add nvm to your shell profile, then:
-nvm install 22
-nvm use 22
+nvm install 20.12.0
+nvm use 20.12.0
 ```
 
 **Windows:**
 Download and install **nvm-windows** from https://github.com/coreybutler/nvm-windows/releases  
 Then in a new terminal:
 ```bash
-nvm install 22
-nvm use 22
+nvm install 20.12.0
+nvm use 20.12.0
 ```
 
 Verify:
 ```bash
-node --version   # should show v22.x.x
+node --version   # should show v20.12.0
 npm --version
 ```
 
 ---
 
-### 3. Install Yarn
-
-```bash
-npm install -g yarn
-```
-
-Verify:
-```bash
-yarn --version
-```
-
----
-
-### 4. Clone the Repository
+### 3. Clone the Repository
 
 ```bash
 git clone https://github.com/ahojsenn/tne.git
@@ -154,17 +144,21 @@ cd tne
 
 ---
 
-### 5. Install Dependencies
+### 4. Install Dependencies
 
 ```bash
-yarn install
+npm ci
 ```
 
 This installs all packages including Nuxt 3, Vue 3, Socket.io, Vuetify, Pinia and Effect.js.
 
+`npm ci` installs exactly what `package-lock.json` specifies, which is what CI
+and the production build both use. (`npm install` also works, but it may bump
+the lockfile and give you a dependency tree nobody has tested.)
+
 ---
 
-### 6. Start the Development Server
+### 5. Start the Development Server
 
 ```bash
 npm run dev
@@ -181,7 +175,7 @@ The terminal will show a local network URL (e.g. `http://192.168.x.x:3000`) — 
 
 ---
 
-### 7. Open the Right Pages
+### 6. Open the Right Pages
 
 | URL | Who opens it |
 |---|---|
@@ -195,7 +189,8 @@ The terminal will show a local network URL (e.g. `http://192.168.x.x:3000`) — 
 
 - **Port 3000 already in use** — run `npm run dev -- --port 3001`
 - **Socket.io not connecting** — make sure all devices are on the same Wi-Fi network
-- **`yarn install` fails** — try deleting `node_modules/` and `yarn.lock`, then run `yarn install` again
+- **`npm ci` fails** — delete `node_modules/` and run `npm ci` again. Don't delete
+  `package-lock.json`: it is the record of the exact versions that were tested
 - **Windows: `node` not found after nvm install** — close and reopen the terminal
 
 ---
@@ -205,7 +200,7 @@ The terminal will show a local network URL (e.g. `http://192.168.x.x:3000`) — 
 Make sure to install the dependencies:
 
 ```bash
-yarn install
+npm ci
 ```
 
 ## Development Server
@@ -237,6 +232,39 @@ Run all Playwright E2E tests:
 ```bash
 npm run test
 ```
+
+## Deployment
+
+Production is **https://konfi.kommitment.works** — a single Ubuntu box running
+the Nitro build behind nginx. Deploys are tag-triggered:
+
+```bash
+git tag v1.4.0 && git push origin v1.4.0
+```
+
+That runs `.github/workflows/deploy.yml`, which builds on Node 20.12.0 (the
+version production runs), gates on the Playwright suite, ships a release, flips
+a symlink, restarts, verifies the new release is really the one serving
+traffic, and **rolls back on its own** if it does not come up healthy.
+
+Useful commands:
+
+```bash
+./deploy.sh --status      # which release is live, and what commit it came from
+./deploy.sh --rollback    # return production to the previous release
+./deploy.sh               # manual deploy — the escape hatch if CI is unavailable
+```
+
+`./deploy.sh` builds locally and goes through the same server-side release
+manager, so a manual deploy is verified and rollback-able exactly like a CI one.
+
+Releases live in `/home/hannes/tne/releases/`, with a `current` symlink that is
+swapped atomically; the last 5 are kept. Production secrets live only on the
+server, in `/home/hannes/tne/shared/.env` — they are never passed through CI.
+
+**Full details** — server layout, one-time setup, the deploy key and repository
+secrets, and how a deploy verifies itself — are in
+[`ubuntuserver/README.md`](ubuntuserver/README.md).
 
 ## Socket events on the socket server
 

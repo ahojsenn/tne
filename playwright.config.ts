@@ -40,7 +40,7 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     },
 
-    // Firefox and WebKit require `yarn playwright install` — uncomment to enable:
+    // Firefox and WebKit require `npx playwright install` — uncomment to enable:
     // {
     //   name: 'firefox',
     //   use: { ...devices['Desktop Firefox'] },
