@@ -139,4 +139,68 @@ test.describe.serial('Speaker hero customisation', () => {
     await expect(page.locator('.hero-section')).toContainText('Thor')
     await expect(page.locator('.hero-section')).not.toContainText('Wolverine')
   })
+
+  // --- personal, free-text hero names (#35) --------------------------------
+
+  const PERSONAL_NAME = 'Captain Kommitment'
+
+  test('can save a personal name that is not in the suggestion list', async ({ page }) => {
+    await login(page)
+    await page.getByRole('button', { name: /Change Hero/i }).click()
+    await expect(page.locator('.hero-picker')).toBeVisible({ timeout: 5000 })
+
+    await page.locator('.hero-search').fill(PERSONAL_NAME)
+    await page.getByRole('button', { name: /^Save$/i }).click()
+
+    await expect(page.locator('.alert-success')).toBeVisible({ timeout: 5000 })
+    await expect(page.locator('.hero-section')).toContainText(PERSONAL_NAME)
+  })
+
+  test('the personal name survives logout and re-login', async ({ page }) => {
+    await login(page)
+    await expect(page.locator('.hero-section')).toContainText(PERSONAL_NAME)
+
+    const response = await page.request.get('/api/speaker/me')
+    expect(response.ok()).toBeTruthy()
+    expect((await response.json()).heroName).toBe(PERSONAL_NAME)
+  })
+
+  test('surrounding whitespace is trimmed away', async ({ page }) => {
+    await login(page)
+    await page.getByRole('button', { name: /Change Hero/i }).click()
+    await page.locator('.hero-search').fill('   Doctor Deploy   ')
+    await page.getByRole('button', { name: /^Save$/i }).click()
+    await expect(page.locator('.alert-success')).toBeVisible({ timeout: 5000 })
+
+    const response = await page.request.get('/api/speaker/me')
+    expect((await response.json()).heroName).toBe('Doctor Deploy')
+  })
+
+  test('a too-long name cannot be saved from the UI', async ({ page }) => {
+    await login(page)
+    await page.getByRole('button', { name: /Change Hero/i }).click()
+    await page.locator('.hero-search').fill('a'.repeat(24))
+
+    await expect(page.locator('.hero-error')).toContainText('at most 23')
+    await expect(page.getByRole('button', { name: /^Save$/i })).toBeDisabled()
+  })
+
+  test('the API rejects an invalid name regardless of the UI', async ({ page }) => {
+    await login(page)
+
+    const tooLong = await page.request.put('/api/speaker/hero', {
+      data: { heroName: 'a'.repeat(24) },
+    })
+    expect(tooLong.status()).toBe(400)
+
+    const tooShort = await page.request.put('/api/speaker/hero', { data: { heroName: 'a' } })
+    expect(tooShort.status()).toBe(400)
+
+    const blank = await page.request.put('/api/speaker/hero', { data: { heroName: '   ' } })
+    expect(blank.status()).toBe(400)
+
+    // The rejected calls must not have changed the stored name.
+    const me = await page.request.get('/api/speaker/me')
+    expect((await me.json()).heroName).toBe('Doctor Deploy')
+  })
 })

@@ -16,24 +16,35 @@ div.dashboard-page
       div.hero-section
         p.hero-label 🦸 Hero Name
         p.hero-name {{ speaker.heroName ?? 'Not set' }}
-        button.hero-change-btn(@click="showHeroPicker = !showHeroPicker" v-if="!showHeroPicker") Change Hero
+        button.hero-change-btn(@click="openPicker" v-if="!showHeroPicker") Change Hero
 
         div.hero-picker(v-if="showHeroPicker")
-          input.hero-search(
-            v-model="heroSearch"
+          label.hero-input-label(for="heroName") Type your own name, or pick a suggestion
+          input#heroName.hero-search(
+            v-model="heroInput"
             type="text"
-            placeholder="Search heroes…"
+            placeholder="e.g. Captain Kommitment"
             autocomplete="off"
+            :class="{ error: heroTouched && heroError }"
+            @input="heroTouched = true"
           )
+          div.hero-meta
+            span.hero-error(v-if="heroTouched && heroError") {{ heroError }}
+            span.hero-counter(v-else :class="{ over: heroTrimmed.length > HERO_NAME_MAX_LENGTH }")
+              | {{ heroTrimmed.length }}/{{ HERO_NAME_MAX_LENGTH }}
           div.hero-list
             button.hero-item(
               v-for="hero in filteredHeroes"
               :key="hero"
-              :class="{ selected: heroSelection === hero }"
-              @click="heroSelection = hero"
+              :class="{ selected: heroTrimmed === hero }"
+              @click="pickHero(hero)"
             ) {{ hero }}
+          //- Only when the name is actually saveable — otherwise this would
+          //- promise to store something the validator is about to reject.
+          p.hero-no-match(v-if="!filteredHeroes.length && !heroError")
+            | No suggestion matches — “{{ heroTrimmed }}” will be saved as your own name.
           div.picker-actions
-            button.save-btn(@click="saveHero" :disabled="!heroSelection || !!actionLoading")
+            button.save-btn(@click="saveHero" :disabled="!!heroError || !!actionLoading")
               span(v-if="actionLoading === 'hero'") ⏳ Saving…
               span(v-else) Save
             button.cancel-btn(@click="cancelPicker") Cancel
@@ -55,6 +66,7 @@ div.dashboard-page
 
 <script setup lang="ts">
 import superheroes from '~/types/heroes'
+import { HERO_NAME_MAX_LENGTH, validateHeroName } from '~/types/heroName'
 
 const speaker = ref<{ email: string; displayName: string; heroName: string | null } | null>(null)
 const pending = ref(true)
@@ -63,19 +75,31 @@ const successMessage = ref('')
 const actionLoading = ref<'logout' | 'delete' | 'hero' | ''>('')
 const showDeleteConfirm = ref(false)
 const showHeroPicker = ref(false)
-const heroSearch = ref('')
-const heroSelection = ref('')
+
+// One field does both jobs: it is the name that gets saved, and it filters the
+// suggestion list as you type. Starts empty when the picker opens so the full
+// list is visible — the current name is already shown above it.
+const heroInput = ref('')
+const heroTouched = ref(false)
+
+const heroTrimmed = computed(() => heroInput.value.trim())
+
+// Same validator the server uses, so the message shown here is the message the
+// API would return.
+const heroError = computed(() => {
+  const check = validateHeroName(heroInput.value)
+  return check.ok ? '' : check.message
+})
 
 const filteredHeroes = computed(() =>
-  heroSearch.value.trim()
-    ? superheroes.filter(h => h.toLowerCase().includes(heroSearch.value.toLowerCase()))
+  heroTrimmed.value
+    ? superheroes.filter(h => h.toLowerCase().includes(heroTrimmed.value.toLowerCase()))
     : superheroes
 )
 
 onMounted(async () => {
   try {
     speaker.value = await $fetch('/api/speaker/me')
-    heroSelection.value = speaker.value?.heroName ?? ''
   } catch {
     await navigateTo('/speaker/login')
   } finally {
@@ -83,22 +107,41 @@ onMounted(async () => {
   }
 })
 
+function openPicker() {
+  heroInput.value = ''
+  heroTouched.value = false
+  showHeroPicker.value = true
+}
+
+function pickHero(hero: string) {
+  heroInput.value = hero
+  heroTouched.value = true
+}
+
 function cancelPicker() {
-  heroSelection.value = speaker.value?.heroName ?? ''
-  heroSearch.value = ''
+  heroInput.value = ''
+  heroTouched.value = false
   showHeroPicker.value = false
 }
 
 async function saveHero() {
+  heroTouched.value = true
+  if (heroError.value) return
+
   serverError.value = ''
   successMessage.value = ''
   actionLoading.value = 'hero'
+  const name = heroTrimmed.value
   try {
-    await $fetch('/api/speaker/hero', { method: 'PUT', body: { heroName: heroSelection.value } })
-    if (speaker.value) speaker.value.heroName = heroSelection.value
-    heroSearch.value = ''
+    const saved = await $fetch<{ heroName: string }>('/api/speaker/hero', {
+      method: 'PUT',
+      body: { heroName: name },
+    })
+    if (speaker.value) speaker.value.heroName = saved.heroName
+    heroInput.value = ''
+    heroTouched.value = false
     showHeroPicker.value = false
-    successMessage.value = `Hero set to ${heroSelection.value}!`
+    successMessage.value = `Hero set to ${saved.heroName}!`
     setTimeout(() => { successMessage.value = '' }, 4000)
   } catch (e: any) {
     serverError.value = e?.data?.statusMessage ?? 'Could not save hero — please try again.'
@@ -217,6 +260,41 @@ async function deleteAccount() {
   margin-top: 12px;
 }
 
+.hero-input-label {
+  display: block;
+  color: #999;
+  font-size: 0.8em;
+  margin-bottom: 6px;
+}
+
+.hero-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.8em;
+  margin: -4px 0 8px;
+  min-height: 1.2em;
+}
+
+.hero-error {
+  color: #f66;
+}
+
+.hero-counter {
+  color: #777;
+  margin-left: auto;
+}
+
+.hero-counter.over {
+  color: #f66;
+}
+
+.hero-no-match {
+  color: #999;
+  font-size: 0.8em;
+  margin: 8px 0 0;
+}
+
 .hero-search {
   background: #1a1a1a;
   border: 1px solid #444;
@@ -231,6 +309,10 @@ async function deleteAccount() {
 
   &:focus { outline: none; border-color: greenyellow; }
   &::placeholder { color: #555; }
+
+  // After &:focus deliberately — same specificity, so source order decides,
+  // and the invalid state has to win while the field is focused.
+  &.error, &.error:focus { border-color: #f44; }
 }
 
 .hero-list {
