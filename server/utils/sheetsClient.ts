@@ -1,5 +1,6 @@
 import { google } from 'googleapis'
 import { JWT } from 'google-auth-library'
+import * as memory from './sheetsMemory'
 
 // Nitro/Vite defines `window`, causing gaxios to lazily pick `window.fetch`
 // (Nitro's patched fetch) instead of node-fetch, which hangs.
@@ -122,7 +123,32 @@ function getSpreadsheetId(): string {
   return id
 }
 
+/**
+ * The e2e suite runs against an in-memory stand-in (see sheetsMemory.ts) so it
+ * does not share one dev spreadsheet across every test. Only the transport is
+ * swapped — everything above this module still runs unchanged.
+ *
+ * Never honoured in production: a silent in-memory speaker store there would
+ * accept registrations and lose them on the next restart. Misconfiguration
+ * degrades to the real backend and says so, rather than taking the site down.
+ */
+let memoryWarningShown = false
+function useMemoryBackend(): boolean {
+  if (process.env.SHEETS_BACKEND !== 'memory') return false
+  if (process.env.NODE_ENV === 'production') {
+    if (!memoryWarningShown) {
+      memoryWarningShown = true
+      console.error(
+        '[sheetsClient] SHEETS_BACKEND=memory is set but ignored in production — using Google Sheets.',
+      )
+    }
+    return false
+  }
+  return true
+}
+
 export async function readRange(range: string): Promise<string[][]> {
+  if (useMemoryBackend()) return memory.readRange(range)
   const spreadsheetId = getSpreadsheetId()
   return retryTransient(`read ${range}`, async () => {
     const sheets = await getSheetsApi()
@@ -136,6 +162,7 @@ export async function readRange(range: string): Promise<string[][]> {
  * Returns true if the sheet was freshly created.
  */
 export async function ensureSheet(sheetTitle: string): Promise<boolean> {
+  if (useMemoryBackend()) return memory.ensureSheet(sheetTitle)
   const spreadsheetId = getSpreadsheetId()
   const sheets = await getSheetsApi()
   const meta = await retryTransient(`metadata for ${sheetTitle}`, () => sheets.spreadsheets.get({ spreadsheetId }))
@@ -158,6 +185,7 @@ export async function ensureSheet(sheetTitle: string): Promise<boolean> {
  * @param valueInputOption  'USER_ENTERED' (default) or 'RAW' — use RAW for auth/sensitive data
  */
 export async function appendRows(range: string, rows: string[][], valueInputOption: 'USER_ENTERED' | 'RAW' = 'USER_ENTERED'): Promise<void> {
+  if (useMemoryBackend()) return memory.appendRows(range, rows)
   const spreadsheetId = getSpreadsheetId()
   // Not retried: a second append after a lost response duplicates the rows.
   const sheets = await getSheetsApi()
@@ -175,6 +203,7 @@ export async function appendRows(range: string, rows: string[][], valueInputOpti
  * @param values 2D array matching the range dimensions
  */
 export async function updateRange(range: string, values: string[][]): Promise<void> {
+  if (useMemoryBackend()) return memory.updateRange(range, values)
   const spreadsheetId = getSpreadsheetId()
   // Safe to retry: the range is explicit, so a repeat writes the same cells.
   await retryTransient(`write ${range}`, async () => {
@@ -194,6 +223,7 @@ export async function updateRange(range: string, values: string[][]): Promise<vo
  * @param rowIndex   1-based row number (as returned by speakerStore)
  */
 export async function deleteRow(sheetTitle: string, rowIndex: number): Promise<void> {
+  if (useMemoryBackend()) return memory.deleteRow(sheetTitle, rowIndex)
   const spreadsheetId = getSpreadsheetId()
   const sheets = await getSheetsApi()
   // The lookup is safe to retry; the delete itself is not — a repeat would take

@@ -57,12 +57,10 @@ jobs:
       - run: npx playwright test
         env:
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
-          GOOGLE_SERVICE_ACCOUNT_EMAIL: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
-          GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY }}
-          # Both point at the dev sheet, exactly as in playwright.yml — the
-          # production spreadsheet ID is deliberately not available to CI.
-          GOOGLE_SHEETS_SPREADSHEET_ID: ${{ secrets.GOOGLE_SHEETS_SPREADSHEET_ID_DEV }}
-          GOOGLE_SHEETS_SPREADSHEET_ID_DEV: ${{ secrets.GOOGLE_SHEETS_SPREADSHEET_ID_DEV }}
+          # No Google credentials — the gate runs against the in-memory sheet
+          # backend, so a deploy can no longer be blocked by spreadsheet
+          # latency or quota. See playwright.config.ts and
+          # server/utils/sheetsMemory.ts.
       - uses: actions/upload-artifact@v4
         if: always()
         with:
