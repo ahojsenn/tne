@@ -144,6 +144,17 @@ journald on this box stores to `/var/log/journal`, so logs survive reboots and
 are vacuumed automatically — unlike the previous `/tmp/tne.log`, which grew
 unbounded and was wiped on restart.
 
+The journal is capped at **500M** via `journald-tne.conf`, installed as a
+drop-in at `/etc/systemd/journald.conf.d/tne.conf`. Without it journald falls
+back to an implicit 10% of the filesystem — about 1.9G here, and it had already
+reached 1.8G. Note the cap applies to the **whole system journal**, not just
+this service: journald keeps one store shared by every unit.
+
+```bash
+journalctl --disk-usage                 # current size
+sudo journalctl --vacuum-size=500M      # apply the cap immediately
+```
+
 `deploy.sh` still works and now goes through the same release manager, so an
 emergency manual deploy is rollback-able exactly like a CI one. It tags its
 release id `-dirty` when the working tree has uncommitted changes.
