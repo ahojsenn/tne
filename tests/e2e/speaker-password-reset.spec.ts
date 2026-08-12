@@ -167,7 +167,12 @@ test.describe.serial('Password reset flow @issue-24', () => {
 
   test('invalid token shows an error', { tag: '@issue-24' }, async ({ page }) => {
     await page.goto('/speaker/reset-password?token=totally-invalid-token')
-    await expect(page.locator('.alert-error')).toBeVisible({ timeout: 5000 })
+    // 20s, matching the sibling test below: this budget covers loading and
+    // compiling the page in the dev server before onMounted can even fire the
+    // request, which was measured at ~7s cold. The lookup itself takes ~10ms.
+    // The old 5s only ever passed because the spreadsheet round-trips in
+    // earlier tests gave Vite time to finish compiling in the background.
+    await expect(page.locator('.alert-error')).toBeVisible({ timeout: 20000 })
   })
 
   test('mismatched passwords show a validation error', { tag: '@issue-24' }, async ({ page }) => {

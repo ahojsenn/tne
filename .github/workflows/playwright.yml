@@ -21,15 +21,15 @@ jobs:
       run: npx playwright test
       env:
         SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
-        GOOGLE_SERVICE_ACCOUNT_EMAIL: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
-        GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY }}
-        # Both point at the dev sheet: sheetsClient prefers _DEV outside production,
-        # but configStore and /api/spreadsheet-url read the unsuffixed name directly.
-        # The production spreadsheet ID is deliberately not available to CI.
-        GOOGLE_SHEETS_SPREADSHEET_ID: ${{ secrets.GOOGLE_SHEETS_SPREADSHEET_ID_DEV }}
-        GOOGLE_SHEETS_SPREADSHEET_ID_DEV: ${{ secrets.GOOGLE_SHEETS_SPREADSHEET_ID_DEV }}
-        # SMTP is intentionally absent — mailer.ts suppresses delivery whenever
-        # NODE_ENV != production and MAIL_DEV_SEND != 1, so no mail leaves CI.
+        # No Google credentials: the suite runs against the in-memory sheet
+        # backend (playwright.config.ts sets SHEETS_BACKEND=memory), so it no
+        # longer registers and deletes real accounts in the shared dev
+        # spreadsheet. Verified by running the whole suite with no credentials
+        # present at all.
+        #
+        # SMTP is intentionally absent too — mailer.ts suppresses delivery
+        # whenever NODE_ENV != production and MAIL_DEV_SEND != 1, so no mail
+        # leaves CI.
     - uses: actions/upload-artifact@v4
       if: always()
       with:
