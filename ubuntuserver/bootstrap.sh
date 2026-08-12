@@ -155,6 +155,16 @@ fi
 run sudo mv /etc/sudoers.d/tne-deploy.new /etc/sudoers.d/tne-deploy
 log "sudoers grant installed"
 
+# ---------------------------------------------------------------- journal size
+# Cap the journal so it cannot creep up to systemd's implicit 10%-of-disk
+# default. Restarting journald applies the new ceiling; the explicit vacuum
+# makes it take effect now rather than at the next rotation.
+log "capping the system journal at 500M"
+run sudo mkdir -p /etc/systemd/journald.conf.d
+run sudo install -m 644 -o root -g root "$SRC/journald-tne.conf" /etc/systemd/journald.conf.d/tne.conf
+run sudo systemctl restart systemd-journald
+run sudo journalctl --vacuum-size=500M
+
 # ---------------------------------------------------------------- journal access
 # The unit logs to journald, and reading another user's unit journal requires
 # adm or systemd-journal membership. Without this, `journalctl -u tne.service`
