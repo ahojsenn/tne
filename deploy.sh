@@ -25,6 +25,9 @@ SSHPORT=22
 ROOT=/home/$TARGETUSER/tne
 RELEASE_SH=$ROOT/bin/release.sh
 SSH="ssh -p $SSHPORT $TARGETUSER@$TARGETSERVER"
+# Options must come before the host — `$SSH -t` would append -t after it, where
+# ssh treats it as part of the remote command.
+SSH_TTY="ssh -p $SSHPORT -t $TARGETUSER@$TARGETSERVER"
 
 TAIL_LOGS=0
 ACTION=deploy
@@ -43,7 +46,8 @@ tail_logs_if_requested() {
   if [ "$TAIL_LOGS" = "1" ]; then
     echo ""
     echo "📋 Streaming production logs from $TARGETSERVER — press Ctrl+C to stop"
-    $SSH "tail -f /tmp/tne.log"
+    # A TTY, so journalctl -f stays interruptible with Ctrl+C.
+    $SSH_TTY "journalctl -u tne.service -f"
   fi
 }
 

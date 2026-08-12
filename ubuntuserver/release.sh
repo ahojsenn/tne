@@ -24,7 +24,10 @@ ROOT=${TNE_ROOT:-/home/hannes/tne}
 SERVICE=${TNE_SERVICE:-tne.service}
 LOCAL_URL=${TNE_LOCAL_URL:-http://127.0.0.1:3000/}
 PUBLIC_URL=${TNE_PUBLIC_URL:-https://konfi.kommitment.works/}
-LOG_FILE=${TNE_LOG_FILE:-/tmp/tne.log}
+
+# How the failure path fetches logs. Overridable so the test harness can point
+# it at a fixture instead of the real journal.
+LOG_CMD=${TNE_LOG_CMD:-}
 
 RELEASES=$ROOT/releases
 SHARED=$ROOT/shared
@@ -56,6 +59,26 @@ verify_running_release() {
     fail "PID $pid is running from $cwd, expected $RELEASES/$expected"
   fi
   log "✅ PID $pid is running from release $expected"
+}
+
+# Reading another user's unit journal needs membership in adm or
+# systemd-journal, which bootstrap.sh grants. Without it journalctl prints a
+# hint and no log lines — so say that outright instead of leaving an empty
+# "last 40 log lines" block, which reads as "nothing was logged".
+dump_recent_logs() {
+  if [ -n "$LOG_CMD" ]; then
+    eval "$LOG_CMD" || true
+    return
+  fi
+
+  local out
+  out=$(journalctl -u "$SERVICE" -n 40 --no-pager -q 2>/dev/null || true)
+  if [ -n "$out" ]; then
+    echo "$out"
+  else
+    echo "(no journal output — is $(id -un) in the adm/systemd-journal group? re-run bootstrap.sh)"
+    echo "(try: sudo journalctl -u $SERVICE -n 40)"
+  fi
 }
 
 health_check() {
@@ -161,7 +184,7 @@ cmd_activate() {
     log "🚨 no previous release to roll back to — site may be down"
   fi
   log "--- last 40 log lines ---"
-  tail -n 40 "$LOG_FILE" 2>/dev/null || true
+  dump_recent_logs
   exit 1
 }
 

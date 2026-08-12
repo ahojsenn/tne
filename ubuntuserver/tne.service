@@ -27,8 +27,19 @@ Environment=NODE_ENV=production
 Restart=on-failure
 RestartSec=5
 
-StandardOutput=append:/tmp/tne.log
-StandardError=append:/tmp/tne.log
+# journald, not a file in /tmp. The previous append:/tmp/tne.log grew without
+# rotation and was wiped on reboot; journald on this box writes to
+# /var/log/journal, so it survives restarts and is vacuumed automatically.
+#   journalctl -u tne.service -f
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=tne
+
+# The app logs a line per throw, and a busy game is exactly when the logs
+# matter. journald's default of 10000 messages per 30s would silently drop
+# them mid-event, so raise the ceiling for this unit.
+LogRateLimitIntervalSec=30s
+LogRateLimitBurst=30000
 
 [Install]
 WantedBy=multi-user.target

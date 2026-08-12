@@ -14,7 +14,9 @@ export TNE_ROOT=$BASE/root
 export TNE_SERVICE=faketne.service
 export TNE_LOCAL_URL=http://127.0.0.1:59999/local
 export TNE_PUBLIC_URL=http://127.0.0.1:59999/public
-export TNE_LOG_FILE=$BASE/fake.log
+# The failure path dumps logs; point it at a fixture instead of the real
+# journal, which the harness has no business reading.
+export TNE_LOG_CMD="echo '(fake log output)'"
 export TNE_MAX_RETRIES=2
 export TNE_RETRY_INTERVAL=1
 export TNE_KEEP_RELEASES=3
