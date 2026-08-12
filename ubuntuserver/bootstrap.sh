@@ -155,6 +155,19 @@ fi
 run sudo mv /etc/sudoers.d/tne-deploy.new /etc/sudoers.d/tne-deploy
 log "sudoers grant installed"
 
+# ---------------------------------------------------------------- journal access
+# The unit logs to journald, and reading another user's unit journal requires
+# adm or systemd-journal membership. Without this, `journalctl -u tne.service`
+# silently shows nothing and the rollback path has no diagnostics to print.
+if id -nG "$(id -un)" | tr ' ' '\n' | grep -qx 'systemd-journal'; then
+  log "journal access already granted"
+else
+  log "adding $(id -un) to the systemd-journal group (needed to read the unit journal)"
+  run sudo usermod -aG systemd-journal "$(id -un)"
+  # Group membership is applied at login, so this session still cannot read it.
+  log "NOTE: log in again for journal access to take effect in your shell"
+fi
+
 # ---------------------------------------------------------------- systemd
 log "installing $SERVICE"
 run sudo install -m 644 -o root -g root "$SRC/tne.service" "/etc/systemd/system/$SERVICE"
@@ -202,7 +215,7 @@ log "verifying"
 sleep 3
 "$ROOT/bin/release.sh" status
 status=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 http://127.0.0.1:3000/ || echo 000)
-[ "$status" = "200" ] || fail "app did not answer on localhost:3000 (HTTP $status) — check: tail -n 50 /tmp/tne.log"
+[ "$status" = "200" ] || fail "app did not answer on localhost:3000 (HTTP $status) — check: sudo journalctl -u $SERVICE -n 50"
 log "✅ bootstrap complete — app healthy on the new layout"
 log ""
 log "The old $OLD_APP is untouched. Once you've seen a few good deploys,"

@@ -123,6 +123,27 @@ Or on the server directly:
 ~/tne/bin/release.sh rollback [id]
 ```
 
+## Logs
+
+The service logs to journald, not to a file:
+
+```bash
+./deploy.sh --logs                              # follow production logs over ssh
+journalctl -u tne.service -f                    # same, on the server
+journalctl -u tne.service -n 200 --no-pager     # recent lines
+journalctl -u tne.service --since "1 hour ago"
+journalctl -u tne.service -p err                # errors only
+```
+
+Reading the unit journal requires membership in `adm` or `systemd-journal`;
+`bootstrap.sh` adds it. Group membership only applies to **new** login sessions,
+so log out and back in after the first run — until then `journalctl` shows
+nothing and `sudo journalctl -u tne.service` is the workaround.
+
+journald on this box stores to `/var/log/journal`, so logs survive reboots and
+are vacuumed automatically — unlike the previous `/tmp/tne.log`, which grew
+unbounded and was wiped on restart.
+
 `deploy.sh` still works and now goes through the same release manager, so an
 emergency manual deploy is rollback-able exactly like a CI one. It tags its
 release id `-dirty` when the working tree has uncommitted changes.
@@ -177,8 +198,6 @@ Known gaps, deliberately not addressed here:
   ssh hannes@konfi.kommitment.works 'bash -lc "nvm install 24 && nvm alias default 24"'
   # then update ExecStart in tne.service to the new path and re-run bootstrap.sh
   ```
-- **Logs** go to `/tmp/tne.log`, append-only, no rotation, wiped on reboot.
-  Moving to journald needs `hannes` in the `adm` or `systemd-journal` group.
 - **No smoke test beyond HTTP 200.** The health check confirms the app answers,
   not that Sheets auth or mail actually work.
 - **Single box, no staging.** A bad release is caught by the health check and
