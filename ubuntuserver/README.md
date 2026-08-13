@@ -27,6 +27,26 @@ release does not come up healthy.
 └── incoming/                   upload staging
 ```
 
+## Network exposure
+
+The app binds **127.0.0.1 only** (`Environment=HOST=127.0.0.1` in
+`tne.service`), so nginx is the sole way in. Nitro's default is `0.0.0.0` and
+`::`, and with that default `http://konfi.kommitment.works:3000` served the
+whole site directly from the internet — no TLS, no HTTP→HTTPS redirect, and a
+speaker login posting its password in the clear. `ufw deny 3000` was in
+`bootstrap.sh` the whole time and was demonstrably not in force, which is why
+the binding, not the firewall, is what keeps the port private now.
+
+Consequently `nginx-tne.conf` proxies to `http://127.0.0.1:3000` rather than
+`localhost:3000`, and `bootstrap.sh` installs the nginx config *before*
+restarting the service, so the proxy target is never briefly wrong.
+
+To check from another machine — a connection refused is the expected result:
+
+```bash
+curl -sS --max-time 5 http://konfi.kommitment.works:3000/
+```
+
 `tne.service` points at `current`, never at a specific release, so deploying
 never touches systemd. Two consequences worth knowing:
 
