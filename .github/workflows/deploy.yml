@@ -26,19 +26,10 @@ permissions:
 env:
   DEPLOY_HOST: konfi.kommitment.works
   DEPLOY_USER: hannes
-  # Pinned to the exact version the Playwright workflow is known to pass on
-  # (lts/* resolved to v24.18.0), rather than to production's interpreter.
-  #
-  # Matching production would be nicer, but is not possible: the server runs
-  # 20.12.0 and the dependency tree can no longer be BUILT on it —
-  # unplugin-utils requires >=20.19.0, and on 20.12.0 `nuxt prepare` dies with
-  # "module.createRequire is not a function".
-  #
-  # Shipping a Node 24 build to a 20.12.0 runtime is safe here: .output is
-  # plain JavaScript, and the release currently serving production was built on
-  # an even newer Node (25.x, on a laptop). If a build ever does emit something
-  # 20.12.0 cannot run, the health check fails and release.sh rolls back.
-  # The real fix is upgrading the server's Node — see ubuntuserver/README.md.
+  # Must stay in step with ExecStart in ubuntuserver/tne.service: the server
+  # runs this exact version, so the interpreter that produces .output is the
+  # one that runs it. Changing it here means changing it there and re-running
+  # bootstrap.sh — deploys never touch the unit file.
   NODE_VERSION: 24.18.0
 
 jobs:

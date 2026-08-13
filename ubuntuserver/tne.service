@@ -11,7 +11,11 @@ User=hannes
 # up whichever release is live at that moment — and nothing here has to change
 # when a new release is deployed.
 WorkingDirectory=/home/hannes/tne/current
-ExecStart=/home/hannes/.nvm/versions/node/v20.12.0/bin/node /home/hannes/tne/current/.output/server/index.mjs
+# Node 24.18.0 — the exact version .github/workflows/deploy.yml builds on, so
+# the interpreter that produced .output is the one that runs it. It was 20.12.0
+# while CI built on 24: not only a mismatch, but a runtime that left Node 20's
+# maintenance window in April 2026 and stops getting security fixes.
+ExecStart=/home/hannes/.nvm/versions/node/v24.18.0/bin/node /home/hannes/tne/current/.output/server/index.mjs
 
 # Nitro already inlines NODE_ENV=production when building .output, but several
 # code paths read it at runtime (prod spreadsheet, SITE_URL, disabling the

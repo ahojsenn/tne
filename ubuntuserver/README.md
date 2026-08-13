@@ -27,6 +27,29 @@ release does not come up healthy.
 └── incoming/                   upload staging
 ```
 
+## Node version
+
+Build and runtime are the same version, **24.18.0**, in two places that must be
+changed together:
+
+| Where | What |
+| --- | --- |
+| `.github/workflows/deploy.yml` | `NODE_VERSION` — builds `.output` |
+| `ubuntuserver/tne.service` | `ExecStart` — runs it |
+
+The interpreter is installed via nvm at
+`/home/hannes/.nvm/versions/node/v24.18.0/bin/node`. To move to a newer one:
+
+```bash
+ssh hannes@konfi.kommitment.works 'export NVM_DIR=$HOME/.nvm; . $NVM_DIR/nvm.sh; nvm install <version>'
+# update NODE_VERSION and ExecStart, then re-run bootstrap.sh
+```
+
+Note `nvm` is only loaded in interactive shells, hence sourcing `nvm.sh`
+explicitly. The unit does not depend on the nvm default version — `ExecStart`
+names an absolute path, so changing the default cannot silently move the
+runtime.
+
 ## Network exposure
 
 The app binds **127.0.0.1 only** (`Environment=HOST=127.0.0.1` in
@@ -214,21 +237,6 @@ above is exercised for real rather than mocked.
 
 Known gaps, deliberately not addressed here:
 
-- **Build and runtime Node versions have drifted apart.** The server runs
-  20.12.0, but the dependency tree can no longer be built on it —
-  `unplugin-utils` requires `>=20.19.0`, and older versions die during
-  `nuxt prepare` with `module.createRequire is not a function`. CI therefore
-  builds on 24.18.0 and ships the output to a 20.12.0 runtime.
-
-  This works today — the release currently serving production was built on an
-  even newer Node (25.x, on a laptop) — and a build too new for the runtime
-  would fail the health check and be rolled back automatically. But it is a gap
-  worth closing, by installing a current Node on the server and pointing
-  `ExecStart` at it:
-  ```bash
-  ssh hannes@konfi.kommitment.works 'bash -lc "nvm install 24 && nvm alias default 24"'
-  # then update ExecStart in tne.service to the new path and re-run bootstrap.sh
-  ```
 - **No smoke test beyond HTTP 200.** The health check confirms the app answers,
   not that Sheets auth or mail actually work.
 - **Single box, no staging.** A bad release is caught by the health check and
