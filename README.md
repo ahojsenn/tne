@@ -136,8 +136,10 @@ npm --version
 requires it, and on anything older `npm ci` fails during `nuxt prepare` with
 `module.createRequire is not a function`.
 
-Production *runs* Node 20.12.0, but only the built output runs there — it is
-plain JavaScript and is not tied to the version that produced it.
+CI builds and production runs the same version, **24.18.0**, so the interpreter
+that produces the build is the one that executes it. See
+[`ubuntuserver/README.md`](ubuntuserver/README.md#node-version) — the two places
+that pin it have to be changed together.
 
 ---
 
