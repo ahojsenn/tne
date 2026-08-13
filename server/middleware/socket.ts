@@ -37,7 +37,10 @@ export default defineEventHandler((event) => {
   httpServer.on('connection', (sock: NodeJS.ErrnoException & { on: Function }) => {
     sock.on('error', (err: NodeJS.ErrnoException) => {
       if (isExpectedSocketError(err)) return
-      console.error('[socket] tcp error:', err)
+      // Code and message only. Logging the error object dumps its rawPacket
+      // buffer — hundreds of bytes of hex per event, which filled the journal
+      // whenever a scanner spoke TLS or HTTP/2 at the plain HTTP port.
+      console.error(`[socket] tcp error: ${err.code ?? 'UNKNOWN'}: ${err.message}`)
     })
   })
   console.log('Socket.io server initiated: ')

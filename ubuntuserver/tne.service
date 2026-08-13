@@ -19,6 +19,15 @@ ExecStart=/home/hannes/.nvm/versions/node/v20.12.0/bin/node /home/hannes/tne/cur
 # a build-time substitution.
 Environment=NODE_ENV=production
 
+# Listen on loopback only. Nitro otherwise binds 0.0.0.0 and ::, which made
+# http://konfi.kommitment.works:3000 serve the whole site straight from the
+# internet: no TLS, no HTTP->HTTPS redirect, and a speaker login posting its
+# password in the clear. nginx is the only thing that should reach the app.
+#
+# `ufw deny 3000` is in bootstrap.sh and was evidently not in force, so this
+# does not rely on the firewall: the socket simply is not there to connect to.
+Environment=HOST=127.0.0.1
+
 # Secrets are NOT set here. Each release dir carries a .env symlink to
 # /home/hannes/tne/shared/.env, which the app's envCheck nitro plugin loads at
 # startup. That keeps the 1734-character service-account key out of systemd's

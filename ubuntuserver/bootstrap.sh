@@ -10,7 +10,7 @@
 #   ssh hannes@konfi.kommitment.works 'bash /tmp/ubuntuserver/bootstrap.sh'
 #
 # Options:
-#   --nginx              also install/reload the nginx site config
+#   --nginx              accepted for compatibility; nginx is always installed
 #   --deploy-key FILE    append a public key to ~/.ssh/authorized_keys (for CI)
 #   --no-seed            skip seeding the first release from the old layout
 #   --yes                don't prompt before restarting the service
@@ -37,6 +37,8 @@ DRY_RUN=0
 
 while [ $# -gt 0 ]; do
   case "$1" in
+    # Accepted but ignored: the nginx config is always installed now, because
+    # its proxy target has to stay in step with the address the app binds.
     --nginx)      DO_NGINX=1 ;;
     --deploy-key) shift; DEPLOY_KEY=${1:-} ;;
     --no-seed)    DO_SEED=0 ;;
@@ -178,6 +180,23 @@ else
   log "NOTE: log in again for journal access to take effect in your shell"
 fi
 
+# ---------------------------------------------------------------- nginx
+# Before the service restart, and no longer behind --nginx. The unit binds the
+# app to 127.0.0.1, so nginx must already be pointing at that exact address
+# when the app rebinds; the other way round leaves a window where the proxy
+# cannot reach it. Installing is idempotent and gated by `nginx -t`, so doing
+# it on every run costs nothing.
+log "installing nginx site config"
+run sudo install -m 644 -o root -g root "$SRC/nginx-tne.conf" /etc/nginx/sites-available/tne.conf
+run sudo ln -sfn /etc/nginx/sites-available/tne.conf /etc/nginx/sites-enabled/tne.conf
+run sudo nginx -t
+run sudo systemctl reload nginx
+
+# Belt and braces only: the app no longer listens on a public interface, so
+# this is not what keeps port 3000 private. Tolerated failure — ufw may be
+# inactive on this box, which is not a reason to abort a bootstrap.
+run sudo ufw deny 3000 || true
+
 # ---------------------------------------------------------------- systemd
 log "installing $SERVICE"
 run sudo install -m 644 -o root -g root "$SRC/tne.service" "/etc/systemd/system/$SERVICE"
@@ -186,18 +205,6 @@ run sudo install -m 644 -o root -g root "$SRC/tne.service" "/etc/systemd/system/
 run sudo systemctl daemon-reload
 run sudo systemctl enable "$SERVICE"
 run sudo systemctl restart "$SERVICE"
-
-# ---------------------------------------------------------------- nginx
-if [ "$DO_NGINX" = "1" ]; then
-  log "installing nginx site config"
-  run sudo install -m 644 -o root -g root "$SRC/nginx-tne.conf" /etc/nginx/sites-available/tne.conf
-  run sudo ln -sfn /etc/nginx/sites-available/tne.conf /etc/nginx/sites-enabled/tne.conf
-  run sudo nginx -t
-  run sudo systemctl reload nginx
-fi
-# Tolerated failure: ufw may be inactive on this box, which is not a reason to
-# abort a bootstrap.
-run sudo ufw deny 3000 || true
 
 # ---------------------------------------------------------------- deploy key
 if [ -n "$DEPLOY_KEY" ]; then
