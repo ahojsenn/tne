@@ -1,4 +1,4 @@
-import { createHash } from 'node:crypto'
+import { createHash, createHmac } from 'node:crypto'
 import { readRange, updateRange, deleteRow, ensureSheet } from './sheetsClient'
 import type { Speaker } from '~/types/speaker'
 
@@ -15,6 +15,20 @@ const RANGE = `${SHEET}!A:I`
  */
 export function hashResetToken(token: string): string {
   return createHash('sha256').update(token).digest('hex')
+}
+
+/**
+ * A stable, non-reversible id for a speaker, used where an email must not
+ * travel: the gameconsole's speaker list and the activate-talk call.
+ *
+ * Keyed on SESSION_SECRET so it cannot be recomputed from the outside, and
+ * derived from the email so it stays the same across restarts. Truncated
+ * because it only has to be unique among a handful of speakers, not
+ * collision-proof against an attacker who cannot generate candidates anyway.
+ */
+export function speakerHandle(email: string): string {
+  const key = process.env.SESSION_SECRET ?? 'tne-speaker-handle-fallback'
+  return createHmac('sha256', key).update(email.trim().toLowerCase()).digest('hex').slice(0, 16)
 }
 
 type SpeakerRow = { speaker: Speaker; rowIndex: number }
@@ -61,6 +75,21 @@ export async function findSpeakerByEmail(email: string): Promise<SpeakerRow | nu
   const idx = dataRows.findIndex(r => (r[0] ?? '').trim().toLowerCase() === normalized)
   if (idx === -1) return null
   return { speaker: rowToSpeaker(dataRows[idx]), rowIndex: idx + 2 } // +2: 1-based + header row
+}
+
+/** Confirmed speakers only — a pending registration cannot be put on stage. */
+export async function listActiveSpeakers(): Promise<Speaker[]> {
+  const { dataRows } = await getAllRows()
+  return dataRows
+    .map(rowToSpeaker)
+    .filter(s => s.email && s.status === 'active')
+}
+
+/** Resolves the opaque handle from speakerHandle() back to a speaker. */
+export async function findSpeakerByHandle(handle: string): Promise<Speaker | null> {
+  if (!handle) return null
+  const speakers = await listActiveSpeakers()
+  return speakers.find(s => speakerHandle(s.email) === handle) ?? null
 }
 
 export async function findSpeakerByToken(token: string): Promise<SpeakerRow | null> {

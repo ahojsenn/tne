@@ -10,6 +10,7 @@ import { GAME } from '~/types/gameModes'
 import { loadConfig } from '../utils/configStore'
 import { type Question } from '~/types/quiz'
 import * as quizStore from '../utils/quizStore'
+import * as talkStore from '../utils/talkStore'
 import { logQuizResults } from '../utils/quizLogger'
 
 export const global = {} as MyGlobal
@@ -97,6 +98,10 @@ export default defineEventHandler((event) => {
     socket.on('client-id', (newid: string) => handlers.handle_client_id(socket, global, newid))
     socket.on('set-speaker-hero', (data: { clientId: string; heroName: string }) => handlers.handle_set_speaker_hero(socket, global, data))
     socket.on('get_heroes', () => { socket.emit('heroes', Effect.runSync(heroes.hero_hitlist)) })
+    // Which talk is running. Same shape as the quiz's activate/get pair, so a
+    // client joining mid-talk learns about it without a reload.
+    socket.on('activate-talk', (handle: string | null) => { void handlers.handle_activate_talk(global, handle) })
+    socket.on('get-active-talk', () => { socket.emit('active-talk', talkStore.getActiveTalk()) })
     socket.on('activate-question', (q: Question | null) => {
       // Save results of the previous question before switching
       const prev = quizStore.getActiveQuestion()

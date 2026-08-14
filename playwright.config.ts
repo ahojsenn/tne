@@ -100,6 +100,10 @@ export default defineConfig({
        * credentials at all — so fall back to a fixed test value. A real secret
        * is still used when one is provided. */
       SESSION_SECRET: process.env.SESSION_SECRET ?? 'playwright-e2e-session-secret-not-for-production',
+      /* The gameconsole password gate. verify.post.ts prefers this over the
+       * adminPasswd in the config sheet, so the console is reachable in tests
+       * without any spreadsheet. */
+      ADMIN_PASSWORD: 'playwright-console',
     },
   },
 });
