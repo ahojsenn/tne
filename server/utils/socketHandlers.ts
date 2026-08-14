@@ -9,6 +9,8 @@ import * as gameMode from './gameModeStore'
 import * as messages from './messagesStore'
 import { GAME } from '~/types/gameModes'
 import { logGameOver } from './gameLogger'
+import * as talkStore from './talkStore'
+import { findSpeakerByHandle } from './speakerStore'
 
 export function handle_client_id(socket: Socket, global: MyGlobal, newid: string): void {
   // find client by id
@@ -78,7 +80,18 @@ export function handle_reset_hero_hitlist(socket: Socket, global: MyGlobal): voi
   global.io.emit('tne-reset')
 }
 
-export function handle_tne(socket: Socket, global: MyGlobal, data: THROW_MESSAGE): void {
+export function handle_tne(socket: Socket, global: MyGlobal, incoming: THROW_MESSAGE): void {
+  // Rebuild the message from scratch rather than spreading what arrived: the
+  // talk id is authoritative server state, so a client must not be able to
+  // send one, aim a throw at a talk that is not running, or attribute it to
+  // someone else. Absent when nobody is on stage — free play stays valid.
+  const activeTalkId = talkStore.getActiveTalkId()
+  const data: THROW_MESSAGE = {
+    text: incoming.text,
+    clientId: incoming.clientId,
+    ...(activeTalkId ? { talkId: activeTalkId } : {}),
+  }
+
   console.log('tne event: ', data)
   const hero = heroes.getHeroFromClientId(data.clientId)
   // log members ot the catchup-channel
@@ -118,6 +131,38 @@ export function handle_tne(socket: Socket, global: MyGlobal, data: THROW_MESSAGE
   console.log('A %s was thrown from %s, score %s... ',
     data.text, hero.heroName, hero.h_m_s)
 
+}
+
+/**
+ * Put a speaker on stage, or clear the stage when handle is null.
+ *
+ * Starting a talk while one runs replaces it — there is never more than one.
+ * An unknown or unconfirmed handle is ignored rather than reported: this
+ * event, like every other console event, is unauthenticated, and answering
+ * "no such speaker" would turn it into a way to test whether someone is
+ * registered.
+ */
+export async function handle_activate_talk(global: MyGlobal, handle: string | null): Promise<void> {
+  if (!handle) {
+    talkStore.endTalk()
+    global.io.emit('active-talk', null)
+    console.log('[talk] stage cleared')
+    return
+  }
+
+  const speaker = await findSpeakerByHandle(handle)
+  if (!speaker) {
+    console.log('[talk] activate ignored: no active speaker for that handle')
+    return
+  }
+
+  const talk = talkStore.startTalk({
+    email: speaker.email,
+    displayName: speaker.displayName,
+    heroName: speaker.heroName ?? speaker.displayName,
+  })
+  global.io.emit('active-talk', talk)
+  console.log('[talk] started:', talk.id, talk.heroName)
 }
 
 export function handle_set_speaker_hero(socket: Socket, global: MyGlobal, data: { clientId: string; heroName: string }): void {

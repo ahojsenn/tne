@@ -18,8 +18,29 @@ div
   //- Console content
   div.statistics(v-if="authenticated")
     h1 Game Console
+
+    //- Who is on stage. Throws are attributed to the active talk.
+    div.talk-control
+      div.talk-current(v-if="activeTalk")
+        span.talk-live ● ON STAGE
+        span.talk-name {{ activeTalk.heroName }}
+        span.talk-since since {{ startedAtLabel }}
+        button.talk-end(@click="endTalk") End talk
+      div.talk-none(v-else) Nobody on stage — throws are unattributed
+
+      div.talk-pick
+        span.talk-pick-label Put on stage:
+        span.talk-empty(v-if="!speakers.length") no confirmed speakers
+        button.talk-speaker(
+          v-for="s in speakers"
+          :key="s.handle"
+          :class="{ active: activeTalk && activeTalk.heroName === s.heroName }"
+          @click="startTalk(s.handle)"
+        ) {{ s.heroName }}
+        button.talk-reload(@click="loadSpeakers" title="Reload speaker list") ⟳
+
     stats_gameMode
-    div ---  
+    div ---
     table.small
       thead
         tr
@@ -68,6 +89,34 @@ const store = useClientStore()
 
 const last_game_heroes = ref([] as HERO_MESSAGE[])
 
+// --- Active talk ---
+import type { ACTIVE_TALK, SPEAKER_OPTION } from '~/types/talk'
+
+const activeTalk = ref<ACTIVE_TALK | null>(null)
+const speakers = ref<SPEAKER_OPTION[]>([])
+
+const startedAtLabel = computed(() => {
+  const iso = activeTalk.value?.startedAt
+  if (!iso) return ''
+  const d = new Date(iso)
+  return Number.isNaN(d.getTime())
+    ? iso
+    : d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+})
+
+async function loadSpeakers() {
+  try {
+    speakers.value = await $fetch<SPEAKER_OPTION[]>('/api/talk/speakers')
+  } catch (e) {
+    console.error('could not load speakers', e)
+  }
+}
+
+// The server resolves the handle and broadcasts; the console does not set its
+// own state, it waits for active-talk like everyone else.
+function startTalk(handle: string) { $io.emit('activate-talk', handle) }
+function endTalk() { $io.emit('activate-talk', null) }
+
 // --- Auth ---
 const authenticated = ref(false)
 const password = ref('')
@@ -114,6 +163,9 @@ onMounted(() => {
     console.log('gameconsole: got last tomato game score', tgs, store.last_game_heroes)
     store.storeLastGameHeroes(tgs)
   })
+  $io.on('active-talk', (t: ACTIVE_TALK | null) => { activeTalk.value = t })
+  $io.emit('get-active-talk')
+  loadSpeakers()
   // every three seconds emit a request for the last 10000 messages
   setInterval(() => $io.emit('get_heroes',10000), 5000)
 })
@@ -190,5 +242,82 @@ td, th {
   text-align: left;
   padding: 7px;
   vertical-align: top;
+}
+
+/* --- active talk --- */
+.talk-control {
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin: 12px 0;
+  font-family: 'Courier New', Courier, monospace;
+  color: #eee;
+}
+
+.talk-current {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.talk-live {
+  color: greenyellow;
+  font-weight: 700;
+}
+
+.talk-name {
+  font-size: 1.15em;
+  overflow-wrap: anywhere;
+}
+
+.talk-since,
+.talk-empty {
+  color: #888;
+  font-size: 0.85em;
+}
+
+.talk-none {
+  color: #888;
+}
+
+.talk-pick {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.talk-pick-label {
+  color: #888;
+  font-size: 0.85em;
+}
+
+.talk-speaker,
+.talk-end,
+.talk-reload {
+  background: #1a1a1a;
+  border: 1px solid #555;
+  border-radius: 4px;
+  color: #eee;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 5px 10px;
+}
+
+.talk-speaker:hover,
+.talk-reload:hover {
+  border-color: greenyellow;
+}
+
+.talk-speaker.active {
+  border-color: greenyellow;
+  color: greenyellow;
+}
+
+.talk-end {
+  border-color: #f44;
+  color: #f66;
 }
 </style>
