@@ -13,6 +13,25 @@ div.dashboard-page
       div.alert.alert-error(v-if="serverError") {{ serverError }}
       div.alert.alert-success(v-if="successMessage") {{ successMessage }}
 
+      //- Live tally while this speaker is the one on stage.
+      div.live-section(v-if="stats")
+        div.live-head
+          span.live-dot(v-if="stats.onStage") ●
+          span.live-title(v-if="stats.onStage") LIVE — you are on stage
+          span.live-title.off(v-else) Not on stage right now
+          span.live-since(v-if="stats.onStage && elapsedLabel") {{ elapsedLabel }}
+
+        template(v-if="stats.onStage")
+          div.live-total
+            span.live-total-n {{ stats.total }}
+            span.live-total-l {{ stats.total === 1 ? 'throw' : 'throws' }} so far
+          div.live-grid
+            div.live-item(v-for="item in THROWABLES" :key="item")
+              img.live-img(:src="`/img/${item}_throw.png`" :alt="item")
+              span.live-count {{ stats.counts[item] ?? 0 }}
+        p.live-hint(v-else)
+          | Your live throw count appears here once the game console puts you on stage.
+
       div.hero-section
         p.hero-label 🦸 Hero Name
         p.hero-name {{ speaker.heroName ?? 'Not set' }}
@@ -67,6 +86,7 @@ div.dashboard-page
 <script setup lang="ts">
 import superheroes from '~/types/heroes'
 import { HERO_NAME_MAX_LENGTH, validateHeroName } from '~/types/heroName'
+import { THROWABLES, type TALK_STATS } from '~/types/talk'
 
 const speaker = ref<{ email: string; displayName: string; heroName: string | null } | null>(null)
 const pending = ref(true)
@@ -97,14 +117,51 @@ const filteredHeroes = computed(() =>
     : superheroes
 )
 
+// --- live talk stats ---
+// Polled, not pushed: the socket is unauthenticated, and these numbers are
+// only for the speaker they belong to. Two seconds is live enough for a tally
+// that a person is glancing at, and it costs one small request.
+const stats = ref<TALK_STATS | null>(null)
+const now = ref(Date.now())
+let statsTimer: ReturnType<typeof setInterval> | null = null
+let clockTimer: ReturnType<typeof setInterval> | null = null
+
+const elapsedLabel = computed(() => {
+  if (!stats.value?.startedAt) return ''
+  const started = new Date(stats.value.startedAt).getTime()
+  if (Number.isNaN(started)) return ''
+  const secs = Math.max(0, Math.floor((now.value - started) / 1000))
+  const m = Math.floor(secs / 60)
+  const s = secs % 60
+  return `${m}:${String(s).padStart(2, '0')}`
+})
+
+async function loadStats() {
+  try {
+    stats.value = await $fetch<TALK_STATS>('/api/speaker/talk-stats')
+  } catch {
+    // A dropped poll is not worth showing; the next one will tell the truth.
+  }
+}
+
 onMounted(async () => {
   try {
     speaker.value = await $fetch('/api/speaker/me')
   } catch {
     await navigateTo('/speaker/login')
+    return
   } finally {
     pending.value = false
   }
+
+  await loadStats()
+  statsTimer = setInterval(loadStats, 2000)
+  clockTimer = setInterval(() => { now.value = Date.now() }, 1000)
+})
+
+onUnmounted(() => {
+  if (statsTimer) clearInterval(statsTimer)
+  if (clockTimer) clearInterval(clockTimer)
 })
 
 function openPicker() {
@@ -225,6 +282,101 @@ async function deleteAccount() {
   border-radius: 6px;
   padding: 14px 16px;
   margin-bottom: 20px;
+}
+
+/* --- live talk stats --- */
+.live-section {
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  color: #eee; /* explicit: the global .bodyClassNoGame sets color: white */
+}
+
+.live-head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.live-dot {
+  color: #f44;
+  animation: live-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+.live-title {
+  color: greenyellow;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.live-title.off {
+  color: #888;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.live-since {
+  color: #888;
+  font-size: 0.85em;
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+.live-total {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 12px 0 4px;
+}
+
+.live-total-n {
+  color: greenyellow;
+  font-size: 2em;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.live-total-l {
+  color: #aaa;
+}
+
+.live-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.live-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.live-img {
+  width: 100%;
+  max-width: 44px;
+  height: auto;
+}
+
+.live-count {
+  color: #eee;
+  font-variant-numeric: tabular-nums;
+}
+
+.live-hint {
+  color: #888;
+  font-size: 0.85em;
+  line-height: 1.5;
+  margin: 8px 0 0;
 }
 
 .hero-label {

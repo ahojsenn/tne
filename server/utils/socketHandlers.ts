@@ -91,6 +91,9 @@ export function handle_tne(socket: Socket, global: MyGlobal, incoming: THROW_MES
     clientId: incoming.clientId,
     ...(activeTalkId ? { talkId: activeTalkId } : {}),
   }
+  // Tallied as it arrives so the speaker's live view cannot be affected by the
+  // message list being capped or cleared. No-op with nobody on stage.
+  if (activeTalkId) talkStore.recordThrow(data.text)
 
   console.log('tne event: ', data)
   const hero = heroes.getHeroFromClientId(data.clientId)
