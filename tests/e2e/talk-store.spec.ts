@@ -4,6 +4,8 @@ import {
   getActiveTalk,
   getActiveTalkId,
   getActiveTalkInternal,
+  getCounts,
+  recordThrow,
   startTalk,
 } from '../../server/utils/talkStore'
 
@@ -66,5 +68,53 @@ test.describe('talkStore', () => {
     const ids = new Set<string>()
     for (let i = 0; i < 5; i++) ids.add(startTalk(SPEAKER).id)
     expect(ids.size).toBe(5)
+  })
+
+  // --- live tally (#13) ---
+
+  test('throws are tallied per item', () => {
+    startTalk(SPEAKER)
+    recordThrow('tomato')
+    recordThrow('tomato')
+    recordThrow('star')
+
+    expect(getCounts()).toEqual({ tomato: 2, star: 1 })
+  })
+
+  test('with nobody on stage nothing is tallied', () => {
+    recordThrow('tomato')
+    expect(getCounts()).toEqual({})
+  })
+
+  test('a new talk starts from zero', () => {
+    startTalk(SPEAKER)
+    recordThrow('tomato')
+    startTalk({ email: 'other@test.example', displayName: 'Other', heroName: 'Other Hero' })
+
+    expect(getCounts()).toEqual({})
+  })
+
+  test('ending a talk discards its tally', () => {
+    startTalk(SPEAKER)
+    recordThrow('egg')
+    endTalk()
+
+    expect(getCounts()).toEqual({})
+  })
+
+  test('the tally is a snapshot, not a live handle into the store', () => {
+    startTalk(SPEAKER)
+    recordThrow('tomato')
+    const snapshot = getCounts()
+    recordThrow('tomato')
+
+    expect(snapshot.tomato).toBe(1)
+    expect(getCounts().tomato).toBe(2)
+  })
+
+  test('the counts never reach the broadcast view', () => {
+    startTalk(SPEAKER)
+    recordThrow('tomato')
+    expect(getActiveTalk()).not.toHaveProperty('counts')
   })
 })

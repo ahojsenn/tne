@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { handle_tne } from '../../server/utils/socketHandlers'
-import { endTalk, startTalk } from '../../server/utils/talkStore'
+import { endTalk, getCounts, startTalk } from '../../server/utils/talkStore'
 import { messages, delete_all_messages } from '../../server/utils/messagesStore'
 
 // Stateless: handle_tne is called directly with stand-ins for the socket and
@@ -72,6 +72,24 @@ test.describe('throw attribution', () => {
     const catchup = emitted.find(e => e.event === 'catchup-event')
     expect(catchup).toBeTruthy()
     expect((catchup!.payload as { talkId?: string }).talkId).toBe(talk.id)
+  })
+
+  test('a throw during a talk also lands in the live tally (#13)', () => {
+    startTalk({ email: 'a@test.example', displayName: 'A', heroName: 'Hero A' })
+
+    const { socket, global } = fakes()
+    handle_tne(socket, global, { text: 'tomato', clientId: 'c1' })
+    handle_tne(socket, global, { text: 'tomato', clientId: 'c2' })
+    handle_tne(socket, global, { text: 'cake', clientId: 'c3' })
+
+    expect(getCounts()).toEqual({ tomato: 2, cake: 1 })
+  })
+
+  test('throws with nobody on stage are not tallied', () => {
+    const { socket, global } = fakes()
+    handle_tne(socket, global, { text: 'tomato', clientId: 'c1' })
+
+    expect(getCounts()).toEqual({})
   })
 
   test('ending the talk stops attribution for later throws', () => {

@@ -24,3 +24,20 @@ export type SPEAKER_OPTION = {
   displayName: string
   heroName: string
 }
+
+/**
+ * What the speaker on stage sees about their own talk.
+ *
+ * `onStage: false` is also the answer when somebody else is presenting — the
+ * shape is identical either way, so the response reveals nothing about a talk
+ * that is not yours.
+ */
+export type TALK_STATS = {
+  onStage: boolean
+  startedAt: string | null
+  counts: Record<string, number>
+  total: number
+}
+
+/** The throwables, in the order the throw page shows them. */
+export const THROWABLES = ['star', 'cake', 'tomato', 'egg', 'frog', 'shoe'] as const
