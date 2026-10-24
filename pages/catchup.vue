@@ -1,5 +1,5 @@
 <template lang="pug">
-div.catchup
+div.catchup(:class="{ 'with-slides': slidesEmbedUrl }")
   iframe.slides-frame(
     v-if="slidesEmbedUrl"
     :src="slidesEmbedUrl"
@@ -98,11 +98,20 @@ onMounted( () => {
   height: 100%;
   width: 100%;
 }
-.slides-frame {
+/* dark letterbox behind the slides */
+.catchup.with-slides {
   position: fixed;
   inset: 0;
-  width: 100vw;
-  height: 100vh;
+  background-color: #000;
+}
+/* keep the iframe at 16:9 so Google doesn't add its own light letterbox */
+.slides-frame {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(100vw, calc(100vh * 16 / 9));
+  height: min(100vh, calc(100vw * 9 / 16));
   border: 0;
   z-index: 0;
 }
