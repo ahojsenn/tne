@@ -1,5 +1,5 @@
 <template lang="pug">
-div.catchup(:class="{ 'with-slides': slidesEmbedUrl }")
+div.catchup(:class="{ embedded }")
   iframe.slides-frame(
     v-if="slidesEmbedUrl"
     :src="slidesEmbedUrl"
@@ -7,7 +7,7 @@ div.catchup(:class="{ 'with-slides': slidesEmbedUrl }")
     allow="fullscreen"
     allowfullscreen
   )
-  form.slides-form(v-else @submit.prevent="showSlides")
+  form.slides-form(v-else-if="!embedded" @submit.prevent="showSlides")
     input(v-model="slidesInput" placeholder="Google Slides URL oder ID" autofocus)
     button(type="submit") Präsentation zeigen
   div.slides-controls(v-if="slidesEmbedUrl")
@@ -31,16 +31,18 @@ const ti_store = useThrownItemsStore()
 const { $io } = useNuxtApp()
 const route = useRoute()
 const router = useRouter()
+// the home page embeds this page as a transparent overlay; only the standalone page gets the slides input and black background
+const embedded = window.self !== window.top
 
 // accepts a full Google Slides URL (edit, view or published "/d/e/..." link) or a bare presentation ID
 function toSlidesEmbedUrl(input: string): string | null {
   const s = input.trim()
   if (!s) return null
   const published = s.match(/\/presentation\/d\/e\/([\w-]+)/)
-  if (published) return `https://docs.google.com/presentation/d/e/${published[1]}/embed?start=false&loop=false&delayms=3000`
+  if (published) return `https://docs.google.com/presentation/d/e/${published[1]}/embed?start=false&loop=false&delayms=3000&rm=minimal`
   const regular = s.match(/\/presentation\/d\/([\w-]+)/)
   const id = regular ? regular[1] : (/^[\w-]+$/.test(s) ? s : null)
-  return id ? `https://docs.google.com/presentation/d/${id}/embed?start=false&loop=false&delayms=3000` : null
+  return id ? `https://docs.google.com/presentation/d/${id}/embed?start=false&loop=false&delayms=3000&rm=minimal` : null
 }
 
 const slidesParam = computed(() => {
@@ -70,7 +72,7 @@ onMounted( () => {
   console.log('catchup.vue: onMounted')
   $io.onAny((event, ...args) => {    console.log('catchup.vue: onAny', event, args)  })
   document.body.classList.remove('bodyClassNoGame')
-  document.body.classList.add('transparentMode')
+  document.body.classList.add(embedded ? 'transparentMode' : 'catchupMode')
   $io.emit('register-catchup-client')
 
   $io.on('catchup-event', (m: THROW_MESSAGE) => {
@@ -93,16 +95,19 @@ onMounted( () => {
   color: white;
   font-family: 'Courier New', Courier, monospace;
 }
+.catchupMode {
+  background-color: #000 !important;
+  color: white;
+  font-family: 'Courier New', Courier, monospace;
+}
 .catchup {
   color: greenyellow;
-  height: 100%;
-  width: 100%;
-}
-/* dark letterbox behind the slides */
-.catchup.with-slides {
   position: fixed;
   inset: 0;
   background-color: #000;
+}
+.catchup.embedded {
+  background-color: transparent;
 }
 /* keep the iframe at 16:9 so Google doesn't add its own light letterbox */
 .slides-frame {
