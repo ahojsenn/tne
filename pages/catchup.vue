@@ -1,18 +1,19 @@
 <template lang="pug">
 div.catchup(:class="{ embedded }")
   iframe.slides-frame(
-    v-if="slidesEmbedUrl"
-    :src="slidesEmbedUrl"
+    v-if="embed"
+    :class="{ full: !embed.isSlides }"
+    :src="embed.url"
     frameborder="0"
     allow="fullscreen"
     allowfullscreen
   )
   form.slides-form(v-else-if="!embedded" @submit.prevent="showSlides")
-    input(v-model="slidesInput" placeholder="Google Slides URL oder ID" autofocus)
-    button(type="submit") Präsentation zeigen
-  div.slides-controls(v-if="slidesEmbedUrl")
+    input(v-model="slidesInput" placeholder="Google Slides oder beliebige https-URL" autofocus)
+    button(type="submit") Anzeigen
+  div.slides-controls(v-if="embed")
     button(@click="toggleFullscreen" title="Vollbild") ⛶
-    button(@click="clearSlides" title="Präsentation schließen") ✕
+    button(@click="clearSlides" title="Schließen") ✕
   div.thrown-layer
     div(v-for="(item, key, index) in ti_store.thrownItems" v-bind:key="item.rnd")
       cake(v-if="item.x === 'cake'") 
@@ -45,20 +46,38 @@ function toSlidesEmbedUrl(input: string): string | null {
   return id ? `https://docs.google.com/presentation/d/${id}/embed?start=false&loop=false&delayms=3000&rm=minimal` : null
 }
 
-const slidesParam = computed(() => {
-  const q = route.query.slides
+// Google Slides get the 16:9 embed; any other https URL is embedded as-is, filling the viewport
+function toEmbed(input: string): { url: string, isSlides: boolean } | null {
+  const s = input.trim()
+  const isGoogleSlides = /docs\.google\.com\/presentation\//.test(s) || /^[\w-]+$/.test(s)
+  if (isGoogleSlides) {
+    const url = toSlidesEmbedUrl(s)
+    return url ? { url, isSlides: true } : null
+  }
+  try {
+    const u = new URL(s)
+    return u.protocol === 'https:' ? { url: u.href, isSlides: false } : null
+  } catch {
+    return null
+  }
+}
+
+// ?show= is the new name; ?slides= keeps old links working
+const showParam = computed(() => {
+  const q = route.query.show ?? route.query.slides
   return (Array.isArray(q) ? q[0] : q) ?? ''
 })
-const slidesEmbedUrl = computed(() => toSlidesEmbedUrl(slidesParam.value))
+const embed = computed(() => toEmbed(showParam.value))
 const slidesInput = ref('')
 
 function showSlides() {
-  if (!toSlidesEmbedUrl(slidesInput.value)) return alert('Das sieht nicht nach einer Google-Slides-URL oder -ID aus.')
-  router.replace({ query: { ...route.query, slides: slidesInput.value.trim() } })
+  if (!toEmbed(slidesInput.value)) return alert('Bitte eine Google-Slides-URL/-ID oder eine https://-URL eingeben.')
+  const { slides, ...rest } = route.query
+  router.replace({ query: { ...rest, show: slidesInput.value.trim() } })
 }
 
 function clearSlides() {
-  const { slides, ...rest } = route.query
+  const { slides, show, ...rest } = route.query
   router.replace({ query: rest })
 }
 
@@ -120,6 +139,12 @@ onMounted( () => {
   border: 0;
   z-index: 0;
 }
+/* arbitrary pages have no fixed aspect ratio: fill the viewport */
+.slides-frame.full {
+  width: 100vw;
+  height: 100vh;
+  background-color: #fff;
+}
 /* thrown items fly above the slides but let clicks through to the iframe */
 .thrown-layer {
   position: fixed;
@@ -142,11 +167,21 @@ onMounted( () => {
   flex: 1;
   padding: 8px;
   font-family: inherit;
+  color: greenyellow;
+  background-color: #111;
+  border: 1px solid greenyellow;
+}
+.slides-form input::placeholder {
+  color: greenyellow;
+  opacity: 0.5;
 }
 .slides-form button, .slides-controls button {
   padding: 8px 12px;
   cursor: pointer;
   font-family: inherit;
+  color: greenyellow;
+  background-color: #111;
+  border: 1px solid greenyellow;
 }
 .slides-controls {
   position: fixed;
