@@ -36,7 +36,7 @@ jobs:
   test:
     name: Playwright
     if: ${{ github.event_name != 'workflow_dispatch' || !inputs.skip_tests }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
@@ -65,7 +65,7 @@ jobs:
     # `always()` plus an explicit result check so an intentionally skipped test
     # job still allows the deploy, while a *failed* one never does.
     if: ${{ always() && needs.test.result != 'failure' && needs.test.result != 'cancelled' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     environment:
       name: production
