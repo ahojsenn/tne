@@ -9,8 +9,8 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@v7
+    - uses: actions/setup-node@v7
       with:
         node-version: lts/*
     - name: Install dependencies
@@ -30,7 +30,7 @@ jobs:
         # SMTP is intentionally absent too — mailer.ts suppresses delivery
         # whenever NODE_ENV != production and MAIL_DEV_SEND != 1, so no mail
         # leaves CI.
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       if: always()
       with:
         name: playwright-report
