@@ -1,5 +1,6 @@
 <template lang="pug">
 div.qrcode-page
+  thrownBackground
   qrcode(v-if="size" :path="path" :size="size" fullscreen)
 </template>
 
@@ -26,5 +27,9 @@ onBeforeUnmount(() => window.removeEventListener('resize', updateSize))
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.qrcode-page > :not(.thrown-background) {
+  position: relative;
+  z-index: 1;
 }
 </style>
