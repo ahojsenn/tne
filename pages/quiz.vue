@@ -16,6 +16,7 @@ div
       button.auth-btn(:disabled="checking" @click="login") {{ checking ? '…' : 'Enter' }}
 
   //- Quiz console
+  thrownBackground(v-if="authenticated")
   .quiz-console(v-if="authenticated")
     h1 🎯 Quiz Console
 
@@ -205,6 +206,8 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .quiz-console {
+  position: relative;
+  z-index: 1;
   color: white;
   font-family: 'Lucida Console', 'Courier New', monospace;
   padding: 20px;
