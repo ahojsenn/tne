@@ -21,6 +21,7 @@ const navItems = [
   { title: 'Answer',       href: '/answer' },
   { title: 'Catchup',      href: '/catchup' },
   { title: 'Kommitment',   href: '/kommitment' },
+  { title: 'QR Code',      href: '/qrcode' },
   { title: '🎤 Speaker Login', href: '/speaker/login' },
   { title: 'ℹ️ About',         href: '/about' },
 ]

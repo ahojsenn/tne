@@ -1,7 +1,8 @@
 <template lang="pug">
 div  
-  div.qrcode 
+  div.qrcode(:class="{ fullscreen }")
     qrcode(
+      :key="size"
       :value="value" 
       :width="size" 
       :height="size"  
@@ -19,11 +20,14 @@ div
 import QRCodeVue3 from "qrcode-vue3"  
 const qrcode = QRCodeVue3
 
-const props = withDefaults(defineProps<{ path?: string }>(), { path: 'throw' })
+const props = withDefaults(
+  defineProps<{ path?: string; size?: number; fullscreen?: boolean }>(),
+  { path: 'throw', size: 256, fullscreen: false },
+)
 
 const baseUrl = useRequestURL()
 const value = computed(() => `${baseUrl.origin}/${props.path}`)
-const size = 256
+const size = computed(() => props.size)
 </script>
 
 <style scoped>
@@ -33,6 +37,13 @@ const size = 256
   bottom: 0;
   z-index: 199;
   font-size: 0.5em;
+}
+.qrcode.fullscreen {
+  position: static;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1em;
 }
 .text {
   color: darkgrey;
