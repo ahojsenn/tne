@@ -39,6 +39,9 @@ div
         ) {{ s.heroName }}
         button.talk-reload(@click="loadSpeakers" title="Reload speaker list") ⟳
 
+    div.catchup-control
+      button.catchup-reset(@click="resetCatchupCounter" title="Setzt die Wurfzähler auf allen /catchup-Seiten auf 0") Catchup-Zähler zurücksetzen
+
     stats_gameMode
     div ---
     table.small
@@ -116,6 +119,9 @@ async function loadSpeakers() {
 // own state, it waits for active-talk like everyone else.
 function startTalk(handle: string) { $io.emit('activate-talk', handle) }
 function endTalk() { $io.emit('activate-talk', null) }
+
+// the server relays this to every /catchup page
+function resetCatchupCounter() { $io.emit('catchup-reset') }
 
 // --- Auth ---
 const authenticated = ref(false)
@@ -294,9 +300,14 @@ td, th {
   font-size: 0.85em;
 }
 
+.catchup-control {
+  margin: 12px 0;
+}
+
 .talk-speaker,
 .talk-end,
-.talk-reload {
+.talk-reload,
+.catchup-reset {
   background: #1a1a1a;
   border: 1px solid #555;
   border-radius: 4px;
@@ -307,7 +318,8 @@ td, th {
 }
 
 .talk-speaker:hover,
-.talk-reload:hover {
+.talk-reload:hover,
+.catchup-reset:hover {
   border-color: greenyellow;
 }
 
