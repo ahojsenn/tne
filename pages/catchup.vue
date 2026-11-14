@@ -11,9 +11,16 @@ div.catchup(:class="{ embedded }")
   form.slides-form(v-else-if="!embedded" @submit.prevent="showSlides")
     input(v-model="slidesInput" placeholder="Google Slides oder beliebige https-URL" autofocus)
     button(type="submit") Anzeigen
-  div.slides-controls(v-if="embed")
-    button(@click="toggleFullscreen" title="Vollbild") ⛶
-    button(@click="clearSlides" title="Schließen") ✕
+  div.slides-controls(v-if="embed || showCounter")
+    button(v-if="showCounter" @click="resetCounts" title="Zähler zurücksetzen (Taste R, wenn der Fokus nicht in den Folien liegt)") ↺
+    template(v-if="embed")
+      button(@click="toggleFullscreen" title="Vollbild") ⛶
+      button(@click="clearSlides" title="Schließen") ✕
+  //- running tally of everything thrown; pointer-events: none so clicks still reach the slides
+  div.throw-counter(v-if="showCounter && visibleCounts.length" :class="`pos-${counterPos}`")
+    span.throw-count(v-for="c in visibleCounts" :key="c.type")
+      img(:src="`/img/${c.type}_throw.png`" :alt="c.type")
+      span {{ c.n }}
   div.thrown-layer
     div(v-for="(item, key, index) in ti_store.thrownItems" v-bind:key="item.rnd")
       cake(v-if="item.x === 'cake'") 
@@ -87,6 +94,68 @@ function toggleFullscreen() {
   else document.documentElement.requestFullscreen()
 }
 
+// --- throw counter ---
+// useThrownItemsStore forgets items after 5 s, so the tally lives here.
+const ITEM_TYPES = ['tomato', 'egg', 'shoe', 'cake', 'frog', 'star'] as const
+type ItemType = typeof ITEM_TYPES[number]
+const isItemType = (x: unknown): x is ItemType =>
+  typeof x === 'string' && (ITEM_TYPES as readonly string[]).includes(x)
+
+// sessionStorage, so an accidental reload mid-talk does not zero the counts
+const COUNTS_KEY = 'tne-catchup-counts'
+function emptyCounts(): Record<ItemType, number> {
+  return Object.fromEntries(ITEM_TYPES.map(t => [t, 0])) as Record<ItemType, number>
+}
+function loadCounts(): Record<ItemType, number> {
+  const counts = emptyCounts()
+  try {
+    const stored = JSON.parse(sessionStorage.getItem(COUNTS_KEY) ?? '{}')
+    for (const t of ITEM_TYPES) {
+      const n = stored?.[t]
+      if (Number.isInteger(n) && n > 0) counts[t] = n
+    }
+  } catch { /* storage blocked or garbage: start from zero */ }
+  return counts
+}
+const counts = ref(loadCounts())
+watch(counts, c => {
+  try { sessionStorage.setItem(COUNTS_KEY, JSON.stringify(c)) } catch { /* storage blocked */ }
+}, { deep: true })
+
+const visibleCounts = computed(() =>
+  ITEM_TYPES.filter(t => counts.value[t] > 0).map(t => ({ type: t, n: counts.value[t] })))
+
+function resetCounts() { counts.value = emptyCounts() }
+
+// ?counter=top-left|top-right|bottom-left|bottom-right|off, default bottom-left
+// (bottom-right is where slides usually carry their QR code)
+const COUNTER_POSITIONS = ['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const
+const counterParam = computed(() => {
+  const q = route.query.counter
+  return (Array.isArray(q) ? q[0] : q) ?? ''
+})
+const showCounter = computed(() => !embedded && counterParam.value !== 'off')
+const counterPos = computed(() =>
+  (COUNTER_POSITIONS as readonly string[]).includes(counterParam.value) ? counterParam.value : 'bottom-left')
+
+// R resets — only while keyboard focus is on this page, not inside the slides iframe
+function onKeydown(e: KeyboardEvent) {
+  if (!showCounter.value || e.ctrlKey || e.metaKey || e.altKey) return
+  if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
+  if (e.key === 'r' || e.key === 'R') resetCounts()
+}
+
+function onCatchupEvent(m: THROW_MESSAGE) {
+  console.log('catchup.vue: got catchup-event: ', m)
+  const item: ThrownItem = {
+      x: m?.text,
+      rnd: Math.floor(Math.random() * 100000),
+    }
+  ti_store.throw(item)
+  // the embedded overlay shows no counter, so it does not count either
+  if (!embedded && isItemType(m?.text)) counts.value[m.text]++
+}
+
 onMounted( () => {
   console.log('catchup.vue: onMounted')
   $io.onAny((event, ...args) => {    console.log('catchup.vue: onAny', event, args)  })
@@ -94,17 +163,19 @@ onMounted( () => {
   document.body.classList.add(embedded ? 'transparentMode' : 'catchupMode')
   $io.emit('register-catchup-client')
 
-  $io.on('catchup-event', (m: THROW_MESSAGE) => {
-    console.log('app.vue: got catchup-event: ', m)
-    const item: ThrownItem = {
-        x: m.text,
-        rnd: Math.floor(Math.random() * 100000),
-      }
-    ti_store.throw(item)
-  })
+  // named handlers, removed on unmount, so revisiting the page does not count every throw twice
+  $io.on('catchup-event', onCatchupEvent)
+  $io.on('catchup-reset', resetCounts)
+  window.addEventListener('keydown', onKeydown)
 
   // every 10 seconds log $io connection status
   setInterval(() => console.log('catchup.vue: $io.connected: ', $io.connected), 10000)
+})
+
+onBeforeUnmount(() => {
+  $io.off('catchup-event', onCatchupEvent)
+  $io.off('catchup-reset', resetCounts)
+  window.removeEventListener('keydown', onKeydown)
 })
 </script>
 
@@ -194,5 +265,33 @@ onMounted( () => {
 }
 .slides-controls:hover {
   opacity: 1;
+}
+/* quiet tally of thrown items, above the slides like .thrown-layer, clicks pass through */
+.throw-counter {
+  position: fixed;
+  z-index: 10;
+  pointer-events: none;
+  display: flex;
+  gap: 10px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background-color: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font-size: 14px;
+  opacity: 0.6;
+}
+.throw-counter.pos-top-left { top: 10px; left: 10px; }
+.throw-counter.pos-top-right { top: 10px; right: 10px; }
+.throw-counter.pos-bottom-left { bottom: 10px; left: 10px; }
+/* sits above the controls, which own the bottom-right corner */
+.throw-counter.pos-bottom-right { bottom: 56px; right: 10px; }
+.throw-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.throw-count img {
+  width: 18px;
+  height: 18px;
 }
 </style>
