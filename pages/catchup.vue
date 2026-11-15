@@ -11,7 +11,13 @@ div.catchup(:class="{ embedded }")
   form.slides-form(v-else-if="!embedded" @submit.prevent="showSlides")
     input(v-model="slidesInput" placeholder="Google Slides oder beliebige https-URL" autofocus)
     button(type="submit") Anzeigen
-  div.slides-controls(v-if="embed || showCounter")
+  div.slides-controls(v-if="embed || !embedded")
+    button(
+      v-if="!embedded"
+      :class="{ active: seeThrough }"
+      @click="seeThrough = !seeThrough"
+      title="Würfe durchscheinend machen, damit die Folien lesbar bleiben (Taste T, wenn der Fokus nicht in den Folien liegt)"
+    ) ◐
     button(v-if="showCounter" @click="resetCounts" title="Zähler zurücksetzen (Taste R, wenn der Fokus nicht in den Folien liegt)") ↺
     template(v-if="embed")
       button(@click="toggleFullscreen" title="Vollbild") ⛶
@@ -21,7 +27,7 @@ div.catchup(:class="{ embedded }")
     span.throw-count(v-for="c in visibleCounts" :key="c.type")
       img(:src="`/img/${c.type}_throw.png`" :alt="c.type")
       span {{ c.n }}
-  div.thrown-layer
+  div.thrown-layer(:class="{ 'see-through': seeThrough }")
     div(v-for="(item, key, index) in ti_store.thrownItems" v-bind:key="item.rnd")
       cake(v-if="item.x === 'cake'") 
       tomato(v-if="item.x ==='tomato'")
@@ -142,11 +148,24 @@ const showCounter = computed(() => !embedded && counterParam.value !== 'off')
 const counterPos = computed(() =>
   (COUNTER_POSITIONS as readonly string[]).includes(counterParam.value) ? counterParam.value : 'bottom-center')
 
-// R resets — only while keyboard focus is on this page, not inside the slides iframe
+// --- see-through toggle ---
+// fades the whole thrown layer so the slides stay readable under a full bombardment;
+// sessionStorage, like the counts, so a reload keeps the setting
+const SEE_THROUGH_KEY = 'tne-catchup-see-through'
+function loadSeeThrough(): boolean {
+  try { return sessionStorage.getItem(SEE_THROUGH_KEY) === '1' } catch { return false }
+}
+const seeThrough = ref(!embedded && loadSeeThrough())
+watch(seeThrough, v => {
+  try { sessionStorage.setItem(SEE_THROUGH_KEY, v ? '1' : '0') } catch { /* storage blocked */ }
+})
+
+// R resets, T toggles see-through — only while keyboard focus is on this page, not inside the slides iframe
 function onKeydown(e: KeyboardEvent) {
-  if (!showCounter.value || e.ctrlKey || e.metaKey || e.altKey) return
+  if (embedded || e.ctrlKey || e.metaKey || e.altKey) return
   if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
-  if (e.key === 'r' || e.key === 'R') resetCounts()
+  if (showCounter.value && (e.key === 'r' || e.key === 'R')) resetCounts()
+  if (e.key === 't' || e.key === 'T') seeThrough.value = !seeThrough.value
 }
 
 function onCatchupEvent(m: THROW_MESSAGE) {
@@ -228,6 +247,11 @@ onBeforeUnmount(() => {
   pointer-events: none;
   overflow: hidden;
 }
+/* opacity on the layer as a whole: overlapping splats are composited first and then faded
+   together, so even a fully covered slide always shows through at the same strength */
+.thrown-layer.see-through {
+  opacity: 0.4;
+}
 .slides-form {
   position: fixed;
   top: 40%;
@@ -269,6 +293,10 @@ onBeforeUnmount(() => {
 }
 .slides-controls:hover {
   opacity: 1;
+}
+.slides-controls button.active {
+  color: #111;
+  background-color: greenyellow;
 }
 /* quiet tally of thrown items, above the slides like .thrown-layer, clicks pass through */
 .throw-counter {
