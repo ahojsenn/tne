@@ -88,6 +88,7 @@ export default defineEventHandler((event) => {
     socket._onconnect = () => console.log('socket connected')
     socket.on('tne', (data: THROW_MESSAGE) => handlers.handle_tne(socket, global, data))
     socket.on('last-messages', (n: number) => socket.emit('last-thrown-items', messages.messages.slice(-n)))
+    socket.on('catchup-reset', () => handlers.handle_catchup_reset(global))
     socket.on('delete-messages', (n: number) => handlers.handle_delete(socket, global, n))
     socket.on('reset-hero-hitlist', () => handlers.handle_reset_hero_hitlist(socket, global))
     socket.on('setGameMode', (gm: GAME) => handlers.handle_setGameMode(socket, global, gm))

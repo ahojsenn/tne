@@ -67,6 +67,16 @@ export function handle_delete(socket: Socket, global: MyGlobal, n: number): void
   global.io.emit('tne-reset')
 }
 
+/**
+ * Zero the throw counters on every /catchup page. The counts live only in the
+ * catchup clients, so the server just relays. Unauthenticated, like every
+ * other console event (see handle_activate_talk).
+ */
+export function handle_catchup_reset(global: MyGlobal): void {
+  console.log('catchup-reset: relaying to catchup-channel')
+  global.io.to('catchup-channel').emit('catchup-reset')
+}
+
 export function handle_reset_hero_hitlist(socket: Socket, global: MyGlobal): void {
   // reset hero_hitlist
   heroes.reset_hero_hitlist(heroes.hero_hitlist)
