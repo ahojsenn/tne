@@ -122,8 +122,11 @@ watch(counts, c => {
   try { sessionStorage.setItem(COUNTS_KEY, JSON.stringify(c)) } catch { /* storage blocked */ }
 }, { deep: true })
 
+// most-thrown first; sort is stable, so ties keep the ITEM_TYPES order
 const visibleCounts = computed(() =>
-  ITEM_TYPES.filter(t => counts.value[t] > 0).map(t => ({ type: t, n: counts.value[t] })))
+  ITEM_TYPES.filter(t => counts.value[t] > 0)
+    .map(t => ({ type: t, n: counts.value[t] }))
+    .sort((a, b) => b.n - a.n))
 
 function resetCounts() { counts.value = emptyCounts() }
 
