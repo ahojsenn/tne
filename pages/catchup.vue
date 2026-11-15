@@ -122,21 +122,25 @@ watch(counts, c => {
   try { sessionStorage.setItem(COUNTS_KEY, JSON.stringify(c)) } catch { /* storage blocked */ }
 }, { deep: true })
 
+// most-thrown first; sort is stable, so ties keep the ITEM_TYPES order
 const visibleCounts = computed(() =>
-  ITEM_TYPES.filter(t => counts.value[t] > 0).map(t => ({ type: t, n: counts.value[t] })))
+  ITEM_TYPES.filter(t => counts.value[t] > 0)
+    .map(t => ({ type: t, n: counts.value[t] }))
+    .sort((a, b) => b.n - a.n))
 
 function resetCounts() { counts.value = emptyCounts() }
 
-// ?counter=top-left|top-right|bottom-left|bottom-right|off, default bottom-left
-// (bottom-right is where slides usually carry their QR code)
-const COUNTER_POSITIONS = ['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const
+// ?counter=bottom-center|top-left|top-right|bottom-left|bottom-right|off, default bottom-center
+// (centred so a 4:3 beamer that crops a 16:9 page still shows it;
+// bottom-right is where slides usually carry their QR code)
+const COUNTER_POSITIONS = ['bottom-center', 'top-left', 'top-right', 'bottom-left', 'bottom-right'] as const
 const counterParam = computed(() => {
   const q = route.query.counter
   return (Array.isArray(q) ? q[0] : q) ?? ''
 })
 const showCounter = computed(() => !embedded && counterParam.value !== 'off')
 const counterPos = computed(() =>
-  (COUNTER_POSITIONS as readonly string[]).includes(counterParam.value) ? counterParam.value : 'bottom-left')
+  (COUNTER_POSITIONS as readonly string[]).includes(counterParam.value) ? counterParam.value : 'bottom-center')
 
 // R resets — only while keyboard focus is on this page, not inside the slides iframe
 function onKeydown(e: KeyboardEvent) {
@@ -283,6 +287,7 @@ onBeforeUnmount(() => {
 .throw-counter.pos-top-left { top: 10px; left: 10px; }
 .throw-counter.pos-top-right { top: 10px; right: 10px; }
 .throw-counter.pos-bottom-left { bottom: 10px; left: 10px; }
+.throw-counter.pos-bottom-center { bottom: 10px; left: 50%; transform: translateX(-50%); }
 /* sits above the controls, which own the bottom-right corner */
 .throw-counter.pos-bottom-right { bottom: 56px; right: 10px; }
 .throw-count {
